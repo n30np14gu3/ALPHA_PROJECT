@@ -10,6 +10,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".NET DLL", ".NET DLL", "{BB44C19A-BCF0-4B5D-8BB8-FDCE377E65F7}"
 	ProjectSection(SolutionItems) = preProject
 		ADDITIONAL_FILES\.NET DLL\MaterialSkin.dll = ADDITIONAL_FILES\.NET DLL\MaterialSkin.dll
+		ADDITIONAL_FILES\.NET DLL\Newtonsoft.Json.dll = ADDITIONAL_FILES\.NET DLL\Newtonsoft.Json.dll
+		ADDITIONAL_FILES\.NET DLL\xNet.dll = ADDITIONAL_FILES\.NET DLL\xNet.dll
 	EndProjectSection
 EndProject
 Global
