@@ -35,7 +35,7 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		}
 		return 0;
 	case WM_SYSCOMMAND:
-		if ((wParam & 0xfff0) == SC_KEYMENU) // Disable ALT application menu
+		if ((wParam & 0xfff0) == SC_KEYMENU)
 			return 0;
 		break;
 	case WM_DESTROY:
@@ -163,9 +163,18 @@ INT WINAPI WinMain(
 
 
 		ImGui::SetNextWindowPos(ImVec2(0, 0));
-		if (ImGui::Begin("[ImGui]", &window_draw, ImVec2(400, 300), 1.0f, dwFlag))
+	
+		if (ImGui::Begin("alpha loader", &window_draw, ImVec2(400, 300), 1.0f, dwFlag))
 		{
-
+			ImGui::Text("loader");
+			ImGui::SameLine(380);
+			if (ImGui::Button("X"))
+				TerminateProcess(GetCurrentProcess(), 0);
+			ImGui::Separator();
+			ImGui::Spacing();
+			ImGui::SetCursorPosX(70);
+			char login[256] = "Login";
+			ImGui::InputText("", login, 256);
 		}
 		ImGui::End();
 		ImGui::EndFrame();
