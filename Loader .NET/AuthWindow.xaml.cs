@@ -10,22 +10,20 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 using MaterialDesignThemes.Wpf;
 
 namespace Loader.NET
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for AuthWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class AuthWindow : Window
     {
         private bool _isDrag;
 
-        public MainWindow()
+        public AuthWindow()
         {
-            new AuthWindow().ShowDialog();
             InitializeComponent();
         }
 
@@ -51,12 +49,22 @@ namespace Loader.NET
 
         private void CloseBtn_Click(object sender, RoutedEventArgs e)
         {
-            Environment.Exit(0);
+            Close();
         }
 
         private void MinBtn_Click(object sender, RoutedEventArgs e)
         {
             WindowState = WindowState.Minimized;
+        }
+
+        private void AuthBtn_Click(object sender, RoutedEventArgs e)
+        {
+            SnackbarMessage.IsActive = true;
+        }
+
+        private void SnackbarMessage_OnActionClick(object sender, RoutedEventArgs e)
+        {
+            SnackbarMessage.IsActive = false;
         }
     }
 }

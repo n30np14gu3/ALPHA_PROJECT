@@ -1,0 +1,60 @@
+﻿<Window x:Class="Loader.NET.AuthWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        mc:Ignorable="d"
+        Title="ALPHA PROJECT" Height="235.5" Width="386.667"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal"
+        TextOptions.TextRenderingMode="Auto"
+        Background="Transparent"
+        FontFamily="{DynamicResource MaterialDesignFont}" WindowStartupLocation="CenterScreen"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        ResizeMode="NoResize">
+    <Border Margin="10">
+        <Border.Effect>
+            <DropShadowEffect Color="#FF263446"
+                              Direction="270"
+                              BlurRadius="10"
+                              ShadowDepth="3" />
+        </Border.Effect>
+        <Grid>
+            <Grid.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FF171E27" Offset="0"/>
+                    <GradientStop Color="#FF1A232E" Offset="1"/>
+                </LinearGradientBrush>
+            </Grid.Background>
+            <Rectangle x:Name="DragHeader" HorizontalAlignment="Left" Height="26" VerticalAlignment="Top" Width="367" MouseLeftButtonDown="DragHeader_MouseLeftButtonDown" MouseLeftButtonUp="DragHeader_MouseLeftButtonUp" MouseMove="DragHeader_MouseMove" Fill="#FF15161B"/>
+            <Button x:Name="CloseBtn"  Margin="342,2,2,191"  Style="{DynamicResource MaterialDesignToolButton}" Content="{materialDesign:PackIcon Close}"
+                 ToolTip="Icon" Height="Auto" Width="Auto" FontSize="14" Background="#FF145291" BorderBrush="#FF124C85" Foreground="#FFEAEAEA" RenderTransformOrigin="0.585,0.818" Click="CloseBtn_Click"/>
+            <Button x:Name="MinBtn"  Margin="322,1,26,196"  Style="{DynamicResource MaterialDesignToolButton}" Content="{materialDesign:PackIcon Minus}"
+                Padding="0,9,0,0"
+            ToolTip="Icon" Height="Auto" Width="Auto" FontSize="14" Background="#FF145291" BorderBrush="#FF124C85" Foreground="#FFEAEAEA" RenderTransformOrigin="-0.551,1.683" Click="MinBtn_Click" />
+            <Rectangle Fill="#FF191A21" HorizontalAlignment="Left" Height="45" Margin="0,26,0,0" VerticalAlignment="Top" Width="367"
+                       Grid.Column="0" />
+            <Label Grid.Column="0" Content="ALPHA PROJECT :: AUTH" HorizontalAlignment="Left" Margin="0,26,0,0" VerticalAlignment="Top" Foreground="#DDFFFFFF" FontSize="29" FontWeight="Light" Height="40"/>
+            <TextBox
+                x:Name="NameTextBox_Copy"
+                materialDesign:HintAssist.Hint="Email" Margin="10,81,10,107" Foreground="White" CaretBrush="#FF4E6785" BorderBrush="#FF15161B" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"/>
+            <PasswordBox x:Name="NameTextBox"
+                materialDesign:HintAssist.Hint="Password" Margin="10,118,10,75" Foreground="White" CaretBrush="#FF4E6785" BorderBrush="#FF15161B" />
+            <Button x:Name="AuthBtn" Content="АВТОРИЗАЦИЯ" HorizontalAlignment="Left" Margin="10,146,0,0" VerticalAlignment="Top" Width="347" FontWeight="Normal" Click="AuthBtn_Click"/>
+            <Label Content="Забыли проль?" HorizontalAlignment="Left" Margin="10,183,0,0" VerticalAlignment="Top" Width="109"  Style="{DynamicResource linkStyle}"/>
+            <Label Content="Регистрация" HorizontalAlignment="Left" Margin="268,183,0,0" VerticalAlignment="Top" Width="89"  HorizontalContentAlignment="Right" Cursor="Hand" Style="{DynamicResource linkStyle}"/>
+            <materialDesign:Snackbar
+                IsActive="False"
+                x:Name="SnackbarMessage" Background="#FF15161B">
+                <materialDesign:SnackbarMessage
+                    x:Name="AuthMessage"
+                    Content="Hello 2"
+                    ActionContent="UNDO" ActionClick="SnackbarMessage_OnActionClick"/>
+            </materialDesign:Snackbar>
+        </Grid>
+    </Border>
+</Window>
