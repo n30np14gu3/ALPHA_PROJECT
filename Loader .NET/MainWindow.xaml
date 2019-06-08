@@ -1,0 +1,24 @@
+﻿<Window x:Class="Loader.NET.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="ALPHA PROJECT" Height="450" Width="800"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal"
+        TextOptions.TextRenderingMode="Auto"
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="{DynamicResource MaterialDesignFont}" WindowStartupLocation="CenterScreen"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        ResizeMode="NoResize">
+    <Grid Margin="0,0,0,10">
+        <StackPanel x:Name="DragHeader" HorizontalAlignment="Left" Height="17" VerticalAlignment="Top" Width="800" Background="#FF063564"/>
+        <Button Content="Button" HorizontalAlignment="Left" Margin="18,398,0,0" VerticalAlignment="Top" Width="772" Background="#FF16A230"/>
+
+    </Grid>
+</Window>
