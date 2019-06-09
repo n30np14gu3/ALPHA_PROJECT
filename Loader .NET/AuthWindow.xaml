@@ -15,7 +15,7 @@
         FontFamily="{DynamicResource MaterialDesignFont}" WindowStartupLocation="CenterScreen"
         WindowStyle="None"
         AllowsTransparency="True"
-        ResizeMode="NoResize" Closing="Window_Closing">
+        ResizeMode="NoResize" Closing="Window_Closing" Initialized="Window_Initialized">
     <Border Margin="10">
         <Border.Effect>
             <DropShadowEffect Color="#FF263446"
@@ -53,7 +53,7 @@
                 <materialDesign:SnackbarMessage
                     x:Name="AuthMessage"
                     Content="Hello 2"
-                    ActionContent="UNDO" ActionClick="SnackbarMessage_OnActionClick"/>
+                    ActionContent="X" ActionClick="SnackbarMessage_OnActionClick"/>
             </materialDesign:Snackbar>
         </Grid>
     </Border>

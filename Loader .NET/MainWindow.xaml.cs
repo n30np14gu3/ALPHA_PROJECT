@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Loader.NET.SDK.Api;
 using MaterialDesignThemes.Wpf;
 
 namespace Loader.NET
@@ -27,6 +28,16 @@ namespace Loader.NET
         {
             new AuthWindow().ShowDialog();
             InitializeComponent();
+
+
+            UserInfo.Items.Add(new TextBlock {Text = $"Имя пользователя: {ClientData.Data?.nickname}"});
+            UserInfo.Items.Add(new TextBlock {Text = $"IP: {ClientData.Data?.ip}"});
+            UserInfo.Items.Add(new TextBlock {Text = $"Дата регистрации: {ClientData.Data?.reg_date}"});
+
+            foreach (SubscriptionModule module in ClientData.Data.subscription_modules)
+            {
+                SubscriptionComponents.Items.Add(new TextBlock {Text = $"{module.name} [истекает: {module.end_date}]"});
+            }
         }
 
         private void DragHeader_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)

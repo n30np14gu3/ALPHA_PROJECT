@@ -24,7 +24,11 @@
             <SolidColorBrush x:Key="SecondaryAccentBrush" Color="#FF1C4864"/>
             <SolidColorBrush x:Key="SecondaryAccentForegroundBrush" Color="White"/>
 
+            <SolidColorBrush x:Key="MaterialDesignPaper" Color="#FF15161B"/>
+            <SolidColorBrush x:Key="MaterialDesignBody" Color="White"/>
+
             <Style TargetType="Label" x:Key="linkStyle">
+                <Setter Property="Cursor" Value="Hand"/>
                 <Setter Property="Foreground" Value="#DD838383"/>
                 <Style.Triggers>
                     <Trigger Property="IsMouseOver" Value="True">
@@ -32,6 +36,8 @@
                     </Trigger>
                 </Style.Triggers>
             </Style>
+
+
         </ResourceDictionary>
     </Application.Resources>
 

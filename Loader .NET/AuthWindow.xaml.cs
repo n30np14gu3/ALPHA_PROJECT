@@ -85,6 +85,7 @@ namespace Loader.NET
                     string result = request.Post($"{ClientData.AppDomain}/api/login", data).ToString();
                     result = Crypto.DecryptResponse(Convert.FromBase64String(result));
                     ServerResponse<UserData> response = JsonConvert.DeserializeObject<ServerResponse<UserData>>(result);
+                    Clipboard.SetText(JsonConvert.SerializeObject(response));
                     switch (response.code)
                     {
                         case ServerCodes.API_CODE_GAME_NOT_FOUND:
@@ -113,7 +114,7 @@ namespace Loader.NET
                             Close();
                             break;
                         default:
-                            throw new Exception("Неизвестная ошибка");
+                            throw new Exception($"Неизвестная ошибка: {response.code}");
                     }
                 }
                 catch (Exception ex)
@@ -149,6 +150,43 @@ namespace Loader.NET
         {
             if (!ClientData.Logged)
                 Environment.Exit(0);
+        }
+
+        private void Window_Initialized(object sender, EventArgs e)
+        {
+            try
+            {
+                using (HttpRequest request = new HttpRequest { IgnoreProtocolErrors = true })
+                {
+                    RequestParams data = new RequestParams();
+                    data["game_id"] = ClientData.GameId;
+                    string rsp = request.Post($"{ClientData.AppDomain}/api/request_updates", data).ToString();
+                    rsp = Crypto.DecryptResponse(Convert.FromBase64String(rsp));
+                    ServerResponse<UpdateInfo> updateInfo = JsonConvert.DeserializeObject<ServerResponse<UpdateInfo>>(rsp);
+                    switch (updateInfo.code)
+                    {
+                        case ServerCodes.API_CODE_GAME_NOT_FOUND:
+                            throw new Exception("Игра не найдена!");
+
+                        case ServerCodes.API_CODE_GAME_DISABLED:
+                            throw new Exception("Лоадер для данной игры приостановлен!");
+
+                        case ServerCodes.API_CODE_OK:
+                            if (DateTime.Parse(updateInfo.data.last_update) > ClientData.LastUpdate)
+                            {
+                                MessageBox.Show(
+                                    "Доступно новое обновление! Подождите, пока мастер обновления закончит работу!", "NEW UPDATE FOUNDED!", MessageBoxButton.OK, MessageBoxImage.Asterisk);
+                                Environment.Exit(0);
+                            }
+                            break;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"НЕ УДАЛОСЬ ПРОВЕРИТЬ ОБНОВЛЕНИЯ!\r\n{ex.Message}", "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+                Environment.Exit(0);
+            }
         }
     }
 }
