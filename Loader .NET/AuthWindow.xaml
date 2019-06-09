@@ -15,7 +15,7 @@
         FontFamily="{DynamicResource MaterialDesignFont}" WindowStartupLocation="CenterScreen"
         WindowStyle="None"
         AllowsTransparency="True"
-        ResizeMode="NoResize">
+        ResizeMode="NoResize" Closing="Window_Closing">
     <Border Margin="10">
         <Border.Effect>
             <DropShadowEffect Color="#FF263446"
@@ -40,13 +40,13 @@
                        Grid.Column="0" />
             <Label Grid.Column="0" Content="ALPHA PROJECT :: AUTH" HorizontalAlignment="Left" Margin="0,26,0,0" VerticalAlignment="Top" Foreground="#DDFFFFFF" FontSize="29" FontWeight="Light" Height="40"/>
             <TextBox
-                x:Name="NameTextBox_Copy"
+                x:Name="TEmail"
                 materialDesign:HintAssist.Hint="Email" Margin="10,81,10,107" Foreground="White" CaretBrush="#FF4E6785" BorderBrush="#FF15161B" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"/>
-            <PasswordBox x:Name="NameTextBox"
-                materialDesign:HintAssist.Hint="Password" Margin="10,118,10,75" Foreground="White" CaretBrush="#FF4E6785" BorderBrush="#FF15161B" />
+            <PasswordBox x:Name="TPassword"
+                materialDesign:HintAssist.Hint="Пароль" Margin="10,118,10,75" Foreground="White" CaretBrush="#FF4E6785" BorderBrush="#FF15161B" />
             <Button x:Name="AuthBtn" Content="АВТОРИЗАЦИЯ" HorizontalAlignment="Left" Margin="10,146,0,0" VerticalAlignment="Top" Width="347" FontWeight="Normal" Click="AuthBtn_Click"/>
-            <Label Content="Забыли проль?" HorizontalAlignment="Left" Margin="10,183,0,0" VerticalAlignment="Top" Width="109"  Style="{DynamicResource linkStyle}"/>
-            <Label Content="Регистрация" HorizontalAlignment="Left" Margin="268,183,0,0" VerticalAlignment="Top" Width="89"  HorizontalContentAlignment="Right" Cursor="Hand" Style="{DynamicResource linkStyle}"/>
+            <Label x:Name="RepassLink" Content="Забыли проль?" HorizontalAlignment="Left" Margin="10,183,0,0" VerticalAlignment="Top" Width="109"  Style="{DynamicResource linkStyle}" MouseLeftButtonUp="RepassLink_MouseLeftButtonUp"/>
+            <Label x:Name="RegLink" Content="Регистрация" HorizontalAlignment="Left" Margin="268,183,0,0" VerticalAlignment="Top" Width="89"  HorizontalContentAlignment="Right" Cursor="Hand" Style="{DynamicResource linkStyle}" MouseLeftButtonUp="RegLink_MouseLeftButtonUp"/>
             <materialDesign:Snackbar
                 IsActive="False"
                 x:Name="SnackbarMessage" Background="#FF15161B">

@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
+using System.Windows;
+using Loader.NET.SDK.Api;
+using Loader.NET.SDK.Cryptography;
+using xNet;
+using Newtonsoft.Json;
 
 namespace Loader.NET
 {
@@ -13,8 +18,45 @@ namespace Loader.NET
         [STAThread]
         public static void Main()
         {
+#if !DEBUG
             AppDomain.CurrentDomain.AssemblyResolve += OnResolveAssembly;
+#endif
+            try
+            {
+                using (HttpRequest request = new HttpRequest {IgnoreProtocolErrors = true})
+                {
+                    RequestParams data = new RequestParams();
+                    data["game_id"] = ClientData.GameId;
+                    string rsp = request.Post($"{ClientData.AppDomain}/api/request_updates", data).ToString();
+                    rsp = Crypto.DecryptResponse(Convert.FromBase64String(rsp));
+                    ServerResponse<UpdateInfo> updateInfo = JsonConvert.DeserializeObject<ServerResponse<UpdateInfo>>(rsp);
+                    switch (updateInfo.code)
+                    {
+                        case ServerCodes.API_CODE_GAME_NOT_FOUND:
+                            throw new Exception("Игра не найдена!");
+
+                        case ServerCodes.API_CODE_GAME_DISABLED:
+                            throw new Exception("Лоадер для данной игры приостановлен!");
+
+                        case ServerCodes.API_CODE_OK:
+                            if (DateTime.Parse(updateInfo.data.last_update) > ClientData.LastUpdate)
+                            {
+                                MessageBox.Show(
+                                    "Доступно новое обновление! Подождите, пока мастер обновления закончит работу!", "NEW UPDATE FOUNDED!", MessageBoxButton.OK, MessageBoxImage.Asterisk);
+                                Environment.Exit(0);
+                            }
+                            break;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show($"НЕ УДАЛОСЬ ПРОВЕРИТЬ ОБНОВЛЕНИЯ!\r\n{e.Message}", "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+                Environment.Exit(0);
+            }
+
             App.Main();
+
         }
 
         private static Assembly OnResolveAssembly(object sender, ResolveEventArgs args)
