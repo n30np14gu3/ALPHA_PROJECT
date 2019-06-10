@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Loader.NET.SDK.Api;
+using Loader.NET.SDK.Api.Structs;
 using MaterialDesignThemes.Wpf;
 
 namespace Loader.NET

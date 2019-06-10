@@ -1,5 +1,6 @@
 ﻿using System;
 using Loader.NET.SDK.Api;
+using Loader.NET.SDK.Api.Structs;
 
 namespace Loader.NET
 {

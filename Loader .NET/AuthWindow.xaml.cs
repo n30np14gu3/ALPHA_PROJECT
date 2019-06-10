@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Loader.NET.SDK.Api;
+using Loader.NET.SDK.Api.Structs;
 using Loader.NET.SDK.Cryptography;
 using Loader.NET.SDK.Device;
 using MaterialDesignThemes.Wpf;
@@ -83,7 +84,7 @@ namespace Loader.NET
                     data["game_id"] = ClientData.GameId;
 
                     string result = request.Post($"{ClientData.AppDomain}/api/login", data).ToString();
-                    result = Crypto.DecryptResponse(Convert.FromBase64String(result));
+                    result = Aes.DecryptResponse(Convert.FromBase64String(result));
                     ServerResponse<UserData> response = JsonConvert.DeserializeObject<ServerResponse<UserData>>(result);
                     Clipboard.SetText(JsonConvert.SerializeObject(response));
                     switch (response.code)
@@ -161,7 +162,7 @@ namespace Loader.NET
                     RequestParams data = new RequestParams();
                     data["game_id"] = ClientData.GameId;
                     string rsp = request.Post($"{ClientData.AppDomain}/api/request_updates", data).ToString();
-                    rsp = Crypto.DecryptResponse(Convert.FromBase64String(rsp));
+                    rsp = Aes.DecryptResponse(Convert.FromBase64String(rsp));
                     ServerResponse<UpdateInfo> updateInfo = JsonConvert.DeserializeObject<ServerResponse<UpdateInfo>>(rsp);
                     switch (updateInfo.code)
                     {

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Loader.NET.SDK.Api
+namespace Loader.NET.SDK.Api.Structs
 {
     internal class UserData
     {
