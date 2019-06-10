@@ -3,11 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
-using System.Windows;
-using Loader.NET.SDK.Api;
-using Loader.NET.SDK.Cryptography;
-using xNet;
-using Newtonsoft.Json;
 
 namespace Loader.NET
 {

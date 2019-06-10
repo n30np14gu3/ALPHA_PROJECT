@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,7 +15,9 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Loader.NET.SDK.Api;
 using Loader.NET.SDK.Api.Structs;
+using Loader.NET.SDK.Cryptography;
 using MaterialDesignThemes.Wpf;
+
 
 namespace Loader.NET
 {
@@ -27,6 +30,7 @@ namespace Loader.NET
 
         public MainWindow()
         {
+
             new AuthWindow().ShowDialog();
             InitializeComponent();
 
@@ -35,10 +39,30 @@ namespace Loader.NET
             UserInfo.Items.Add(new TextBlock {Text = $"IP: {ClientData.Data?.ip}"});
             UserInfo.Items.Add(new TextBlock {Text = $"Дата регистрации: {ClientData.Data?.reg_date}"});
 
-            foreach (SubscriptionModule module in ClientData.Data.subscription_modules)
+            if (ClientData.Data != null)
             {
-                SubscriptionComponents.Items.Add(new TextBlock {Text = $"{module.name} [истекает: {module.end_date}]"});
+                foreach (SubscriptionModule module in ClientData.Data.subscription_modules)
+                {
+                    SubscriptionComponents.Items.Add(new TextBlock
+                        { Text = $"{module.name} [истекает: {module.end_date}]" });
+                }
             }
+        }
+
+
+        private void checkKeys()
+        {
+
+        }
+
+        private void generateKeyPair()
+        {
+
+        }
+
+        private void loadKeyPair()
+        {
+
         }
 
         private void DragHeader_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)

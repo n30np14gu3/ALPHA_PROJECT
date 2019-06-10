@@ -34,10 +34,10 @@ namespace Loader.NET.SDK.Cryptography
             return result;
         }
 
-        internal static string EncryptResponse(string data)
+        internal static byte[]  EncryptResponse(string data)
         {
 
-            string result;
+            byte[] result;
             using (Rijndael cryptor = Rijndael.Create())
             {
                 cryptor.Mode = CipherMode.CBC;
@@ -56,7 +56,7 @@ namespace Loader.NET.SDK.Cryptography
                             srDecrypt.Write(data);
                         }
 
-                        result = BitConverter.ToString(msDecrypt.ToArray()).Replace("-", "");
+                        result = msDecrypt.ToArray();
                     }
 
 
