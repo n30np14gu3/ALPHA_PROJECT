@@ -52,8 +52,8 @@
                 x:Name="SnackbarMessage" Background="#FF15161B">
                 <materialDesign:SnackbarMessage
                     x:Name="AuthMessage"
-                    Content="Hello 2"
-                    ActionContent="X" ActionClick="SnackbarMessage_OnActionClick"/>
+                    Content=""
+                    ActionContent="X" ActionClick="SnackbarMessage_OnActionClick" Foreground="White"/>
             </materialDesign:Snackbar>
         </Grid>
     </Border>

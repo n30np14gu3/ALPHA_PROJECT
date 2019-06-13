@@ -13,5 +13,8 @@ namespace Loader.NET
         public static string ZipPassword = "";
         public static string AppDomain = "http://alpha-cheat.io";
         public static SessionHelper Session = null;
+
+        internal static readonly string SessionKey =
+            "5=N4t5SZH_!2Ugw4tctC*U-sMWw_QgT2^eP?nE9GL7JE3=qp?XRjF4ZS+XW$Bk8^^uPTj%AZv7SWmyDwS?2dC#3xJhb7venM&!N?";
     }
 }

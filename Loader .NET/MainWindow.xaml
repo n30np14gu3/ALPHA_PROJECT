@@ -63,8 +63,8 @@
                     </ListBox>
                 </StackPanel>
             </materialDesign:Card>
-            <Button Content="ЗАПУСТИТЬ" HorizontalAlignment="Left" Margin="10,0,0,44" VerticalAlignment="Bottom" Width="286" Height="40"/>
-            <Label Content="alphacheat.com" HorizontalAlignment="Right" Margin="0,0,10,10" Width="286" Height="26" VerticalAlignment="Bottom" HorizontalContentAlignment="Center" Style="{DynamicResource linkStyle}"/>
+            <Button x:Name="LaunchBtn" Content="ЗАПУСТИТЬ" HorizontalAlignment="Left" Margin="10,0,0,44" VerticalAlignment="Bottom" Width="286" Height="40" Click="LaunchBtn_Click"/>
+            <Label x:Name="BrandLink" Content="alphacheat.com" HorizontalAlignment="Right" Margin="0,0,10,10" Width="286" Height="26" VerticalAlignment="Bottom" HorizontalContentAlignment="Center" Style="{DynamicResource linkStyle}" MouseLeftButtonUp="BrandLink_MouseLeftButtonUp"/>
         </Grid>
     </Border>
 </Window>

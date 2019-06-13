@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -30,7 +31,9 @@ namespace Loader.NET
 
         public MainWindow()
         {
-
+            InitializeComponent();
+            /*SessionHelper helper = new SessionHelper(1024);
+            helper.RequestKeys();
             new AuthWindow().ShowDialog();
             InitializeComponent();
 
@@ -46,23 +49,7 @@ namespace Loader.NET
                     SubscriptionComponents.Items.Add(new TextBlock
                         { Text = $"{module.name} [истекает: {module.end_date}]" });
                 }
-            }
-        }
-
-
-        private void checkKeys()
-        {
-
-        }
-
-        private void generateKeyPair()
-        {
-
-        }
-
-        private void loadKeyPair()
-        {
-
+            }*/
         }
 
         private void DragHeader_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -93,6 +80,44 @@ namespace Loader.NET
         private void MinBtn_Click(object sender, RoutedEventArgs e)
         {
             WindowState = WindowState.Minimized;
+        }
+
+        private void BrandLink_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            Process.Start(ClientData.AppDomain);
+        }
+
+        private async void LaunchBtn_Click(object sender, RoutedEventArgs e)
+        {
+            await Task.Run(() => runCsGo());
+
+        }
+
+        void runCsGo()
+        {
+            if (Process.GetProcessesByName("csgo").Length == 0)
+            {
+                Process.Start("steam://rungameid/730");
+                while (Process.GetProcessesByName("csgo").Length == 0) { }
+            }
+
+            kek:
+            int loadedModules = 0;
+            foreach (ProcessModule module in Process.GetProcessesByName("csgo")[0].Modules)
+            {
+                if (module.ModuleName == "client_panorama.dll")
+                    loadedModules++;
+
+                if (module.ModuleName == "engine.dll")
+                    loadedModules++;
+
+                if (module.ModuleName == "server.dll")
+                    loadedModules++;
+            }
+            if (loadedModules != 3)
+                goto kek;
+
+
         }
     }
 }
