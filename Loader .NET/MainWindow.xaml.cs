@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -17,7 +18,10 @@ using System.Windows.Shapes;
 using Loader.NET.SDK.Api;
 using Loader.NET.SDK.Api.Structs;
 using Loader.NET.SDK.Cryptography;
+using Loader.NET.SDK.Win32;
 using MaterialDesignThemes.Wpf;
+using Newtonsoft.Json;
+using xNet;
 
 
 namespace Loader.NET
@@ -28,11 +32,13 @@ namespace Loader.NET
     public partial class MainWindow : Window
     {
         private bool _isDrag;
+        private List<byte[]> _dlls = new List<byte[]>();
+        private int _csgoPid = 0;
 
         public MainWindow()
         {
             InitializeComponent();
-            /*SessionHelper helper = new SessionHelper(1024);
+            SessionHelper helper = new SessionHelper(1024);
             helper.RequestKeys();
             new AuthWindow().ShowDialog();
             InitializeComponent();
@@ -49,7 +55,7 @@ namespace Loader.NET
                     SubscriptionComponents.Items.Add(new TextBlock
                         { Text = $"{module.name} [истекает: {module.end_date}]" });
                 }
-            }*/
+            }
         }
 
         private void DragHeader_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -89,8 +95,57 @@ namespace Loader.NET
 
         private async void LaunchBtn_Click(object sender, RoutedEventArgs e)
         {
+            LaunchBtn.IsEnabled = false;
             await Task.Run(() => runCsGo());
+            await Task.Run(() => downloadLibs());
+            await Task.Run(() => injectLibs());
+            LaunchBtn.IsEnabled = true;
 
+        }
+
+        void downloadLibs()
+        {
+            try
+            {
+                using (HttpRequest request = new HttpRequest {IgnoreProtocolErrors = true})
+                {
+                    RequestParams data = new RequestParams();
+                    data["access_token"] = ClientData.Data.access_token;
+                    data["game_id"] = ClientData.GameId;
+
+                    string rsp = request.Post($"{ClientData.AppDomain}/api/request_dll", data).ToString();
+                    rsp = Aes.DecryptResponse(Convert.FromBase64String(rsp));
+                    List<string> libs = JsonConvert.DeserializeObject<List<string>>(rsp);
+                    _dlls.Clear();
+                    foreach (string lib in libs)
+                    {
+                        _dlls.Add(Convert.FromBase64String(Encoding.UTF8.GetString(Crypto.FromHex(lib))));
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"ОШИБКА!\n{ex.Message}", "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+                _dlls.Clear();
+            }
+        }
+
+        void injectLibs()
+        {
+            try
+            {
+                foreach (byte[] raw in _dlls)
+                {
+                    if (!ManualMapInjector.InjectDll(raw, _csgoPid))
+                        throw new Exception("Не удалось запустить чит!");
+
+                    Thread.Sleep(1000);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         void runCsGo()
@@ -118,6 +173,7 @@ namespace Loader.NET
                 goto kek;
 
 
+            _csgoPid = Process.GetProcessesByName("csgo")[0].Id;
         }
     }
 }
