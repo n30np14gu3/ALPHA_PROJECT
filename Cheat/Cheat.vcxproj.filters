@@ -1,17 +1,82 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    <Filter Include="SDK">
+      <UniqueIdentifier>{ab623509-0d78-41d8-b2af-59b5736c39f0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    <Filter Include="SDK\license">
+      <UniqueIdentifier>{40603b62-70a4-455f-8f17-196628cd707b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    <Filter Include="SDK\openssl extensions">
+      <UniqueIdentifier>{49c0368e-e43e-4c50-81a2-697c2bf137a6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="SDK\network">
+      <UniqueIdentifier>{f2fce8ca-6371-4fb8-934d-e5c0277aa55f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SDK\network\http">
+      <UniqueIdentifier>{75178b94-4266-45bd-b5d1-b0486fe8cd17}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SDK\crypto">
+      <UniqueIdentifier>{05c4e0f4-4ac2-4065-9f1e-4606840cdbf1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SDK\network\sokets">
+      <UniqueIdentifier>{d058ce42-acf3-4033-b632-e0f35d35d519}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SDK\crypto\hash">
+      <UniqueIdentifier>{e39ed5fa-c9c0-488d-aeed-0dac4dda98cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SDK\crypto\base64">
+      <UniqueIdentifier>{79501dfa-0ee3-4d2d-846e-48b5d5be1620}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="DllMain.cpp" />
+    <ClCompile Include="SDK\license\license_manager.cpp">
+      <Filter>SDK\license</Filter>
+    </ClCompile>
+    <ClCompile Include="SDK\openssl extensions\openssl_extensions.cpp">
+      <Filter>SDK\openssl extensions</Filter>
+    </ClCompile>
+    <ClCompile Include="SDK\network\http\http_request.cpp">
+      <Filter>SDK\network\http</Filter>
+    </ClCompile>
+    <ClCompile Include="SDK\network\sokets\local_client.cpp">
+      <Filter>SDK\network\sokets</Filter>
+    </ClCompile>
+    <ClCompile Include="SDK\crypto\hash\sha256.cpp">
+      <Filter>SDK\crypto\hash</Filter>
+    </ClCompile>
+    <ClCompile Include="SDK\crypto\hash\sha512.cpp">
+      <Filter>SDK\crypto\hash</Filter>
+    </ClCompile>
+    <ClCompile Include="SDK\crypto\base64\base64.cpp">
+      <Filter>SDK\crypto\base64</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="SDK\license\license_manager.h">
+      <Filter>SDK\license</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\openssl extensions\openssl_extensions.h">
+      <Filter>SDK\openssl extensions</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\network\http\http_request.h">
+      <Filter>SDK\network\http</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\crypto\XorStr.h">
+      <Filter>SDK\crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\network\sokets\local_client.h">
+      <Filter>SDK\network\sokets</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\crypto\hash\sha256.hpp">
+      <Filter>SDK\crypto\hash</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\crypto\hash\sha512.hpp">
+      <Filter>SDK\crypto\hash</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\crypto\base64\base64.hpp">
+      <Filter>SDK\crypto\base64</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

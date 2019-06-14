@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Loader.NET.SDK.Api.Structs
 {
+    [Serializable]
     internal class UserData
     {
         public string nickname;

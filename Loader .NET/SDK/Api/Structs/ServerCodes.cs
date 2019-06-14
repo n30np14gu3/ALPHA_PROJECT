@@ -1,5 +1,8 @@
-﻿namespace Loader.NET.SDK.Api.Structs
+﻿using System;
+
+namespace Loader.NET.SDK.Api.Structs
 {
+    [Serializable]
     internal enum ServerCodes : uint
     {
         API_CODE_UNKNOWN_ERROR = 300,
