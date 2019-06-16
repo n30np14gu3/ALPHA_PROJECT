@@ -103,6 +103,8 @@
     <Compile Include="SDK\Device\HWID.cs" />
     <Compile Include="SDK\Win32\ManualMapInjector.cs" />
     <Compile Include="SDK\Win32\NativeMethods.cs" />
+    <Compile Include="SDK\Win32\PROTO_HEADER.cs" />
+    <Compile Include="SDK\Win32\SERVER_RESPONSE.cs" />
     <Page Include="AuthWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

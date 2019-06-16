@@ -28,6 +28,9 @@
     <Filter Include="SDK\crypto\base64">
       <UniqueIdentifier>{79501dfa-0ee3-4d2d-846e-48b5d5be1620}</UniqueIdentifier>
     </Filter>
+    <Filter Include="SDK\globals">
+      <UniqueIdentifier>{70d10e6b-f568-494a-adf9-5d03f5bac99c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DllMain.cpp" />
@@ -78,5 +81,13 @@
     <ClInclude Include="SDK\crypto\base64\base64.hpp">
       <Filter>SDK\crypto\base64</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Cheat.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Release_DBG\libeay32.dll" />
+    <None Include="..\Release_DBG\ssleay32.dll" />
   </ItemGroup>
 </Project>
