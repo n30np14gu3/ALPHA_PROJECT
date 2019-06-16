@@ -131,7 +131,6 @@
     <ClCompile Include="SDK\openssl extensions\openssl_extensions.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="resource.h" />
     <ClInclude Include="SDK\crypto\base64\base64.hpp" />
     <ClInclude Include="SDK\crypto\hash\sha256.hpp" />
     <ClInclude Include="SDK\crypto\hash\sha512.hpp" />
@@ -140,13 +139,6 @@
     <ClInclude Include="SDK\network\http\http_request.h" />
     <ClInclude Include="SDK\network\sokets\local_client.h" />
     <ClInclude Include="SDK\openssl extensions\openssl_extensions.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="Cheat.rc" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\Release_DBG\libeay32.dll" />
-    <None Include="..\Release_DBG\ssleay32.dll" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

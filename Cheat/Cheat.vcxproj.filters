@@ -81,13 +81,5 @@
     <ClInclude Include="SDK\crypto\base64\base64.hpp">
       <Filter>SDK\crypto\base64</Filter>
     </ClInclude>
-    <ClInclude Include="resource.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="Cheat.rc" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\Release_DBG\libeay32.dll" />
-    <None Include="..\Release_DBG\ssleay32.dll" />
   </ItemGroup>
 </Project>

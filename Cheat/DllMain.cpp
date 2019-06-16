@@ -2,7 +2,6 @@
 
 #include "SDK/network/http/http_request.h"
 #include "SDK/network/sokets/local_client.h"
-#include "resource.h"
 
 void test_thread()
 {
