@@ -59,28 +59,34 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>H:\ALPHA_PROJECT\ADDITIONAL_FILES\openssl\include;$(IncludePath)</IncludePath>
-    <LibraryPath>H:\ALPHA_PROJECT\ADDITIONAL_FILES\openssl\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;H:\ALPHA_PROJECT\ADDITIONAL_FILES\openssl\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;H:\ALPHA_PROJECT\ADDITIONAL_FILES\openssl\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_DBG|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>H:\ALPHA_PROJECT\ADDITIONAL_FILES\openssl\include;$(IncludePath)</IncludePath>
-    <LibraryPath>H:\ALPHA_PROJECT\ADDITIONAL_FILES\openssl\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;H:\ALPHA_PROJECT\ADDITIONAL_FILES\openssl\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;H:\ALPHA_PROJECT\ADDITIONAL_FILES\openssl\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>H:\ALPHA_PROJECT\ADDITIONAL_FILES\openssl\include;$(IncludePath)</IncludePath>
-    <LibraryPath>H:\ALPHA_PROJECT\ADDITIONAL_FILES\openssl\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;H:\ALPHA_PROJECT\ADDITIONAL_FILES\openssl\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;H:\ALPHA_PROJECT\ADDITIONAL_FILES\openssl\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;CHEAT_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WIN32;NDEBUG;CHEAT_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <LanguageStandard>
+      </LanguageStandard>
+      <EnableModules>
+      </EnableModules>
+      <SDLCheck>false</SDLCheck>
+      <AdditionalOptions>/std:c++latest %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -92,14 +98,20 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_DBG|Win32'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
       <Optimization>Disabled</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>false</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;CHEAT_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WIN32;NDEBUG;CHEAT_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
       <WholeProgramOptimization>false</WholeProgramOptimization>
+      <LanguageStandard>
+      </LanguageStandard>
+      <EnableModules>
+      </EnableModules>
+      <SDLCheck>false</SDLCheck>
+      <AdditionalOptions>/std:c++latest %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -111,10 +123,16 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;CHEAT_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WIN32;_DEBUG;CHEAT_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>
+      </LanguageStandard>
+      <EnableModules>
+      </EnableModules>
+      <SDLCheck>false</SDLCheck>
+      <AdditionalOptions>/std:c++latest %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -122,6 +140,33 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="core\features\aimbot\aimbot.cpp" />
+    <ClCompile Include="core\features\backtrack\backtrack.cpp" />
+    <ClCompile Include="core\features\misc\events.cpp" />
+    <ClCompile Include="core\features\misc\hitmarker.cpp" />
+    <ClCompile Include="core\features\misc\logs.cpp" />
+    <ClCompile Include="core\features\misc\misc.cpp" />
+    <ClCompile Include="core\features\misc\movement.cpp" />
+    <ClCompile Include="core\features\misc\prediction.cpp" />
+    <ClCompile Include="core\features\skinchanger\glovechanger.cpp" />
+    <ClCompile Include="core\features\skinchanger\parser.cpp" />
+    <ClCompile Include="core\features\skinchanger\skinchanger.cpp" />
+    <ClCompile Include="core\features\visuals\nightmode.cpp" />
+    <ClCompile Include="core\features\visuals\sound.cpp" />
+    <ClCompile Include="core\features\visuals\visuals.cpp" />
+    <ClCompile Include="core\hooks\hooks.cpp" />
+    <ClCompile Include="core\menu\config\config.cpp" />
+    <ClCompile Include="core\menu\imgui\dx9\imgui_impl_dx9.cpp" />
+    <ClCompile Include="core\menu\imgui\imgui.cpp" />
+    <ClCompile Include="core\menu\imgui\imgui_draw.cpp" />
+    <ClCompile Include="core\menu\menu.cpp" />
+    <ClCompile Include="dependencies\interfaces\interfaces.cpp" />
+    <ClCompile Include="dependencies\math\math.cpp" />
+    <ClCompile Include="dependencies\utilities\hook.cpp" />
+    <ClCompile Include="dependencies\utilities\md5.cpp" />
+    <ClCompile Include="dependencies\utilities\netvar_manager.cpp" />
+    <ClCompile Include="dependencies\utilities\render.cpp" />
+    <ClCompile Include="dependencies\utilities\utilities.cpp" />
     <ClCompile Include="DllMain.cpp" />
     <ClCompile Include="SDK\crypto\base64\base64.cpp" />
     <ClCompile Include="SDK\crypto\hash\sha256.cpp" />
@@ -132,8 +177,71 @@
     <ClCompile Include="SDK\network\sokets\local_client.cpp" />
     <ClCompile Include="SDK\openssl extensions\openssl_extensions.cpp" />
     <ClCompile Include="SDK\protection\AntiLeak.cpp" />
+    <ClCompile Include="source-sdk\math\vector3d.cpp" />
+    <ClCompile Include="source-sdk\math\view_matrix.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="core\features\aimbot\aimbot.hpp" />
+    <ClInclude Include="core\features\backtrack\backtrack.hpp" />
+    <ClInclude Include="core\features\misc\events.hpp" />
+    <ClInclude Include="core\features\misc\hitmarker.hpp" />
+    <ClInclude Include="core\features\misc\logs.hpp" />
+    <ClInclude Include="core\features\misc\misc.hpp" />
+    <ClInclude Include="core\features\misc\movement.hpp" />
+    <ClInclude Include="core\features\misc\prediction.hpp" />
+    <ClInclude Include="core\features\skinchanger\glovechanger.hpp" />
+    <ClInclude Include="core\features\skinchanger\parser.hpp" />
+    <ClInclude Include="core\features\skinchanger\skinchanger.hpp" />
+    <ClInclude Include="core\features\visuals\nightmode.hpp" />
+    <ClInclude Include="core\features\visuals\sound.hpp" />
+    <ClInclude Include="core\features\visuals\visuals.hpp" />
+    <ClInclude Include="core\hooks\hooks.hpp" />
+    <ClInclude Include="core\menu\config\archivex.hpp" />
+    <ClInclude Include="core\menu\config\config.hpp" />
+    <ClInclude Include="core\menu\imgui\dx9\imgui_impl_dx9.h" />
+    <ClInclude Include="core\menu\imgui\imconfig.h" />
+    <ClInclude Include="core\menu\imgui\imgui.h" />
+    <ClInclude Include="core\menu\imgui\imgui_internal.h" />
+    <ClInclude Include="core\menu\imgui\stb_rect_pack.h" />
+    <ClInclude Include="core\menu\imgui\stb_textedit.h" />
+    <ClInclude Include="core\menu\imgui\stb_truetype.h" />
+    <ClInclude Include="core\menu\menu.hpp" />
+    <ClInclude Include="dependencies\common_includes.hpp" />
+    <ClInclude Include="dependencies\interfaces\c_global_vars_base.hpp" />
+    <ClInclude Include="dependencies\interfaces\engine_sounds.hpp" />
+    <ClInclude Include="dependencies\interfaces\glow_manager.hpp" />
+    <ClInclude Include="dependencies\interfaces\imageformats.h" />
+    <ClInclude Include="dependencies\interfaces\interfaces.hpp" />
+    <ClInclude Include="dependencies\interfaces\iv_debug_overlay.hpp" />
+    <ClInclude Include="dependencies\interfaces\iv_effects.hpp" />
+    <ClInclude Include="dependencies\interfaces\iv_engine_client.hpp" />
+    <ClInclude Include="dependencies\interfaces\iv_model_info.hpp" />
+    <ClInclude Include="dependencies\interfaces\iv_model_render.hpp" />
+    <ClInclude Include="dependencies\interfaces\iv_render_beams.hpp" />
+    <ClInclude Include="dependencies\interfaces\i_app_system.hpp" />
+    <ClInclude Include="dependencies\interfaces\i_base_client_dll.hpp" />
+    <ClInclude Include="dependencies\interfaces\i_client_entity_list.hpp" />
+    <ClInclude Include="dependencies\interfaces\i_client_mode.hpp" />
+    <ClInclude Include="dependencies\interfaces\i_client_state.hpp" />
+    <ClInclude Include="dependencies\interfaces\i_console.hpp" />
+    <ClInclude Include="dependencies\interfaces\i_game_event_manager.hpp" />
+    <ClInclude Include="dependencies\interfaces\i_input.hpp" />
+    <ClInclude Include="dependencies\interfaces\i_input_system.hpp" />
+    <ClInclude Include="dependencies\interfaces\i_localize.hpp" />
+    <ClInclude Include="dependencies\interfaces\i_material_system.hpp" />
+    <ClInclude Include="dependencies\interfaces\i_panel.hpp" />
+    <ClInclude Include="dependencies\interfaces\i_player_movement.hpp" />
+    <ClInclude Include="dependencies\interfaces\i_render_view.hpp" />
+    <ClInclude Include="dependencies\interfaces\i_surface.hpp" />
+    <ClInclude Include="dependencies\interfaces\i_trace.hpp" />
+    <ClInclude Include="dependencies\math\math.hpp" />
+    <ClInclude Include="dependencies\utilities\fnv.hpp" />
+    <ClInclude Include="dependencies\utilities\hook.hpp" />
+    <ClInclude Include="dependencies\utilities\md5.hpp" />
+    <ClInclude Include="dependencies\utilities\netvar_manager.hpp" />
+    <ClInclude Include="dependencies\utilities\render.hpp" />
+    <ClInclude Include="dependencies\utilities\singleton.hpp" />
+    <ClInclude Include="dependencies\utilities\utilities.hpp" />
     <ClInclude Include="DllMain.h" />
     <ClInclude Include="SDK\crypto\base64\base64.hpp" />
     <ClInclude Include="SDK\crypto\hash\sha256.hpp" />
@@ -180,6 +288,26 @@
     <ClInclude Include="SDK\rapidjson\stream.h" />
     <ClInclude Include="SDK\rapidjson\stringbuffer.h" />
     <ClInclude Include="SDK\rapidjson\writer.h" />
+    <ClInclude Include="source-sdk\classes\client_class.hpp" />
+    <ClInclude Include="source-sdk\classes\collideable.hpp" />
+    <ClInclude Include="source-sdk\classes\convar.hpp" />
+    <ClInclude Include="source-sdk\classes\c_usercmd.hpp" />
+    <ClInclude Include="source-sdk\classes\entities.hpp" />
+    <ClInclude Include="source-sdk\classes\net_channel.hpp" />
+    <ClInclude Include="source-sdk\classes\recv_props.hpp" />
+    <ClInclude Include="source-sdk\classes\studio.hpp" />
+    <ClInclude Include="source-sdk\classes\view_setup.h" />
+    <ClInclude Include="source-sdk\math\utl_vector.hpp" />
+    <ClInclude Include="source-sdk\math\vector2d.hpp" />
+    <ClInclude Include="source-sdk\math\vector3d.hpp" />
+    <ClInclude Include="source-sdk\math\view_matrix.hpp" />
+    <ClInclude Include="source-sdk\misc\color.hpp" />
+    <ClInclude Include="source-sdk\sdk.hpp" />
+    <ClInclude Include="source-sdk\structs\dlight.hpp" />
+    <ClInclude Include="source-sdk\structs\materials.hpp" />
+    <ClInclude Include="source-sdk\structs\models.hpp" />
+    <ClInclude Include="source-sdk\structs\vertex_t.hpp" />
+    <ClInclude Include="source-sdk\structs\weaponinfo.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

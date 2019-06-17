@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.Reflection;
 
+
 namespace Loader.NET
 {
     public class Program

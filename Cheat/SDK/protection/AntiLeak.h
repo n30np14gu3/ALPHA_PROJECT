@@ -5,6 +5,18 @@
 
 namespace AntiLeak
 {
+#define JUNK_CODE_ONE        \
+    __asm{push eax}            \
+    __asm{xor eax, eax}        \
+    __asm{setpo al}            \
+    __asm{push edx}            \
+    __asm{xor edx, eax}        \
+    __asm{sal edx, 2}        \
+    __asm{xchg eax, edx}    \
+    __asm{pop edx}            \
+    __asm{or eax, ecx}        \
+    __asm{pop eax}
+
 #pragma pack(1)
 	typedef struct _PROCESS_BASIC_INFORMATION {
 		PVOID Reserved1;
@@ -41,5 +53,17 @@ namespace AntiLeak
 	bool CheckProcessDebugFlags();
 	bool Int2DCheck();
 	bool IsDbgPresentPrefixCheck();
-	inline void PushPopSS();
+	void ErasePEHeaderFromMemory();
+	void ChangeSizeOfImage(DWORD NewSize);
+
+	inline void PushPopSS()
+	{
+		__asm
+		{
+			push ss
+			pop ss
+			mov eax, 9 // This line executes but is stepped over
+			xor edx, edx // This is where the debugger will step to
+		}
+	}
 }

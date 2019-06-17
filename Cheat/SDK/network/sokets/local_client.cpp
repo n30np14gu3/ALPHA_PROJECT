@@ -14,10 +14,10 @@
 
 #pragma comment(lib, "Ws2_32.lib")
 
-using namespace std;
-ifstream::pos_type filesize(const char* filename)
+
+std::ifstream::pos_type filesize(const char* filename)
 {
-	std::ifstream in(filename, ifstream::ate | ifstream::binary);
+	std::ifstream in(filename, std::ifstream::ate | std::ifstream::binary);
 	return in.tellg();
 }
 
@@ -27,7 +27,7 @@ local_client::local_client(const char* ip, u_short port)
 	m_sClient = 0;
 	m_iErrorCode = 0;
 
-	m_sSessionKey = string(XorStr("5=N4t5SZH_!2Ugw4tctC*U-sMWw_QgT2^eP?nE9GL7JE3=qp?XRjF4ZS+XW$Bk8^^uPTj%AZv7SWmyDwS?2dC#3xJhb7venM&!N?"));
+	m_sSessionKey = std::string(XorStr("5=N4t5SZH_!2Ugw4tctC*U-sMWw_QgT2^eP?nE9GL7JE3=qp?XRjF4ZS+XW$Bk8^^uPTj%AZv7SWmyDwS?2dC#3xJhb7venM&!N?"));
 
 	ZeroMemory(&m_pHeader, sizeof(PROTO_HEADER));
 
@@ -80,7 +80,6 @@ bool local_client::data_exchange()
 	//READ PUBLIC KEY AND DELETE FILE
 	DWORD keySize = static_cast<DWORD>(filesize(XorStr("public.pem")));
 	FILE* public_key = nullptr;
-
 	byte* key_data = new byte[keySize];
 	memset(key_data, 0, keySize);
 	
@@ -97,7 +96,7 @@ bool local_client::data_exchange()
 	remove(XorStr("public.pem"));
 
 	//SEND PROTOCOL HEADER
-	string hash = sha256(string(reinterpret_cast<char*>(key_data)) + m_sSessionKey);
+	std::string hash = sha256(std::string(reinterpret_cast<char*>(key_data)) + m_sSessionKey);
 	
 	PROTO_HEADER header = {};
 	ZeroMemory(&header, sizeof(PROTO_HEADER));
@@ -132,9 +131,9 @@ bool local_client::data_exchange()
 		return false;
 
 	//STORE DATA
-	globals::access_token = string(reinterpret_cast<char*>(response.access_token));
-	globals::crypto_key = string(reinterpret_cast<char*>(response.key));
-	globals::crypto_iv = string(reinterpret_cast<char*>(response.iv));
+	globals::access_token = std::string(reinterpret_cast<char*>(response.access_token));
+	globals::crypto_key = std::string(reinterpret_cast<char*>(response.key));
+	globals::crypto_iv = std::string(reinterpret_cast<char*>(response.iv));
 	globals::user_id = response.user_id;
 
 	ZeroMemory(&response, sizeof(SERVER_RESPONSE));

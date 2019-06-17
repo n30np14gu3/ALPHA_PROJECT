@@ -133,17 +133,6 @@ namespace AntiLeak
 		return true;
 	}
 
-	inline void PushPopSS()
-	{
-		__asm
-		{
-			push ss
-			pop ss
-			mov eax, 9 // This line executes but is stepped over
-			xor edx, edx // This is where the debugger will step to
-		}
-	}
-
 	bool IsDbgPresentPrefixCheck()
 	{
 		__try
@@ -158,5 +147,28 @@ namespace AntiLeak
 		}
 
 		return true;
+	}
+
+	void ErasePEHeaderFromMemory()
+	{
+		DWORD OldProtect = 0;
+
+		// Get base address of module
+		char *pBaseAddr = reinterpret_cast<char*>(GetModuleHandle(nullptr));
+		VirtualProtect(pBaseAddr, 4096, // Assume x86 page size
+			PAGE_READWRITE, &OldProtect);
+		ZeroMemory(pBaseAddr, 4096);
+	}
+
+	void ChangeSizeOfImage(DWORD NewSize)
+	{
+		__asm
+		{
+			mov ebx, NewSize
+			mov eax, fs:[0x30]
+			mov eax, [eax + 0x0c] 
+			mov eax, [eax + 0x0c] 
+			mov dword ptr[eax + 0x20], ebx
+		}
 	}
 }

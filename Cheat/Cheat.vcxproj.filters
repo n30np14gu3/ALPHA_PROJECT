@@ -46,6 +46,69 @@
     <Filter Include="SDK\protection">
       <UniqueIdentifier>{73244cde-20d8-4f4e-bff2-d9f1407b6933}</UniqueIdentifier>
     </Filter>
+    <Filter Include="source-sdk">
+      <UniqueIdentifier>{b8742911-8dd9-449b-b060-63f9e1f82113}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source-sdk\classes">
+      <UniqueIdentifier>{c60c2b18-fefe-4bdd-afa6-ddd700e8b91c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source-sdk\math">
+      <UniqueIdentifier>{8b441de7-cd81-401c-8e11-c1c3eeeacd0f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source-sdk\misc">
+      <UniqueIdentifier>{772b9d90-9d87-4b1d-bbfa-264d3f093add}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source-sdk\structs">
+      <UniqueIdentifier>{2a93aa31-582a-42f9-9cf3-051b676b5b33}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dependencies">
+      <UniqueIdentifier>{b7bc80bc-345d-4b54-9442-e81463efd2e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dependencies\interfaces">
+      <UniqueIdentifier>{2e5165d4-74a2-4ccc-85db-40a78e0a4b30}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dependencies\math">
+      <UniqueIdentifier>{96afac69-1546-4c3e-9fc3-c315c2f7a2ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dependencies\utilities">
+      <UniqueIdentifier>{cb4c3c36-0e80-4aca-bb83-95b8ba763db3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core">
+      <UniqueIdentifier>{7a83c3b8-21a8-4085-b465-fedec61fadf7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core\hooks">
+      <UniqueIdentifier>{0d32882f-b27c-4244-b978-11157b0437a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core\menu">
+      <UniqueIdentifier>{cc504fc5-8f74-44cd-9229-dc742c8fae6f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core\menu\config">
+      <UniqueIdentifier>{cd95c597-47c6-4367-b775-ddb1accd66b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core\menu\imgui">
+      <UniqueIdentifier>{9503d411-1e05-4364-8b95-c8e855a7b858}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core\menu\imgui\dx9">
+      <UniqueIdentifier>{8eda4c6d-8c99-4b9e-944f-7b71835578e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core\features">
+      <UniqueIdentifier>{95d052f1-dbef-4e23-a824-80b0d98eb236}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core\features\aimbot">
+      <UniqueIdentifier>{c072dbe6-7261-40ff-832f-1b2a2af2ab39}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core\features\backtrack">
+      <UniqueIdentifier>{77a7b4ac-97ad-4783-9194-e1797204b5b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core\features\misc">
+      <UniqueIdentifier>{023bb5fc-4097-40f7-908c-de7a089b67be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core\features\skinchanger">
+      <UniqueIdentifier>{6aecaa78-853a-4c18-a1b8-ea827502174a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core\features\visuals">
+      <UniqueIdentifier>{20288c82-e50a-47c6-8128-57a74e4464a6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DllMain.cpp" />
@@ -75,6 +138,93 @@
     </ClCompile>
     <ClCompile Include="SDK\protection\AntiLeak.cpp">
       <Filter>SDK\protection</Filter>
+    </ClCompile>
+    <ClCompile Include="source-sdk\math\vector3d.cpp">
+      <Filter>source-sdk\math</Filter>
+    </ClCompile>
+    <ClCompile Include="source-sdk\math\view_matrix.cpp">
+      <Filter>source-sdk\math</Filter>
+    </ClCompile>
+    <ClCompile Include="dependencies\interfaces\interfaces.cpp">
+      <Filter>dependencies\interfaces</Filter>
+    </ClCompile>
+    <ClCompile Include="dependencies\math\math.cpp">
+      <Filter>dependencies\math</Filter>
+    </ClCompile>
+    <ClCompile Include="dependencies\utilities\hook.cpp">
+      <Filter>dependencies\utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="dependencies\utilities\md5.cpp">
+      <Filter>dependencies\utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="dependencies\utilities\netvar_manager.cpp">
+      <Filter>dependencies\utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="dependencies\utilities\render.cpp">
+      <Filter>dependencies\utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="dependencies\utilities\utilities.cpp">
+      <Filter>dependencies\utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="core\menu\imgui\dx9\imgui_impl_dx9.cpp">
+      <Filter>core\menu\imgui\dx9</Filter>
+    </ClCompile>
+    <ClCompile Include="core\menu\imgui\imgui.cpp">
+      <Filter>core\menu\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="core\menu\imgui\imgui_draw.cpp">
+      <Filter>core\menu\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="core\menu\config\config.cpp">
+      <Filter>core\menu\config</Filter>
+    </ClCompile>
+    <ClCompile Include="core\hooks\hooks.cpp">
+      <Filter>core\hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="core\features\aimbot\aimbot.cpp">
+      <Filter>core\features\aimbot</Filter>
+    </ClCompile>
+    <ClCompile Include="core\features\backtrack\backtrack.cpp">
+      <Filter>core\features\backtrack</Filter>
+    </ClCompile>
+    <ClCompile Include="core\features\misc\events.cpp">
+      <Filter>core\features\misc</Filter>
+    </ClCompile>
+    <ClCompile Include="core\features\misc\hitmarker.cpp">
+      <Filter>core\features\misc</Filter>
+    </ClCompile>
+    <ClCompile Include="core\features\misc\logs.cpp">
+      <Filter>core\features\misc</Filter>
+    </ClCompile>
+    <ClCompile Include="core\features\misc\misc.cpp">
+      <Filter>core\features\misc</Filter>
+    </ClCompile>
+    <ClCompile Include="core\features\misc\movement.cpp">
+      <Filter>core\features\misc</Filter>
+    </ClCompile>
+    <ClCompile Include="core\features\misc\prediction.cpp">
+      <Filter>core\features\misc</Filter>
+    </ClCompile>
+    <ClCompile Include="core\features\visuals\nightmode.cpp">
+      <Filter>core\features\visuals</Filter>
+    </ClCompile>
+    <ClCompile Include="core\features\visuals\sound.cpp">
+      <Filter>core\features\visuals</Filter>
+    </ClCompile>
+    <ClCompile Include="core\features\visuals\visuals.cpp">
+      <Filter>core\features\visuals</Filter>
+    </ClCompile>
+    <ClCompile Include="core\features\skinchanger\glovechanger.cpp">
+      <Filter>core\features\skinchanger</Filter>
+    </ClCompile>
+    <ClCompile Include="core\features\skinchanger\parser.cpp">
+      <Filter>core\features\skinchanger</Filter>
+    </ClCompile>
+    <ClCompile Include="core\features\skinchanger\skinchanger.cpp">
+      <Filter>core\features\skinchanger</Filter>
+    </ClCompile>
+    <ClCompile Include="core\menu\menu.cpp">
+      <Filter>core\menu</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -214,5 +364,248 @@
       <Filter>SDK\protection</Filter>
     </ClInclude>
     <ClInclude Include="DllMain.h" />
+    <ClInclude Include="source-sdk\sdk.hpp">
+      <Filter>source-sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="source-sdk\classes\c_usercmd.hpp">
+      <Filter>source-sdk\classes</Filter>
+    </ClInclude>
+    <ClInclude Include="source-sdk\classes\client_class.hpp">
+      <Filter>source-sdk\classes</Filter>
+    </ClInclude>
+    <ClInclude Include="source-sdk\classes\collideable.hpp">
+      <Filter>source-sdk\classes</Filter>
+    </ClInclude>
+    <ClInclude Include="source-sdk\classes\convar.hpp">
+      <Filter>source-sdk\classes</Filter>
+    </ClInclude>
+    <ClInclude Include="source-sdk\classes\entities.hpp">
+      <Filter>source-sdk\classes</Filter>
+    </ClInclude>
+    <ClInclude Include="source-sdk\classes\net_channel.hpp">
+      <Filter>source-sdk\classes</Filter>
+    </ClInclude>
+    <ClInclude Include="source-sdk\classes\recv_props.hpp">
+      <Filter>source-sdk\classes</Filter>
+    </ClInclude>
+    <ClInclude Include="source-sdk\classes\studio.hpp">
+      <Filter>source-sdk\classes</Filter>
+    </ClInclude>
+    <ClInclude Include="source-sdk\classes\view_setup.h">
+      <Filter>source-sdk\classes</Filter>
+    </ClInclude>
+    <ClInclude Include="source-sdk\math\utl_vector.hpp">
+      <Filter>source-sdk\math</Filter>
+    </ClInclude>
+    <ClInclude Include="source-sdk\math\vector2d.hpp">
+      <Filter>source-sdk\math</Filter>
+    </ClInclude>
+    <ClInclude Include="source-sdk\math\vector3d.hpp">
+      <Filter>source-sdk\math</Filter>
+    </ClInclude>
+    <ClInclude Include="source-sdk\math\view_matrix.hpp">
+      <Filter>source-sdk\math</Filter>
+    </ClInclude>
+    <ClInclude Include="source-sdk\misc\color.hpp">
+      <Filter>source-sdk\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="source-sdk\structs\dlight.hpp">
+      <Filter>source-sdk\structs</Filter>
+    </ClInclude>
+    <ClInclude Include="source-sdk\structs\materials.hpp">
+      <Filter>source-sdk\structs</Filter>
+    </ClInclude>
+    <ClInclude Include="source-sdk\structs\models.hpp">
+      <Filter>source-sdk\structs</Filter>
+    </ClInclude>
+    <ClInclude Include="source-sdk\structs\vertex_t.hpp">
+      <Filter>source-sdk\structs</Filter>
+    </ClInclude>
+    <ClInclude Include="source-sdk\structs\weaponinfo.hpp">
+      <Filter>source-sdk\structs</Filter>
+    </ClInclude>
+    <ClInclude Include="dependencies\common_includes.hpp">
+      <Filter>dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="dependencies\interfaces\c_global_vars_base.hpp">
+      <Filter>dependencies\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="dependencies\interfaces\engine_sounds.hpp">
+      <Filter>dependencies\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="dependencies\interfaces\glow_manager.hpp">
+      <Filter>dependencies\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="dependencies\interfaces\i_app_system.hpp">
+      <Filter>dependencies\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="dependencies\interfaces\i_base_client_dll.hpp">
+      <Filter>dependencies\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="dependencies\interfaces\i_client_entity_list.hpp">
+      <Filter>dependencies\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="dependencies\interfaces\i_client_mode.hpp">
+      <Filter>dependencies\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="dependencies\interfaces\i_client_state.hpp">
+      <Filter>dependencies\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="dependencies\interfaces\i_console.hpp">
+      <Filter>dependencies\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="dependencies\interfaces\i_game_event_manager.hpp">
+      <Filter>dependencies\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="dependencies\interfaces\i_input.hpp">
+      <Filter>dependencies\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="dependencies\interfaces\i_input_system.hpp">
+      <Filter>dependencies\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="dependencies\interfaces\i_localize.hpp">
+      <Filter>dependencies\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="dependencies\interfaces\i_material_system.hpp">
+      <Filter>dependencies\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="dependencies\interfaces\i_panel.hpp">
+      <Filter>dependencies\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="dependencies\interfaces\i_player_movement.hpp">
+      <Filter>dependencies\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="dependencies\interfaces\i_render_view.hpp">
+      <Filter>dependencies\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="dependencies\interfaces\i_surface.hpp">
+      <Filter>dependencies\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="dependencies\interfaces\i_trace.hpp">
+      <Filter>dependencies\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="dependencies\interfaces\imageformats.h">
+      <Filter>dependencies\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="dependencies\interfaces\interfaces.hpp">
+      <Filter>dependencies\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="dependencies\interfaces\iv_debug_overlay.hpp">
+      <Filter>dependencies\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="dependencies\interfaces\iv_effects.hpp">
+      <Filter>dependencies\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="dependencies\interfaces\iv_engine_client.hpp">
+      <Filter>dependencies\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="dependencies\interfaces\iv_model_info.hpp">
+      <Filter>dependencies\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="dependencies\interfaces\iv_model_render.hpp">
+      <Filter>dependencies\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="dependencies\interfaces\iv_render_beams.hpp">
+      <Filter>dependencies\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="dependencies\math\math.hpp">
+      <Filter>dependencies\math</Filter>
+    </ClInclude>
+    <ClInclude Include="dependencies\utilities\fnv.hpp">
+      <Filter>dependencies\utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="dependencies\utilities\hook.hpp">
+      <Filter>dependencies\utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="dependencies\utilities\md5.hpp">
+      <Filter>dependencies\utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="dependencies\utilities\netvar_manager.hpp">
+      <Filter>dependencies\utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="dependencies\utilities\render.hpp">
+      <Filter>dependencies\utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="dependencies\utilities\singleton.hpp">
+      <Filter>dependencies\utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="dependencies\utilities\utilities.hpp">
+      <Filter>dependencies\utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="core\menu\imgui\dx9\imgui_impl_dx9.h">
+      <Filter>core\menu\imgui\dx9</Filter>
+    </ClInclude>
+    <ClInclude Include="core\menu\imgui\imconfig.h">
+      <Filter>core\menu\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="core\menu\imgui\imgui.h">
+      <Filter>core\menu\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="core\menu\imgui\imgui_internal.h">
+      <Filter>core\menu\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="core\menu\imgui\stb_rect_pack.h">
+      <Filter>core\menu\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="core\menu\imgui\stb_textedit.h">
+      <Filter>core\menu\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="core\menu\imgui\stb_truetype.h">
+      <Filter>core\menu\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="core\menu\config\archivex.hpp">
+      <Filter>core\menu\config</Filter>
+    </ClInclude>
+    <ClInclude Include="core\menu\config\config.hpp">
+      <Filter>core\menu\config</Filter>
+    </ClInclude>
+    <ClInclude Include="core\hooks\hooks.hpp">
+      <Filter>core\hooks</Filter>
+    </ClInclude>
+    <ClInclude Include="core\features\aimbot\aimbot.hpp">
+      <Filter>core\features\aimbot</Filter>
+    </ClInclude>
+    <ClInclude Include="core\features\backtrack\backtrack.hpp">
+      <Filter>core\features\backtrack</Filter>
+    </ClInclude>
+    <ClInclude Include="core\features\misc\events.hpp">
+      <Filter>core\features\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="core\features\misc\hitmarker.hpp">
+      <Filter>core\features\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="core\features\misc\logs.hpp">
+      <Filter>core\features\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="core\features\misc\misc.hpp">
+      <Filter>core\features\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="core\features\misc\movement.hpp">
+      <Filter>core\features\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="core\features\misc\prediction.hpp">
+      <Filter>core\features\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="core\features\visuals\nightmode.hpp">
+      <Filter>core\features\visuals</Filter>
+    </ClInclude>
+    <ClInclude Include="core\features\visuals\sound.hpp">
+      <Filter>core\features\visuals</Filter>
+    </ClInclude>
+    <ClInclude Include="core\features\visuals\visuals.hpp">
+      <Filter>core\features\visuals</Filter>
+    </ClInclude>
+    <ClInclude Include="core\features\skinchanger\glovechanger.hpp">
+      <Filter>core\features\skinchanger</Filter>
+    </ClInclude>
+    <ClInclude Include="core\features\skinchanger\parser.hpp">
+      <Filter>core\features\skinchanger</Filter>
+    </ClInclude>
+    <ClInclude Include="core\features\skinchanger\skinchanger.hpp">
+      <Filter>core\features\skinchanger</Filter>
+    </ClInclude>
+    <ClInclude Include="core\menu\menu.hpp">
+      <Filter>core\menu</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
