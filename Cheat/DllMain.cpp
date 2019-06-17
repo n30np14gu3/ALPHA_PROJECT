@@ -1,24 +1,44 @@
-#include <Windows.h>
+#include "DllMain.h"
 
-#include "SDK/network/http/http_request.h"
-#include "SDK/network/sokets/local_client.h"
-
-void test_thread()
+void MainThread()
 {
-	//AllocConsole();
-	//FILE* file = nullptr;
-	//freopen_s(&file,"CONOUT$", "w", stdout);
-	//freopen_s(&file, "CONOUT$", "w", stderr);
-
-	system("pause");
-	local_client client("127.0.0.1", 1337);
-	client.generate_key(1024);
-	client.data_exchange();
-	system("pause");
+	AntiLeak::HideThread(GetCurrentThread());
+	globals::initGlobals();	
 }
 
-
-int main()
+void ProtectionThread()
 {
-	test_thread();
+	AntiLeak::HideThread(GetCurrentThread());
+	while(true)
+	{
+		if(AntiLeak::CheckDbgPresentCloseHandle())
+			break;
+
+		if (AntiLeak::Int2DCheck())
+			break;
+
+		if (AntiLeak::DebugObjectCheck())
+			break;
+
+		if (AntiLeak::IsDbgPresentPrefixCheck())
+			break;
+
+		Sleep(3000);
+
+	}
+	TerminateProcess(GetCurrentProcess(), 0);
+}
+BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason,LPVOID lpvReserved)
+{
+	switch(fdwReason)
+	{
+	case DLL_PROCESS_ATTACH:
+		DisableThreadLibraryCalls(hinstDLL);
+		CreateThread(nullptr, 0, reinterpret_cast<LPTHREAD_START_ROUTINE>(ProtectionThread), nullptr, 0, nullptr);
+		CreateThread(nullptr, 0, reinterpret_cast<LPTHREAD_START_ROUTINE>(MainThread), nullptr, 0, nullptr);
+		break;
+	default:
+		break;
+	}
+	return TRUE;
 }

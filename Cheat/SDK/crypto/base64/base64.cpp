@@ -16,7 +16,7 @@ namespace base64
 	namespace
 	{
 
-		static std::string BASE64_CHARS = XorStr("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/");
+		std::string BASE64_CHARS;
 
 		size_t encoded_size(size_t raw)
 		{
@@ -192,11 +192,13 @@ namespace base64
 
 	std::string base64_encode(const std::string& str)
 	{
+		BASE64_CHARS = XorStr("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/");
 		return std::for_each(str.begin(), str.end(), encode_t(str.size())).str();
 	}
 
 	std::string base64_decode(const std::string& str)
 	{
+		BASE64_CHARS = XorStr("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/");
 		size_t unpadded_size = str.size();
 		if (str.size() > 0 && str[str.size() - 1] == '=')
 			unpadded_size -= 1;

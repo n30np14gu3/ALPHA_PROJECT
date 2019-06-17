@@ -4,23 +4,24 @@ using System.Runtime.InteropServices;
 
 namespace Loader.NET.SDK.Win32
 {
-    internal class ManualMapInjector
+    internal class Injector
     {
         [UnmanagedFunctionPointer(CallingConvention.StdCall, CharSet = CharSet.Auto)]
-        private delegate bool Inject(byte[] rawData, int pId);
+        private delegate bool Inject(Int32 pId, byte[] pDll);
 
-        internal static bool InjectDll(byte[] dllData, int pId)
+
+        internal static bool ManualMapInject(Int32 pId, byte[] pDll)
         {
             string tmpFile = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
             File.WriteAllBytes(tmpFile, Properties.Resources._mmi_);
 
-            IntPtr pDll = NativeMethods.LoadLibrary(tmpFile);
-            IntPtr pAddr = NativeMethods.GetProcAddress(pDll, "_Inject@8");
+            IntPtr _pDll = NativeMethods.LoadLibrary(tmpFile);
+            IntPtr pAddr = NativeMethods.GetProcAddress(_pDll, "_Inject@8");
             Inject inject = (Inject) Marshal.GetDelegateForFunctionPointer(pAddr, typeof(Inject));
 
-            bool result = inject(dllData, pId);
+            bool result = inject(pId, pDll);
 
-            NativeMethods.FreeLibrary(pDll);
+            NativeMethods.FreeLibrary(_pDll);
 
             File.Delete(tmpFile);
 

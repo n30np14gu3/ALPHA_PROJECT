@@ -1,44 +1,104 @@
 #include <Windows.h>
 #include <WinInet.h>
 #include "http_request.h"
+#include "../../crypto/XorStr.h"
+
 #pragma comment (lib, "Wininet.lib")
 
 
 
-string sendHttpRequest(
-	const string& server,
-	const string& route,
-	const string& user_agent,
-	const string& params,
-	const string& method
-)
+namespace http_request
 {
-	HINTERNET hInternet = InternetOpen(user_agent.c_str(), INTERNET_OPEN_TYPE_PRECONFIG, nullptr, nullptr, INTERNET_FLAG_SECURE);
-	if(hInternet != nullptr)
+	string post(
+		const string& server,
+		const string& route,
+		const string& user_agent,
+		const string& params,
+		bool ssl
+	)
 	{
-		HINTERNET hConnect = InternetConnect(hInternet, server.c_str(), INTERNET_DEFAULT_HTTPS_PORT, nullptr, nullptr, INTERNET_SERVICE_HTTP, INTERNET_FLAG_SECURE, 1);
-		if(hConnect != nullptr)
-		{
-			HINTERNET hRequest = HttpOpenRequest(hConnect, method.c_str(), route.c_str(), nullptr, nullptr, nullptr, INTERNET_FLAG_KEEP_CONNECTION, 1);
-			if(hRequest != nullptr)
-			{
-				if (HttpSendRequest(hRequest, nullptr, 0, LPVOID(params.c_str()), params.length() + 1))
-				{
-					unsigned char c = 0;
-					string response = "";
-					for(;;)
-					{
-						DWORD readed = 0;
-						BOOL isRead = InternetReadFile(hRequest, LPVOID(&c), 1, &readed);
-						if(readed == 0 || !isRead)
-							break;
+		HINTERNET hInternet = InternetOpen(user_agent.c_str(), INTERNET_OPEN_TYPE_PRECONFIG, nullptr, nullptr, 0);
 
-						response += c;
+		if (hInternet != nullptr)
+		{
+			HINTERNET hConnect = InternetConnect(hInternet, server.c_str(), ssl ? INTERNET_DEFAULT_HTTPS_PORT : INTERNET_DEFAULT_HTTP_PORT, nullptr, nullptr, INTERNET_SERVICE_HTTP, 0, 0);
+			if (hConnect != nullptr)
+			{
+				HINTERNET hRequest = HttpOpenRequest(hConnect, XorStr("POST"), route.c_str(), nullptr, nullptr, nullptr, ssl ? (INTERNET_FLAG_SECURE | INTERNET_FLAG_KEEP_CONNECTION) : INTERNET_SERVICE_HTTP, 0);
+				if (hRequest != nullptr)
+				{
+					string heades = XorStr("Content-Type: application/x-www-form-urlencoded\r\n");
+					if (HttpSendRequest(hRequest, heades.c_str(), heades.length(), LPVOID(TEXT(params.c_str())), params.length()))
+					{
+						unsigned char c = 0;
+						string response = "";
+						for (;;)
+						{
+							DWORD readed = 0;
+							BOOL isRead = InternetReadFile(hRequest, LPVOID(&c), 1, &readed);
+							if (readed == 0 || !isRead)
+								break;
+
+							response += c;
+						}
+						InternetCloseHandle(hRequest);
+						InternetCloseHandle(hConnect);
+						InternetCloseHandle(hInternet);
+						return  response;
 					}
-					return  response;
 				}
 			}
+			InternetCloseHandle(hConnect);
+			InternetCloseHandle(hInternet);
 		}
+		InternetCloseHandle(hInternet);
+
+		return "";
 	}
-	return "";
+
+	string get(
+		const string& server,
+		const string& route,
+		const string& user_agent,
+		const string& params,
+		bool ssl
+	)
+	{
+		HINTERNET hInternet = InternetOpen(user_agent.c_str(), INTERNET_OPEN_TYPE_PRECONFIG, nullptr, nullptr, 0);
+
+		if (hInternet != nullptr)
+		{
+			HINTERNET hConnect = InternetConnect(hInternet, server.c_str(), ssl ? INTERNET_DEFAULT_HTTPS_PORT : INTERNET_DEFAULT_HTTP_PORT, nullptr, nullptr, INTERNET_SERVICE_HTTP, 0, 0);
+			if (hConnect != nullptr)
+			{
+				HINTERNET hRequest = HttpOpenRequest(hConnect, XorStr("GET"), (route + "?" + params).c_str(), nullptr, nullptr, nullptr, ssl ? (INTERNET_FLAG_SECURE | INTERNET_FLAG_KEEP_CONNECTION) : INTERNET_SERVICE_HTTP, 0);
+				if (hRequest != nullptr)
+				{
+					if (HttpSendRequest(hRequest, nullptr, 0, nullptr, 0))
+					{
+						unsigned char c = 0;
+						string response;
+						for (;;)
+						{
+							DWORD readed = 0;
+							BOOL isRead = InternetReadFile(hRequest, LPVOID(&c), 1, &readed);
+							if (readed == 0 || !isRead)
+								break;
+
+							response += c;
+						}
+						InternetCloseHandle(hRequest);
+						InternetCloseHandle(hConnect);
+						InternetCloseHandle(hInternet);
+						return  response;
+					}
+				}
+			}
+			InternetCloseHandle(hConnect);
+			InternetCloseHandle(hInternet);
+		}
+		InternetCloseHandle(hInternet);
+
+		return "";
+	}
 }

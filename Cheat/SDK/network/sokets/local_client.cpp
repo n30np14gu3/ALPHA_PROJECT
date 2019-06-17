@@ -8,12 +8,13 @@
 
 #include "../../crypto/hash/sha256.hpp"
 #include "../../crypto/XorStr.h"
-#include "../../openssl extensions/openssl_extensions.h"
+#include "../../globals/globals.h"
 
 #include <fstream>
 
 #pragma comment(lib, "Ws2_32.lib")
 
+using namespace std;
 ifstream::pos_type filesize(const char* filename)
 {
 	std::ifstream in(filename, ifstream::ate | ifstream::binary);
@@ -105,13 +106,15 @@ bool local_client::data_exchange()
 	memcpy((void*)header.hash, hash.c_str(), hash.length());
 	OPENSSL_cleanse(rnd_data, keySize);
 	hash.clear();
+	delete[] rnd_data;
+
 	if(!sendpacket(reinterpret_cast<byte*>(&header), sizeof(PROTO_HEADER)))
 		return false;
 
 	if(!sendpacket(key_data, keySize))
 		return false;
 
-	//RECV KEYS
+	//RECV KEYS & DECRYPT
 	DWORD recived = 0;
 	DWORD* encryptedSize = reinterpret_cast<DWORD*>(recivepacket(sizeof(DWORD), &recived));
 	if(recived != 4)
@@ -128,6 +131,13 @@ bool local_client::data_exchange()
 	if(!RSA_private_decrypt(*encryptedSize, encryptedData, reinterpret_cast<byte*>(&response), m_rsa, RSA_PKCS1_PADDING))
 		return false;
 
+	//STORE DATA
+	globals::access_token = string(reinterpret_cast<char*>(response.access_token));
+	globals::crypto_key = string(reinterpret_cast<char*>(response.key));
+	globals::crypto_iv = string(reinterpret_cast<char*>(response.iv));
+	globals::user_id = response.user_id;
+
+	ZeroMemory(&response, sizeof(SERVER_RESPONSE));
 
 	return true;
 }

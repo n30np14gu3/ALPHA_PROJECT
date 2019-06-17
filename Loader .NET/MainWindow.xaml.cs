@@ -136,8 +136,8 @@ namespace Loader.NET
             {
                 foreach (byte[] raw in _dlls)
                 {
-                    if (!ManualMapInjector.InjectDll(raw, _csgoPid))
-                        throw new Exception("Не удалось запустить чит!");
+                    //if (!Injector.ManualMapInject(raw, _csgoPid))
+                    //    throw new Exception("Не удалось запустить чит!");
 
                     Thread.Sleep(1000);
                 }

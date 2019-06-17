@@ -36,7 +36,7 @@
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_DBG|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>false</WholeProgramOptimization>
@@ -87,6 +87,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
+      <GenerateMapFile>false</GenerateMapFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_DBG|Win32'">
@@ -104,7 +105,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <AssemblyDebug>true</AssemblyDebug>
     </Link>
   </ItemDefinitionGroup>
@@ -125,20 +126,60 @@
     <ClCompile Include="SDK\crypto\base64\base64.cpp" />
     <ClCompile Include="SDK\crypto\hash\sha256.cpp" />
     <ClCompile Include="SDK\crypto\hash\sha512.cpp" />
+    <ClCompile Include="SDK\globals\globals.cpp" />
     <ClCompile Include="SDK\license\license_manager.cpp" />
     <ClCompile Include="SDK\network\http\http_request.cpp" />
     <ClCompile Include="SDK\network\sokets\local_client.cpp" />
     <ClCompile Include="SDK\openssl extensions\openssl_extensions.cpp" />
+    <ClCompile Include="SDK\protection\AntiLeak.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DllMain.h" />
     <ClInclude Include="SDK\crypto\base64\base64.hpp" />
     <ClInclude Include="SDK\crypto\hash\sha256.hpp" />
     <ClInclude Include="SDK\crypto\hash\sha512.hpp" />
     <ClInclude Include="SDK\crypto\XorStr.h" />
+    <ClInclude Include="SDK\globals\globals.h" />
     <ClInclude Include="SDK\license\license_manager.h" />
     <ClInclude Include="SDK\network\http\http_request.h" />
     <ClInclude Include="SDK\network\sokets\local_client.h" />
     <ClInclude Include="SDK\openssl extensions\openssl_extensions.h" />
+    <ClInclude Include="SDK\protection\AntiLeak.h" />
+    <ClInclude Include="SDK\rapidjson\allocators.h" />
+    <ClInclude Include="SDK\rapidjson\document.h" />
+    <ClInclude Include="SDK\rapidjson\encodedstream.h" />
+    <ClInclude Include="SDK\rapidjson\encodings.h" />
+    <ClInclude Include="SDK\rapidjson\error\en.h" />
+    <ClInclude Include="SDK\rapidjson\error\error.h" />
+    <ClInclude Include="SDK\rapidjson\filereadstream.h" />
+    <ClInclude Include="SDK\rapidjson\filewritestream.h" />
+    <ClInclude Include="SDK\rapidjson\fwd.h" />
+    <ClInclude Include="SDK\rapidjson\internal\biginteger.h" />
+    <ClInclude Include="SDK\rapidjson\internal\diyfp.h" />
+    <ClInclude Include="SDK\rapidjson\internal\dtoa.h" />
+    <ClInclude Include="SDK\rapidjson\internal\ieee754.h" />
+    <ClInclude Include="SDK\rapidjson\internal\itoa.h" />
+    <ClInclude Include="SDK\rapidjson\internal\meta.h" />
+    <ClInclude Include="SDK\rapidjson\internal\pow10.h" />
+    <ClInclude Include="SDK\rapidjson\internal\regex.h" />
+    <ClInclude Include="SDK\rapidjson\internal\stack.h" />
+    <ClInclude Include="SDK\rapidjson\internal\strfunc.h" />
+    <ClInclude Include="SDK\rapidjson\internal\strtod.h" />
+    <ClInclude Include="SDK\rapidjson\internal\swap.h" />
+    <ClInclude Include="SDK\rapidjson\istreamwrapper.h" />
+    <ClInclude Include="SDK\rapidjson\memorybuffer.h" />
+    <ClInclude Include="SDK\rapidjson\memorystream.h" />
+    <ClInclude Include="SDK\rapidjson\msinttypes\inttypes.h" />
+    <ClInclude Include="SDK\rapidjson\msinttypes\stdint.h" />
+    <ClInclude Include="SDK\rapidjson\ostreamwrapper.h" />
+    <ClInclude Include="SDK\rapidjson\pointer.h" />
+    <ClInclude Include="SDK\rapidjson\prettywriter.h" />
+    <ClInclude Include="SDK\rapidjson\rapidjson.h" />
+    <ClInclude Include="SDK\rapidjson\reader.h" />
+    <ClInclude Include="SDK\rapidjson\schema.h" />
+    <ClInclude Include="SDK\rapidjson\stream.h" />
+    <ClInclude Include="SDK\rapidjson\stringbuffer.h" />
+    <ClInclude Include="SDK\rapidjson\writer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
