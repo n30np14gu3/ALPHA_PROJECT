@@ -10,6 +10,8 @@ public:
 	void viewmodel_modulate(const model_render_info_t& info);
 	void chams() noexcept;
 	void glow() noexcept;
+	bool isActive = true;
+	const int moduleId = 0;
 private:
 	int alpha[65];
 	bool last_dormant[65];

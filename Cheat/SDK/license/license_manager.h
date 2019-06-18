@@ -26,5 +26,5 @@ namespace license_manager
 
 	bool getModulesInfo();
 
-	bool checkModuleActive(unsigned int _end_date);
+	bool checkModuleActive(LICENSE_DATA data, int moduleId);
 }

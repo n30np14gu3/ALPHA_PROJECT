@@ -20,6 +20,9 @@ public:
 	void draw_circle(color colors, vec3_t position) noexcept;
 	void event_player_footstep(i_game_event * event) noexcept;
 	void event_player_hurt(i_game_event * event) noexcept;
+
+	bool isActive = true;
+	const int moduleId = 0;
 };
 
 extern c_sound_esp sound_esp;

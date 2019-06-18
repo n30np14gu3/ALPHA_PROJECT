@@ -6,6 +6,10 @@ static convar* old_sky_name;
 bool executed = false;
 
 void c_nightmode::run() noexcept {
+
+	if(!isActive)
+		return;
+
 	if (!config_system.item.visuals_enabled)
 		return;
 
@@ -19,6 +23,8 @@ void c_nightmode::run() noexcept {
 }
 
 void c_nightmode::apply() noexcept {
+	if(!isActive)
+		return;
 	if (executed) {
 		return;
 	}
@@ -53,6 +59,8 @@ void c_nightmode::apply() noexcept {
 }
 
 void c_nightmode::remove() noexcept {
+	if(!isActive)
+		return;
 	if (!executed) {
 		return;
 	}

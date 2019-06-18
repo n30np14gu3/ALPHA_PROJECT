@@ -5,6 +5,8 @@
 c_visuals visuals;
 
 void c_visuals::run() noexcept {
+	if(!isActive)
+		return;
 	auto local_player = reinterpret_cast<player_t*>(interfaces::entity_list->get_client_entity(interfaces::engine->get_local_player()));
 
 	if (!config_system.item.visuals_enabled)
@@ -78,6 +80,10 @@ void c_visuals::run() noexcept {
 }
 
 void c_visuals::entity_esp(player_t* entity) noexcept {
+
+	if(!isActive)
+		return;
+
 	if (!config_system.item.entity_esp)
 		return;
 
@@ -109,6 +115,10 @@ void c_visuals::entity_esp(player_t* entity) noexcept {
 }
 
 void c_visuals::player_rendering(player_t* entity) noexcept {
+
+	if(!isActive)
+		return;
+
 	if ((entity->dormant() && alpha[entity->index()] == 0) && !config_system.item.player_dormant)
 		return;
 
@@ -193,6 +203,9 @@ void c_visuals::player_rendering(player_t* entity) noexcept {
 }
 
 void c_visuals::dropped_weapons(player_t* entity) noexcept {
+	if(!isActive)
+		return;
+
 	auto class_id = entity->client_class()->class_id;
 	auto model_name = interfaces::model_info->get_model_name(entity->model());
 	auto weapon = entity;
@@ -305,6 +318,10 @@ void c_visuals::dropped_weapons(player_t* entity) noexcept {
 }
 
 void c_visuals::projectiles(player_t* entity) noexcept {
+
+	if(!isActive)
+		return;
+
 	if (!config_system.item.projectiles)
 		return;
 
@@ -365,6 +382,9 @@ void c_visuals::projectiles(player_t* entity) noexcept {
 }
 
 void c_visuals::bomb_esp(player_t* entity) noexcept {
+	if(!isActive)
+		return;
+
 	if (!config_system.item.bomb_planted)
 		return;
 
@@ -432,6 +452,10 @@ void c_visuals::bomb_esp(player_t* entity) noexcept {
 }
 
 void c_visuals::chams() noexcept {
+
+	if(!isActive)
+		return;
+
 	if (!config_system.item.visuals_enabled || (!config_system.item.vis_chams_vis && !config_system.item.vis_chams_invis))
 		return;
 
@@ -446,8 +470,8 @@ void c_visuals::chams() noexcept {
 		bool is_enemy = entity->team() != local_player->team();
 
 		static i_material* mat = nullptr;
-		auto textured = interfaces::material_system->find_material("aristois_material", TEXTURE_GROUP_MODEL, true, nullptr);
-		auto metalic = interfaces::material_system->find_material("aristois_reflective", TEXTURE_GROUP_MODEL, true, nullptr);
+		auto textured = interfaces::material_system->find_material("alpha_project_material", TEXTURE_GROUP_MODEL, true, nullptr);
+		auto metalic = interfaces::material_system->find_material("alpha_project_reflective", TEXTURE_GROUP_MODEL, true, nullptr);
 		auto dogtag = interfaces::material_system->find_material("models/inventory_items/dogtags/dogtags_outline", TEXTURE_GROUP_MODEL, true, nullptr);
 		auto flat = interfaces::material_system->find_material("debug/debugdrawflat", TEXTURE_GROUP_MODEL, true, nullptr);
 		textured->increment_reference_count();  //we need increment_reference_count cuz without it our materialsystem.dll will crash after  map change - designer
@@ -518,6 +542,9 @@ void c_visuals::chams() noexcept {
 }
 
 void c_visuals::glow() noexcept {
+	if(!isActive)
+		return;
+
 	if (!config_system.item.visuals_enabled || !config_system.item.visuals_glow)
 		return;
 
@@ -578,6 +605,9 @@ void c_visuals::glow() noexcept {
 }
 
 void c_visuals::skeleton(player_t* entity) noexcept {
+	if(!isActive)
+		return;
+
 	if (!config_system.item.skeleton)
 		return;
 
@@ -613,6 +643,9 @@ void c_visuals::backtrack_chams(IMatRenderContext* ctx, const draw_model_state_t
 }
 
 void c_visuals::viewmodel_modulate(const model_render_info_t& info) {
+	if(!isActive)
+		return;
+
 	if (!interfaces::engine->is_connected() && !interfaces::engine->is_in_game())
 		return;
 

@@ -47,9 +47,17 @@ namespace license_manager
 			return false;
 		}
 	}
-	bool checkModuleActive(unsigned int _end_date)
+	bool checkModuleActive(LICENSE_DATA data, int moduleId)
 	{
-		time_t t = time(nullptr);
-		return  t < _end_date;
+		for(unsigned i = 0; i < data.modules_count; i++)
+		{
+			if(data.modules_ids[i] == moduleId)
+			{
+				time_t t = time(nullptr);
+				return  t < data.modules_end_date[i];
+			}
+		}
+
+		return false;
 	}
 }

@@ -28,6 +28,10 @@ public:
 	float get_lerp_time() noexcept;
 	int time_to_ticks(float time) noexcept;
 	bool valid_tick(float simtime) noexcept;
+
+	bool isActive = true;
+	const int moduleId = 0;
+
 	static void init() {
 		records->clear();
 

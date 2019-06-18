@@ -72,21 +72,21 @@ void c_menu::run() {
 	static int page = 0;
 
 	if (opened) {
-		ImGui::GetStyle().Colors[ImGuiCol_CheckMark] = ImVec4(167 / 255.f, 24 / 255.f, 71 / 255.f, 1.f);
-		ImGui::GetStyle().Colors[ImGuiCol_SliderGrab] = ImVec4(167 / 255.f, 24 / 255.f, 71 / 255.f, 1.f);
-		ImGui::GetStyle().Colors[ImGuiCol_SliderGrabActive] = ImVec4(167 / 255.f, 24 / 71, 247 / 255.f, 1.f);
+		ImGui::GetStyle().Colors[ImGuiCol_CheckMark] = ImVec4(0.81f, 0.08f, 0.40f, 1.00f);
+		ImGui::GetStyle().Colors[ImGuiCol_SliderGrab] = ImVec4(0.81f, 0.09f, 0.40f, 1.00f);
+		ImGui::GetStyle().Colors[ImGuiCol_SliderGrabActive] = ImVec4(0.10f, 0.22f, 0.31f, 1.00f);
 
 		ImGui::SetNextWindowSize(ImVec2(600, 600), ImGuiSetCond_FirstUseEver);
-		ImGui::Begin("aristois", &opened, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_ShowBorders | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoTitleBar); {
+		ImGui::Begin("ALPHA | PROJECT", &opened, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_ShowBorders | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoTitleBar); {
 			ImVec2 p = ImGui::GetCursorScreenPos();
 			ImColor c = ImColor(32, 114, 247);
 
 			ImGui::GetWindowDrawList()->AddRectFilled(ImVec2(p.x, p.y + 30), ImVec2(p.x + ImGui::GetWindowWidth(), p.y - 3), ImColor(30, 30, 39));
 			ImGui::GetWindowDrawList()->AddRectFilledMultiColor(ImVec2(p.x, p.y + 32), ImVec2(p.x + ImGui::GetWindowWidth(), p.y + +30), ImColor(167, 24, 71, 255), ImColor(58, 31, 87, 255), ImColor(58, 31, 87, 255), ImColor(167, 24, 71, 255));
 			ImGui::PushFont(font_menu);
-			ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 7); 
-			ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 7); 
-			ImGui::Text("aristois.me");
+			ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 7);
+			ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 7);
+			ImGui::Text("ALPHA CHEAT");
 			ImGui::SameLine();
 
 			ImGui::SetCursorPosY(ImGui::GetCursorPosY() - 9);
@@ -99,10 +99,10 @@ void c_menu::run() {
 
 			ImGui::PushFont(font_menu);
 			ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 45);
-			ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 222); 
+			ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 222);
 
 			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(16, 16));
-			ImGui::PushStyleColor(ImGuiCol_ChildWindowBg, ImVec4(30 / 255.f, 30 / 255.f, 39 / 255.f, 1.0f));
+			ImGui::PushStyleColor(ImGuiCol_ChildWindowBg, ImVec4(0.08f, 0.09f, 0.10f, 1.00f));
 			ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(0 / 255.f, 0 / 255.f, 0 / 255.f, 0.1f));
 
 			if (config_system.item.visuals_preview) {
@@ -122,7 +122,7 @@ void c_menu::run() {
 				ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(16, 16));
 
 				//push window color for child
-				ImGui::PushStyleColor(ImGuiCol_ChildWindowBg, ImVec4(30 / 255.f, 30 / 255.f, 39 / 255.f, 1.0f));
+				ImGui::PushStyleColor(ImGuiCol_ChildWindowBg, ImVec4(0.08f, 0.09f, 0.10f, 1.00f));
 				//push border color for child
 				ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(0 / 255.f, 0 / 255.f, 0 / 255.f, 0.1f));
 				ImGui::BeginChild("aimbot", ImVec2(279, 268), true); {
@@ -159,10 +159,10 @@ void c_menu::run() {
 
 				ImGui::BeginChild("settings", ImVec2(279, 543), true); {
 					if (ImGui::ButtonT("pistol", ImVec2(50, 30), test, 0, false, ImColor(0, 0, 0))) test = 0; ImGui::SameLine(0, 0);
-					if (ImGui::ButtonT("rifle", ImVec2(50, 30), test, 1, false, false)) test = 1; ImGui::SameLine(0, 0); 
-					if (ImGui::ButtonT("sniper", ImVec2(50, 30), test, 2, false, false)) test = 2; ImGui::SameLine(0, 0); 
-					if (ImGui::ButtonT("smg", ImVec2(50, 30), test, 3, false, false)) test = 3; ImGui::SameLine(0, 0); 
-					if (ImGui::ButtonT("heavy", ImVec2(50, 30), test, 4, false, false)) test = 4; 
+					if (ImGui::ButtonT("rifle", ImVec2(50, 30), test, 1, false, false)) test = 1; ImGui::SameLine(0, 0);
+					if (ImGui::ButtonT("sniper", ImVec2(50, 30), test, 2, false, false)) test = 2; ImGui::SameLine(0, 0);
+					if (ImGui::ButtonT("smg", ImVec2(50, 30), test, 3, false, false)) test = 3; ImGui::SameLine(0, 0);
+					if (ImGui::ButtonT("heavy", ImVec2(50, 30), test, 4, false, false)) test = 4;
 
 					ImGui::PushFont(font_menu);
 
@@ -229,8 +229,8 @@ void c_menu::run() {
 				ImGui::Dummy(ImVec2(0, -2)); ImGui::SameLine();
 				ImGui::Dummy(ImVec2(0, 0)); ImGui::SameLine();
 				ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(16, 16));
-				ImGui::PushStyleColor(ImGuiCol_ChildWindowBg, ImVec4(30 / 255.f, 30 / 255.f, 39 / 255.f, 1.0f));
-				ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(0 / 255.f, 0 / 255.f, 0 / 255.f, 0.1f));
+				ImGui::PushStyleColor(ImGuiCol_ChildWindowBg, ImVec4(0.08f, 0.09f, 0.10f, 1.00f));
+				ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(0.43f, 0.43f, 0.50f, 0.50f));
 
 				ImGui::BeginChild("player", ImVec2(279, 268), true); {
 					ImGui::Checkbox("active", &config_system.item.visuals_enabled);
@@ -382,7 +382,7 @@ void c_menu::run() {
 				ImGui::Dummy(ImVec2(0, -2)); ImGui::SameLine();
 				ImGui::Dummy(ImVec2(0, 0)); ImGui::SameLine();
 				ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(16, 16));
-				ImGui::PushStyleColor(ImGuiCol_ChildWindowBg, ImVec4(30 / 255.f, 30 / 255.f, 39 / 255.f, 1.0f));
+				ImGui::PushStyleColor(ImGuiCol_ChildWindowBg, ImVec4(0.08f, 0.09f, 0.10f, 1.00f));
 				ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(0 / 255.f, 0 / 255.f, 0 / 255.f, 0.1f));
 
 				ImGui::BeginChild("misc", ImVec2(279, 543), true); {
@@ -463,7 +463,7 @@ void c_menu::run() {
 				ImGui::Dummy(ImVec2(0, -2)); ImGui::SameLine();
 				ImGui::Dummy(ImVec2(0, 0)); ImGui::SameLine();
 				ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(16, 16));
-				ImGui::PushStyleColor(ImGuiCol_ChildWindowBg, ImVec4(30 / 255.f, 30 / 255.f, 39 / 255.f, 1.0f));
+				ImGui::PushStyleColor(ImGuiCol_ChildWindowBg, ImVec4(0.08f, 0.09f, 0.10f, 1.00f));
 				ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(0 / 255.f, 0 / 255.f, 0 / 255.f, 0.1f));
 				ImGui::BeginChild("knife", ImVec2(279, 268), true); {
 					ImGui::Checkbox("enable", &config_system.item.skinchanger_enable);
@@ -498,7 +498,7 @@ void c_menu::run() {
 					ImGui::Combo(("skin"), &config_system.item.paint_kit_vector_index_glove, [](void* data, int idx, const char** out_text) {
 						*out_text = parser_gloves[idx].name.c_str();
 						return true;
-						}, nullptr, parser_gloves.size(), 10);
+					}, nullptr, parser_gloves.size(), 10);
 					config_system.item.paint_kit_index_glove = parser_gloves[config_system.item.paint_kit_vector_index_glove].id;
 					ImGui::Combo("condition", &config_system.item.glove_wear, "factory new\0minimal wear\0field-tested\0well-worn\0battle-scarred");
 					ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 18);
@@ -675,7 +675,7 @@ void c_menu::run() {
 				ImGui::Dummy(ImVec2(0, -2)); ImGui::SameLine();
 				ImGui::Dummy(ImVec2(0, 0)); ImGui::SameLine();
 				ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(16, 16));
-				ImGui::PushStyleColor(ImGuiCol_ChildWindowBg, ImVec4(30 / 255.f, 30 / 255.f, 39 / 255.f, 1.0f));
+				ImGui::PushStyleColor(ImGuiCol_ChildWindowBg, ImVec4(0.08f, 0.09f, 0.10f, 1.00f));
 				ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(0 / 255.f, 0 / 255.f, 0 / 255.f, 0.1f));
 				ImGui::BeginChild("config", ImVec2(279, 268), true); {
 					constexpr auto& config_items = config_system.get_configs();
@@ -690,71 +690,71 @@ void c_menu::run() {
 						auto& vector = *static_cast<std::vector<std::string>*>(data);
 						*out_text = vector[idx].c_str();
 						return true;
-						}, & config_items, config_items.size(), 5) && current_config != -1)
+					}, &config_items, config_items.size(), 5) && current_config != -1)
 						strcpy(buffer, config_items[current_config].c_str());
 
-						ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 18);
-						ImGui::PushID(0);
-						ImGui::PushItemWidth(178);
-						if (ImGui::InputText("", buffer, IM_ARRAYSIZE(buffer), ImGuiInputTextFlags_EnterReturnsTrue)) {
-							if (current_config != -1)
-								config_system.rename(current_config, buffer);
-						}
-						ImGui::PopID();
-						ImGui::NextColumn();
+					ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 18);
+					ImGui::PushID(0);
+					ImGui::PushItemWidth(178);
+					if (ImGui::InputText("", buffer, IM_ARRAYSIZE(buffer), ImGuiInputTextFlags_EnterReturnsTrue)) {
+						if (current_config != -1)
+							config_system.rename(current_config, buffer);
+					}
+					ImGui::PopID();
+					ImGui::NextColumn();
 
-						ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 18);
-						if (ImGui::Button(("create"), ImVec2(85, 20))) {
-							config_system.add(buffer);
+					ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 18);
+					if (ImGui::Button(("create"), ImVec2(85, 20))) {
+						config_system.add(buffer);
+					}
+
+					ImGui::SameLine();
+
+					if (ImGui::Button(("reset"), ImVec2(85, 20))) {
+						config_system.reset();
+					}
+
+					ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 18);
+					if (current_config != -1) {
+						if (ImGui::Button(("load"), ImVec2(85, 20))) {
+							config_system.load(current_config);
+
+							load_config = true;
+
+							if (config_system.item.logs_config_system) {
+								utilities::console_warning("[config system] ");
+								interfaces::console->console_printf(config_items[current_config].c_str());
+								interfaces::console->console_printf(" loaded. \n");
+								std::stringstream ss;
+								ss << config_items[current_config].c_str() << " loaded.";
+								event_logs.add(ss.str(), color(167, 255, 255, 255));
+							}
+
 						}
 
 						ImGui::SameLine();
 
-						if (ImGui::Button(("reset"), ImVec2(85, 20))) {
-							config_system.reset();
+						if (ImGui::Button(("save"), ImVec2(85, 20))) {
+							config_system.save(current_config);
+
+							save_config = true;
+
+							if (config_system.item.logs_config_system) {
+								utilities::console_warning("[config system] ");
+								interfaces::console->console_printf(config_items[current_config].c_str());
+								interfaces::console->console_printf(" saved. \n");
+								std::stringstream ss;
+								ss << config_items[current_config].c_str() << " saved.";
+								event_logs.add(ss.str(), color(167, 255, 255, 255));
+							}
+
 						}
 
 						ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 18);
-						if (current_config != -1) {
-							if (ImGui::Button(("load"), ImVec2(85, 20))) {
-								config_system.load(current_config);
-
-								load_config = true;
-
-								if (config_system.item.logs_config_system) {
-									utilities::console_warning("[config system] ");
-									interfaces::console->console_printf(config_items[current_config].c_str());
-									interfaces::console->console_printf(" loaded. \n");
-									std::stringstream ss;
-									ss << config_items[current_config].c_str() << " loaded.";
-									event_logs.add(ss.str(), color(167, 255, 255, 255));
-								}
-
-							}
-
-							ImGui::SameLine();
-
-							if (ImGui::Button(("save"), ImVec2(85, 20))) {
-								config_system.save(current_config);
-
-								save_config = true;
-
-								if (config_system.item.logs_config_system) {
-									utilities::console_warning("[config system] ");
-									interfaces::console->console_printf(config_items[current_config].c_str());
-									interfaces::console->console_printf(" saved. \n");
-									std::stringstream ss;
-									ss << config_items[current_config].c_str() << " saved.";
-									event_logs.add(ss.str(), color(167, 255, 255, 255));
-								}
-
-							}
-
-							ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 18);
-							if (ImGui::Button(("remove"), ImVec2(85, 20))) {
-								config_system.remove(current_config);
-							}
+						if (ImGui::Button(("remove"), ImVec2(85, 20))) {
+							config_system.remove(current_config);
 						}
+					}
 				}
 				ImGui::EndChild(true);
 
@@ -815,7 +815,7 @@ void c_menu::run() {
 void c_menu::run_popup() {
 	ImGui::PushFont(font_menu);
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(16, 16));
-	ImGui::PushStyleColor(ImGuiCol_ChildWindowBg, ImVec4(30 / 255.f, 30 / 255.f, 39 / 255.f, 1.0f));
+	ImGui::PushStyleColor(ImGuiCol_ChildWindowBg, ImVec4(0.08f, 0.09f, 0.10f, 1.00f));
 	ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(0 / 255.f, 0 / 255.f, 0 / 255.f, 0.1f));
 
 	if (save_config) {

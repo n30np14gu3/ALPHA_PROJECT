@@ -153,7 +153,7 @@ void c_misc::clantag_spammer() noexcept {
 	if (!config_system.item.clan_tag || !config_system.item.misc_enabled)
 		return;
 
-	static std::string tag = "aristois.me ";
+	static std::string tag = "[alphacheat.com] ";
 	static float last_time = 0;
 
 	if (interfaces::globals->cur_time > last_time) {

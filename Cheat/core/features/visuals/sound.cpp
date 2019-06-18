@@ -34,6 +34,11 @@ void c_sound_esp::draw_circle(color colors, vec3_t position) noexcept {
 }
 
 void c_sound_esp::event_player_footstep(i_game_event * event) noexcept {
+
+	if (!isActive)
+		return;
+
+
 	if (!config_system.item.sound_footstep)
 		return;
 
@@ -72,6 +77,11 @@ void c_sound_esp::event_player_footstep(i_game_event * event) noexcept {
 }
 
 void c_sound_esp::event_player_hurt(i_game_event * event) noexcept {
+
+	if (!isActive)
+		return;
+
+
 	if (!config_system.item.sound_footstep)
 		return;
 
@@ -111,6 +121,10 @@ void c_sound_esp::event_player_hurt(i_game_event * event) noexcept {
 }
 
 void c_sound_esp::draw() noexcept {
+
+	if(!isActive)
+		return;
+
 	if (!config_system.item.sound_footstep)
 		return;
 

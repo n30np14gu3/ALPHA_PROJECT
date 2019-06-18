@@ -31,6 +31,7 @@ HWND hooks::window;
 WNDPROC hooks::wndproc_original = NULL;
 
 void hooks::initialize() noexcept {
+
 	client_hook = std::make_unique<vmt_hook>();
 	clientmode_hook = std::make_unique<vmt_hook>();
 	panel_hook = std::make_unique<vmt_hook>();

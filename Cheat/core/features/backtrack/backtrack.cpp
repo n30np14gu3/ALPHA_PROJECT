@@ -24,6 +24,9 @@ bool c_backtrack::valid_tick(float simtime) noexcept {
 }
 
 void c_backtrack::update() noexcept {
+	if(!isActive)
+		return;
+
 	auto local_player = reinterpret_cast<player_t*>(interfaces::entity_list->get_client_entity(interfaces::engine->get_local_player()));
 	if (!config_system.item.backtrack || !local_player || !local_player->is_alive()) {
 		if (!records->empty())
@@ -64,6 +67,9 @@ void c_backtrack::update() noexcept {
 }
 
 void c_backtrack::run(c_usercmd * cmd) noexcept {
+	if(!isActive)
+		return;
+
 	if (!config_system.item.backtrack)
 		return;
 
