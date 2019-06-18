@@ -5,8 +5,6 @@
 c_visuals visuals;
 
 void c_visuals::run() noexcept {
-	if(!isActive)
-		return;
 	auto local_player = reinterpret_cast<player_t*>(interfaces::entity_list->get_client_entity(interfaces::engine->get_local_player()));
 
 	if (!config_system.item.visuals_enabled)
@@ -80,10 +78,6 @@ void c_visuals::run() noexcept {
 }
 
 void c_visuals::entity_esp(player_t* entity) noexcept {
-
-	if(!isActive)
-		return;
-
 	if (!config_system.item.entity_esp)
 		return;
 
@@ -102,23 +96,19 @@ void c_visuals::entity_esp(player_t* entity) noexcept {
 		return;
 
 	if (client_class->class_id == class_ids::cchicken) {
-		render.draw_text(entity_position.x, entity_position.y, render.name_font, "chicken", true, color(255, 255, 255));
+		render.draw_text(entity_position.x, entity_position.y, render.name_font, XorStr("chicken"), true, color(255, 255, 255));
 	}
 
-	else if (strstr(model_name, "dust_soccer_ball001")) {
-		render.draw_text(entity_position.x, entity_position.y, render.name_font, "soccer ball", true, color(255, 255, 255));
+	else if (strstr(model_name, XorStr("dust_soccer_ball001"))) {
+		render.draw_text(entity_position.x, entity_position.y, render.name_font, XorStr("soccer ball"), true, color(255, 255, 255));
 	}
 
 	else if (client_class->class_id == class_ids::chostage) {
-		render.draw_text(entity_position.x, entity_position.y, render.name_font, "hostage", true, color(255, 255, 255));
+		render.draw_text(entity_position.x, entity_position.y, render.name_font, XorStr("hostage"), true, color(255, 255, 255));
 	}
 }
 
 void c_visuals::player_rendering(player_t* entity) noexcept {
-
-	if(!isActive)
-		return;
-
 	if ((entity->dormant() && alpha[entity->index()] == 0) && !config_system.item.player_dormant)
 		return;
 
@@ -155,7 +145,7 @@ void c_visuals::player_rendering(player_t* entity) noexcept {
 		auto green = config_system.item.clr_name[1] * 255;
 		auto blue = config_system.item.clr_name[2] * 255;
 
-		std::string print(info.fakeplayer ? std::string("bot ").append(info.name).c_str() : info.name);
+		std::string print(info.fakeplayer ? std::string(XorStr("bot ")).append(info.name).c_str() : info.name);
 		std::transform(print.begin(), print.end(), print.begin(), ::tolower);
 
 		render.draw_text(bbox.x + (bbox.w / 2), bbox.y - 13, render.name_font, print, true, color(red, green, blue, alpha[entity->index()]));
@@ -164,7 +154,7 @@ void c_visuals::player_rendering(player_t* entity) noexcept {
 		std::vector<std::pair<std::string, color>> flags;
 
 		if (config_system.item.player_flags_armor && entity->has_helmet() && entity->armor() > 0)
-			flags.push_back(std::pair<std::string, color>("hk", color(255, 255, 255, alpha[entity->index()])));
+			flags.push_back(std::pair<std::string, color>(XorStr("hk"), color(255, 255, 255, alpha[entity->index()])));
 		else if (config_system.item.player_flags_armor && !entity->has_helmet() && entity->armor() > 0)
 			flags.push_back(std::pair<std::string, color>("k", color(255, 255, 255, alpha[entity->index()])));
 
@@ -172,13 +162,13 @@ void c_visuals::player_rendering(player_t* entity) noexcept {
 			flags.push_back(std::pair<std::string, color>(std::string("$").append(std::to_string(entity->money())), color(120, 180, 10, alpha[entity->index()])));
 
 		if (config_system.item.player_flags_scoped && entity->is_scoped())
-			flags.push_back(std::pair<std::string, color>(std::string("zoom"), color(80, 160, 200, alpha[entity->index()])));
+			flags.push_back(std::pair<std::string, color>(std::string(XorStr("zoom")), color(80, 160, 200, alpha[entity->index()])));
 
 		if (config_system.item.player_flags_c4 && entity->has_c4())
-			flags.push_back(std::pair<std::string, color>(std::string("bomb"), color(255, 255, 255, alpha[entity->index()])));
+			flags.push_back(std::pair<std::string, color>(std::string(XorStr("bomb")), color(255, 255, 255, alpha[entity->index()])));
 
 		if (config_system.item.player_flags_flashed && entity->is_flashed())
-			flags.push_back(std::pair<std::string, color>(std::string("flashed"), color(255, 255, 255, alpha[entity->index()])));
+			flags.push_back(std::pair<std::string, color>(std::string(XorStr("flashed")), color(255, 255, 255, alpha[entity->index()])));
 
 		auto position = 0;
 		for (auto text : flags) {
@@ -203,9 +193,6 @@ void c_visuals::player_rendering(player_t* entity) noexcept {
 }
 
 void c_visuals::dropped_weapons(player_t* entity) noexcept {
-	if(!isActive)
-		return;
-
 	auto class_id = entity->client_class()->class_id;
 	auto model_name = interfaces::model_info->get_model_name(entity->model());
 	auto weapon = entity;
@@ -225,103 +212,99 @@ void c_visuals::dropped_weapons(player_t* entity) noexcept {
 
 	if (!(entity->origin().x == 0 && entity->origin().y == 0 && entity->origin().z == 0)) { //ghetto fix sorry - designer
 		if (config_system.item.dropped_weapons) {
-			if (strstr(entity->client_class()->network_name, ("CWeapon"))) {
-				std::string data = strstr(entity->client_class()->network_name, ("CWeapon"));
+			if (strstr(entity->client_class()->network_name, (XorStr("CWeapon")))) {
+				std::string data = strstr(entity->client_class()->network_name, (XorStr("CWeapon")));
 				std::transform(data.begin(), data.end(), data.begin(), ::tolower); //convert dropped weapons names to lowercase, looks cleaner - designer
 				render.draw_text(dropped_weapon_position.x, dropped_weapon_position.y, render.name_font, clean_item_name(data), true, color(255, 255, 255));
 			}
 
 			if (class_id == class_ids::cak47)
-				render.draw_text(dropped_weapon_position.x, dropped_weapon_position.y, render.name_font, "ak47", true, color(255, 255, 255));
+				render.draw_text(dropped_weapon_position.x, dropped_weapon_position.y, render.name_font, XorStr("ak47"), true, color(255, 255, 255));
 
 			if (class_id == class_ids::cc4)
-				render.draw_text(dropped_weapon_position.x, dropped_weapon_position.y, render.name_font, "bomb", true, color(255, 255, 255));
+				render.draw_text(dropped_weapon_position.x, dropped_weapon_position.y, render.name_font, XorStr("bomb"), true, color(255, 255, 255));
 
 			if (class_id == class_ids::cdeagle)
-				render.draw_text(dropped_weapon_position.x, dropped_weapon_position.y, render.name_font, "deagle", true, color(255, 255, 255));
+				render.draw_text(dropped_weapon_position.x, dropped_weapon_position.y, render.name_font, XorStr("deagle"), true, color(255, 255, 255));
 
-			if (strstr(model_name, "w_defuser"))
-				render.draw_text(dropped_weapon_position.x, dropped_weapon_position.y, render.name_font, "defuse kit", true, color(255, 255, 255));
+			if (strstr(model_name, XorStr("w_defuser")))
+				render.draw_text(dropped_weapon_position.x, dropped_weapon_position.y, render.name_font, XorStr("defuse kit"), true, color(255, 255, 255));
 		}
 
 		if (config_system.item.danger_zone_dropped) { 	//no need to create separate func for danger zone shit - designer (also use switch instead of else if)
-			if (strstr(model_name, "case_pistol"))
-				render.draw_text(dropped_weapon_position.x, dropped_weapon_position.y, render.name_font, "pistol case", true, color(255, 152, 56));
+			if (strstr(model_name, XorStr("case_pistol")))
+				render.draw_text(dropped_weapon_position.x, dropped_weapon_position.y, render.name_font, XorStr("pistol case"), true, color(255, 152, 56));
 
-			else if (strstr(model_name, "case_light_weapon"))
-				render.draw_text(dropped_weapon_position.x, dropped_weapon_position.y, render.name_font, "light case", true, color(255, 152, 56));
+			else if (strstr(model_name, XorStr("case_light_weapon")))
+				render.draw_text(dropped_weapon_position.x, dropped_weapon_position.y, render.name_font, XorStr("light case"), true, color(255, 152, 56));
 
-			else if (strstr(model_name, "case_heavy_weapon"))
-				render.draw_text(dropped_weapon_position.x, dropped_weapon_position.y, render.name_font, "heavy case", true, color(255, 152, 56));
+			else if (strstr(model_name, XorStr("case_heavy_weapon")))
+				render.draw_text(dropped_weapon_position.x, dropped_weapon_position.y, render.name_font, XorStr("heavy case"), true, color(255, 152, 56));
 
-			else if (strstr(model_name, "case_explosive"))
-				render.draw_text(dropped_weapon_position.x, dropped_weapon_position.y, render.name_font, "explosive case", true, color(255, 152, 56));
+			else if (strstr(model_name, XorStr("case_explosive")))
+				render.draw_text(dropped_weapon_position.x, dropped_weapon_position.y, render.name_font, XorStr("explosive case"), true, color(255, 152, 56));
 
-			else if (strstr(model_name, "case_tools"))
-				render.draw_text(dropped_weapon_position.x, dropped_weapon_position.y, render.name_font, "tools case", true, color(255, 152, 56));
+			else if (strstr(model_name, XorStr("case_tools")))
+				render.draw_text(dropped_weapon_position.x, dropped_weapon_position.y, render.name_font, XorStr("tools case"), true, color(255, 152, 56));
 
-			else if (strstr(model_name, "random"))
-				render.draw_text(dropped_weapon_position.x, dropped_weapon_position.y, render.name_font, "airdrop", true, color(255, 255, 255));
+			else if (strstr(model_name, XorStr("random")))
+				render.draw_text(dropped_weapon_position.x, dropped_weapon_position.y, render.name_font, XorStr("airdrop"), true, color(255, 255, 255));
 
-			else if (strstr(model_name, "dz_armor_helmet"))
-				render.draw_text(dropped_weapon_position.x, dropped_weapon_position.y, render.name_font, "armor, helmet", true, color(66, 89, 244));
+			else if (strstr(model_name, XorStr("dz_armor_helmet")))
+				render.draw_text(dropped_weapon_position.x, dropped_weapon_position.y, render.name_font, XorStr("armor, helmet"), true, color(66, 89, 244));
 
-			else if (strstr(model_name, "dz_helmet"))
-				render.draw_text(dropped_weapon_position.x, dropped_weapon_position.y, render.name_font, "helmet", true, color(66, 89, 244));
+			else if (strstr(model_name, XorStr("dz_helmet")))
+				render.draw_text(dropped_weapon_position.x, dropped_weapon_position.y, render.name_font, XorStr("helmet"), true, color(66, 89, 244));
 
-			else if (strstr(model_name, "dz_armor"))
-				render.draw_text(dropped_weapon_position.x, dropped_weapon_position.y, render.name_font, "armor", true, color(66, 89, 244));
+			else if (strstr(model_name, XorStr("dz_armor")))
+				render.draw_text(dropped_weapon_position.x, dropped_weapon_position.y, render.name_font, XorStr("armor"), true, color(66, 89, 244));
 
-			else if (strstr(model_name, "upgrade_tablet"))
-				render.draw_text(dropped_weapon_position.x, dropped_weapon_position.y, render.name_font, "tablet upgrade", true, color(255, 255, 255));
+			else if (strstr(model_name, XorStr("upgrade_tablet")))
+				render.draw_text(dropped_weapon_position.x, dropped_weapon_position.y, render.name_font, XorStr("tablet upgrade"), true, color(255, 255, 255));
 
-			else if (strstr(model_name, "briefcase"))
-				render.draw_text(dropped_weapon_position.x, dropped_weapon_position.y, render.name_font, "briefcase", true, color(255, 255, 255));
+			else if (strstr(model_name, XorStr("briefcase")))
+				render.draw_text(dropped_weapon_position.x, dropped_weapon_position.y, render.name_font, XorStr("briefcase"), true, color(255, 255, 255));
 
-			else if (strstr(model_name, "parachutepack"))
-				render.draw_text(dropped_weapon_position.x, dropped_weapon_position.y, render.name_font, "parachutepack", true, color(255, 255, 255));
+			else if (strstr(model_name, XorStr("parachutepack")))
+				render.draw_text(dropped_weapon_position.x, dropped_weapon_position.y, render.name_font, XorStr("parachutepack"), true, color(255, 255, 255));
 
-			else if (strstr(model_name, "dufflebag"))
-				render.draw_text(dropped_weapon_position.x, dropped_weapon_position.y, render.name_font, "cash bag", true, color(120, 180, 10));
+			else if (strstr(model_name, XorStr("dufflebag")))
+				render.draw_text(dropped_weapon_position.x, dropped_weapon_position.y, render.name_font, XorStr("cash bag"), true, color(120, 180, 10));
 
-			else if (strstr(model_name, "ammobox"))
-				render.draw_text(dropped_weapon_position.x, dropped_weapon_position.y, render.name_font, "ammobox", true, color(158, 48, 255));
+			else if (strstr(model_name, XorStr("ammobox")))
+				render.draw_text(dropped_weapon_position.x, dropped_weapon_position.y, render.name_font, XorStr("ammobox"), true, color(158, 48, 255));
 
 			else if (class_id == class_ids::cdrone)
-				render.draw_text(dropped_weapon_position.x, dropped_weapon_position.y, render.name_font, "drone", true, color(255, 255, 255));
+				render.draw_text(dropped_weapon_position.x, dropped_weapon_position.y, render.name_font, XorStr("drone"), true, color(255, 255, 255));
 
 			else if (class_id == class_ids::cphyspropradarjammer)
-				render.draw_text(dropped_weapon_position.x, dropped_weapon_position.y, render.name_font, "radar jammer", true, color(255, 255, 255));
+				render.draw_text(dropped_weapon_position.x, dropped_weapon_position.y, render.name_font, XorStr("radar jammer"), true, color(255, 255, 255));
 
 			else if (class_id == class_ids::cdronegun)
-				render.draw_text(dropped_weapon_position.x, dropped_weapon_position.y, render.name_font, "sentry turret", true, color(255, 30, 30));
+				render.draw_text(dropped_weapon_position.x, dropped_weapon_position.y, render.name_font, XorStr("sentry turret"), true, color(255, 30, 30));
 
 			else if (class_id == class_ids::cknife)
-				render.draw_text(dropped_weapon_position.x, dropped_weapon_position.y, render.name_font, "knife", true, color(255, 255, 255));
+				render.draw_text(dropped_weapon_position.x, dropped_weapon_position.y, render.name_font, XorStr("knife"), true, color(255, 255, 255));
 
 			else if (class_id == class_ids::cmelee)
-				render.draw_text(dropped_weapon_position.x, dropped_weapon_position.y, render.name_font, "melee", true, color(255, 255, 255));
+				render.draw_text(dropped_weapon_position.x, dropped_weapon_position.y, render.name_font, XorStr("melee"), true, color(255, 255, 255));
 
 			else if (class_id == class_ids::citemcash)
-				render.draw_text(dropped_weapon_position.x, dropped_weapon_position.y, render.name_font, "cash", true, color(120, 180, 10));
+				render.draw_text(dropped_weapon_position.x, dropped_weapon_position.y, render.name_font, XorStr("cash"), true, color(120, 180, 10));
 
 			else if (class_id == class_ids::citem_healthshot)
-				render.draw_text(dropped_weapon_position.x, dropped_weapon_position.y, render.name_font, "health shot", true, color(66, 89, 244));
+				render.draw_text(dropped_weapon_position.x, dropped_weapon_position.y, render.name_font, XorStr("health shot"), true, color(66, 89, 244));
 
 			else if (class_id == class_ids::ctablet)
-				render.draw_text(dropped_weapon_position.x, dropped_weapon_position.y, render.name_font, "tablet", true, color(255, 255, 255));
+				render.draw_text(dropped_weapon_position.x, dropped_weapon_position.y, render.name_font, XorStr("tablet"), true, color(255, 255, 255));
 
 			else if (class_id == class_ids::chostage)
-				render.draw_text(dropped_weapon_position.x, dropped_weapon_position.y, render.name_font, "hostage", true, color(255, 255, 255));
+				render.draw_text(dropped_weapon_position.x, dropped_weapon_position.y, render.name_font, XorStr("hostage"), true, color(255, 255, 255));
 		}
 	}
 }
 
 void c_visuals::projectiles(player_t* entity) noexcept {
-
-	if(!isActive)
-		return;
-
 	if (!config_system.item.projectiles)
 		return;
 
@@ -339,7 +322,7 @@ void c_visuals::projectiles(player_t* entity) noexcept {
 
 		auto model = interfaces::model_info->get_studio_model(entity->model());
 
-		if (!model || !strstr(model->name_char_array, "thrown") && !strstr(model->name_char_array, "dropped"))
+		if (!model || !strstr(model->name_char_array, XorStr("thrown")) && !strstr(model->name_char_array, XorStr("dropped")))
 			return;
 
 		std::string name = model->name_char_array;
@@ -348,12 +331,12 @@ void c_visuals::projectiles(player_t* entity) noexcept {
 		if (!math.world_to_screen(grenade_origin, grenade_position))
 			return;
 
-		if (name.find("flashbang") != std::string::npos) {
-			render.draw_text(grenade_position.x, grenade_position.y, render.name_font, "flashbang", true, color(255, 255, 255));
+		if (name.find(XorStr("flashbang")) != std::string::npos) {
+			render.draw_text(grenade_position.x, grenade_position.y, render.name_font, XorStr("flashbang"), true, color(255, 255, 255));
 		}
 
-		else if (name.find("smokegrenade") != std::string::npos) {
-			render.draw_text(grenade_position.x, grenade_position.y, render.name_font, "smoke", true, color(255, 255, 255));
+		else if (name.find(XorStr("smokegrenade")) != std::string::npos) {
+			render.draw_text(grenade_position.x, grenade_position.y, render.name_font, XorStr("smoke"), true, color(255, 255, 255));
 
 			auto time = interfaces::globals->interval_per_tick * (interfaces::globals->tick_count - entity->smoke_grenade_tick_begin());
 
@@ -363,28 +346,25 @@ void c_visuals::projectiles(player_t* entity) noexcept {
 			}
 		}
 
-		else if (name.find("incendiarygrenade") != std::string::npos) {
-			render.draw_text(grenade_position.x, grenade_position.y, render.name_font, "incendiary", true, color(255, 255, 255));
+		else if (name.find(XorStr("incendiarygrenade")) != std::string::npos) {
+			render.draw_text(grenade_position.x, grenade_position.y, render.name_font, XorStr("incendiary"), true, color(255, 255, 255));
 		}
 
-		else if (name.find("molotov") != std::string::npos) {
-			render.draw_text(grenade_position.x, grenade_position.y, render.name_font, "molotov", true, color(255, 255, 255));
+		else if (name.find(XorStr("molotov")) != std::string::npos) {
+			render.draw_text(grenade_position.x, grenade_position.y, render.name_font, XorStr("molotov"), true, color(255, 255, 255));
 		}
 
-		else if (name.find("fraggrenade") != std::string::npos) {
-			render.draw_text(grenade_position.x, grenade_position.y, render.name_font, "grenade", true, color(255, 255, 255));
+		else if (name.find(XorStr("fraggrenade")) != std::string::npos) {
+			render.draw_text(grenade_position.x, grenade_position.y, render.name_font, XorStr("grenade"), true, color(255, 255, 255));
 		}
 
-		else if (name.find("decoy") != std::string::npos) {
-			render.draw_text(grenade_position.x, grenade_position.y, render.name_font, "decoy", true, color(255, 255, 255));
+		else if (name.find(XorStr("decoy")) != std::string::npos) {
+			render.draw_text(grenade_position.x, grenade_position.y, render.name_font, XorStr("decoy"), true, color(255, 255, 255));
 		}
 	}
 }
 
 void c_visuals::bomb_esp(player_t* entity) noexcept {
-	if(!isActive)
-		return;
-
 	if (!config_system.item.bomb_planted)
 		return;
 
@@ -413,7 +393,7 @@ void c_visuals::bomb_esp(player_t* entity) noexcept {
 	char buffer[64];
 	sprintf_s(buffer, "%.1f", explode_time);
 
-	auto c4_timer = interfaces::console->get_convar("mp_c4timer")->get_int();
+	auto c4_timer = interfaces::console->get_convar(XorStr("mp_c4timer"))->get_int();
 	auto value = (explode_time * height) / c4_timer;
 
 	float damage;
@@ -424,7 +404,7 @@ void c_visuals::bomb_esp(player_t* entity) noexcept {
 	std::string damage_text;
 	damage_text += "-";
 	damage_text += std::to_string((int)(damage));
-	damage_text += "HP";
+	damage_text += XorStr("HP");
 
 	if (explode_time <= 10) {
 		render.draw_filled_rect(0, 0, 10, value, color(255, 0, 0, 180));
@@ -440,7 +420,7 @@ void c_visuals::bomb_esp(player_t* entity) noexcept {
 	}
 
 	if (local_player->is_alive() && damage >= local_player->health()) {
-		render.draw_text(12, value - 31, render.name_font, "FATAL", false, color(255, 255, 255));
+		render.draw_text(12, value - 31, render.name_font, XorStr("FATAL"), false, color(255, 255, 255));
 	}
 
 	if (!math.world_to_screen(bomb_origin, bomb_position))
@@ -452,10 +432,6 @@ void c_visuals::bomb_esp(player_t* entity) noexcept {
 }
 
 void c_visuals::chams() noexcept {
-
-	if(!isActive)
-		return;
-
 	if (!config_system.item.visuals_enabled || (!config_system.item.vis_chams_vis && !config_system.item.vis_chams_invis))
 		return;
 
@@ -470,10 +446,10 @@ void c_visuals::chams() noexcept {
 		bool is_enemy = entity->team() != local_player->team();
 
 		static i_material* mat = nullptr;
-		auto textured = interfaces::material_system->find_material("alpha_project_material", TEXTURE_GROUP_MODEL, true, nullptr);
-		auto metalic = interfaces::material_system->find_material("alpha_project_reflective", TEXTURE_GROUP_MODEL, true, nullptr);
-		auto dogtag = interfaces::material_system->find_material("models/inventory_items/dogtags/dogtags_outline", TEXTURE_GROUP_MODEL, true, nullptr);
-		auto flat = interfaces::material_system->find_material("debug/debugdrawflat", TEXTURE_GROUP_MODEL, true, nullptr);
+		auto textured = interfaces::material_system->find_material(XorStr("alpha_project_material"), TEXTURE_GROUP_MODEL, true, nullptr);
+		auto metalic = interfaces::material_system->find_material(XorStr("alpha_project_reflective"), TEXTURE_GROUP_MODEL, true, nullptr);
+		auto dogtag = interfaces::material_system->find_material(XorStr("models/inventory_items/dogtags/dogtags_outline"), TEXTURE_GROUP_MODEL, true, nullptr);
+		auto flat = interfaces::material_system->find_material(XorStr("debug/debugdrawflat"), TEXTURE_GROUP_MODEL, true, nullptr);
 		textured->increment_reference_count();  //we need increment_reference_count cuz without it our materialsystem.dll will crash after  map change - designer
 		metalic->increment_reference_count();
 		flat->increment_reference_count();
@@ -542,9 +518,6 @@ void c_visuals::chams() noexcept {
 }
 
 void c_visuals::glow() noexcept {
-	if(!isActive)
-		return;
-
 	if (!config_system.item.visuals_enabled || !config_system.item.visuals_glow)
 		return;
 
@@ -585,7 +558,7 @@ void c_visuals::glow() noexcept {
 			break;
 		}
 
-		if (strstr(client_class->network_name, ("CWeapon")) && config_system.item.visuals_glow_weapons) {
+		if (strstr(client_class->network_name, (XorStr("CWeapon"))) && config_system.item.visuals_glow_weapons) {
 			glow.set(config_system.item.clr_glow_dropped[0], config_system.item.clr_glow_dropped[1], config_system.item.clr_glow_dropped[2], config_system.item.clr_glow_dropped[3]);
 		}
 
@@ -605,9 +578,6 @@ void c_visuals::glow() noexcept {
 }
 
 void c_visuals::skeleton(player_t* entity) noexcept {
-	if(!isActive)
-		return;
-
 	if (!config_system.item.skeleton)
 		return;
 
@@ -643,9 +613,6 @@ void c_visuals::backtrack_chams(IMatRenderContext* ctx, const draw_model_state_t
 }
 
 void c_visuals::viewmodel_modulate(const model_render_info_t& info) {
-	if(!isActive)
-		return;
-
 	if (!interfaces::engine->is_connected() && !interfaces::engine->is_in_game())
 		return;
 
@@ -659,13 +626,13 @@ void c_visuals::viewmodel_modulate(const model_render_info_t& info) {
 	if (!local_player->is_alive())
 		return;
 
-	if (strstr(model_name, "sleeve")) {
+	if (strstr(model_name, XorStr("sleeve"))) {
 		if (config_system.item.remove_sleeves) {
 			interfaces::render_view->set_blend(0.f);
 		}
 	}
 
-	if (strstr(model_name, "arms")) {
+	if (strstr(model_name, XorStr("arms"))) {
 		if (config_system.item.remove_hands) {
 			interfaces::render_view->set_blend(0.f);
 		}

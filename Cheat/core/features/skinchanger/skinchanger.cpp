@@ -1,4 +1,5 @@
 #include "skinchanger.hpp"
+#include "../../../SDK/crypto/XorStr.h"
 c_skinchanger skin_changer;
 
 #define INVALID_EHANDLE_INDEX 0xFFFFFFFF
@@ -56,35 +57,35 @@ void c_skinchanger::run() noexcept {
 	if (!active_weapon)
 		return;
 
-	auto model_bayonet = "models/weapons/v_knife_bayonet.mdl";
-	auto model_m9 = "models/weapons/v_knife_m9_bay.mdl";
-	auto model_karambit = "models/weapons/v_knife_karam.mdl";
-	auto model_bowie = "models/weapons/v_knife_survival_bowie.mdl";
-	auto model_butterfly = "models/weapons/v_knife_butterfly.mdl";
-	auto model_falchion = "models/weapons/v_knife_falchion_advanced.mdl";
-	auto model_flip = "models/weapons/v_knife_flip.mdl";
-	auto model_gut = "models/weapons/v_knife_gut.mdl";
-	auto model_huntsman = "models/weapons/v_knife_tactical.mdl";
-	auto model_shadow_daggers = "models/weapons/v_knife_push.mdl";
-	auto model_navaja = "models/weapons/v_knife_gypsy_jackknife.mdl";
-	auto model_stiletto = "models/weapons/v_knife_stiletto.mdl";
-	auto model_talon = "models/weapons/v_knife_widowmaker.mdl";
-	auto model_ursus = "models/weapons/v_knife_ursus.mdl";
+	auto model_bayonet = XorStr("models/weapons/v_knife_bayonet.mdl");
+	auto model_m9 = XorStr("models/weapons/v_knife_m9_bay.mdl");
+	auto model_karambit = XorStr("models/weapons/v_knife_karam.mdl");
+	auto model_bowie = XorStr("models/weapons/v_knife_survival_bowie.mdl");
+	auto model_butterfly = XorStr("models/weapons/v_knife_butterfly.mdl");
+	auto model_falchion = XorStr("models/weapons/v_knife_falchion_advanced.mdl");
+	auto model_flip = XorStr("models/weapons/v_knife_flip.mdl");
+	auto model_gut = XorStr("models/weapons/v_knife_gut.mdl");
+	auto model_huntsman = XorStr("models/weapons/v_knife_tactical.mdl");
+	auto model_shadow_daggers = XorStr("models/weapons/v_knife_push.mdl");
+	auto model_navaja = XorStr("models/weapons/v_knife_gypsy_jackknife.mdl");
+	auto model_stiletto = XorStr("models/weapons/v_knife_stiletto.mdl");
+	auto model_talon = XorStr("models/weapons/v_knife_widowmaker.mdl");
+	auto model_ursus = XorStr("models/weapons/v_knife_ursus.mdl");
 
-	auto index_bayonet = interfaces::model_info->get_model_index("models/weapons/v_knife_bayonet.mdl");
-	auto index_m9 = interfaces::model_info->get_model_index("models/weapons/v_knife_m9_bay.mdl");
-	auto index_karambit = interfaces::model_info->get_model_index("models/weapons/v_knife_karam.mdl");
-	auto index_bowie = interfaces::model_info->get_model_index("models/weapons/v_knife_survival_bowie.mdl");
-	auto index_butterfly = interfaces::model_info->get_model_index("models/weapons/v_knife_butterfly.mdl");
-	auto index_falchion = interfaces::model_info->get_model_index("models/weapons/v_knife_falchion_advanced.mdl");
-	auto index_flip = interfaces::model_info->get_model_index("models/weapons/v_knife_flip.mdl");
-	auto index_gut = interfaces::model_info->get_model_index("models/weapons/v_knife_gut.mdl");
-	auto index_huntsman = interfaces::model_info->get_model_index("models/weapons/v_knife_tactical.mdl");
-	auto index_shadow_daggers = interfaces::model_info->get_model_index("models/weapons/v_knife_push.mdl");
-	auto index_navaja = interfaces::model_info->get_model_index("models/weapons/v_knife_gypsy_jackknife.mdl");
-	auto index_stiletto = interfaces::model_info->get_model_index("models/weapons/v_knife_stiletto.mdl");
-	auto index_talon = interfaces::model_info->get_model_index("models/weapons/v_knife_widowmaker.mdl");
-	auto index_ursus = interfaces::model_info->get_model_index("models/weapons/v_knife_ursus.mdl");
+	auto index_bayonet = interfaces::model_info->get_model_index(XorStr("models/weapons/v_knife_bayonet.mdl"));
+	auto index_m9 = interfaces::model_info->get_model_index(XorStr("models/weapons/v_knife_m9_bay.mdl"));
+	auto index_karambit = interfaces::model_info->get_model_index(XorStr("models/weapons/v_knife_karam.mdl"));
+	auto index_bowie = interfaces::model_info->get_model_index(XorStr("models/weapons/v_knife_survival_bowie.mdl"));
+	auto index_butterfly = interfaces::model_info->get_model_index(XorStr("models/weapons/v_knife_butterfly.mdl"));
+	auto index_falchion = interfaces::model_info->get_model_index(XorStr("models/weapons/v_knife_falchion_advanced.mdl"));
+	auto index_flip = interfaces::model_info->get_model_index(XorStr("models/weapons/v_knife_flip.mdl"));
+	auto index_gut = interfaces::model_info->get_model_index(XorStr("models/weapons/v_knife_gut.mdl"));
+	auto index_huntsman = interfaces::model_info->get_model_index(XorStr("models/weapons/v_knife_tactical.mdl"));
+	auto index_shadow_daggers = interfaces::model_info->get_model_index(XorStr("models/weapons/v_knife_push.mdl"));
+	auto index_navaja = interfaces::model_info->get_model_index(XorStr("models/weapons/v_knife_gypsy_jackknife.mdl"));
+	auto index_stiletto = interfaces::model_info->get_model_index(XorStr("models/weapons/v_knife_stiletto.mdl"));
+	auto index_talon = interfaces::model_info->get_model_index(XorStr("models/weapons/v_knife_widowmaker.mdl"));
+	auto index_ursus = interfaces::model_info->get_model_index(XorStr("models/weapons/v_knife_ursus.mdl"));
 
 	auto my_weapons = local_player->weapons();
 	for (size_t i = 0; my_weapons[i] != INVALID_EHANDLE_INDEX; i++) {

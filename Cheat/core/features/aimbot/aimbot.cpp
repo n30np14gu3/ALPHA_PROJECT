@@ -4,6 +4,7 @@
 #include "../../../source-sdk/math/vector2d.hpp"
 #include "../../../dependencies/common_includes.hpp"
 #include "../../features/backtrack/backtrack.hpp"
+#include "../../../SDK/crypto/XorStr.h"
 
 c_aimbot aimbot;
 
@@ -213,7 +214,7 @@ void c_aimbot::event_player_death(i_game_event* event) noexcept {
 	if (!local_player || !local_player->is_alive())
 		return;
 
-	auto attacker = interfaces::entity_list->get_client_entity(interfaces::engine->get_player_for_user_id(event->get_int("attacker")));
+	auto attacker = interfaces::entity_list->get_client_entity(interfaces::engine->get_player_for_user_id(event->get_int(XorStr("attacker"))));
 
 	if (!attacker)
 		return;
@@ -255,7 +256,7 @@ void c_aimbot::rcs_standalone(c_usercmd* user_cmd) noexcept {
 		return;
 
 	static vec3_t old_punch = { 0.0f, 0.0f, 0.0f };
-	auto recoil_scale = interfaces::console->get_convar("weapon_recoil_scale");
+	auto recoil_scale = interfaces::console->get_convar(XorStr("weapon_recoil_scale"));
 	auto aim_punch = local_player->aim_punch_angle() * recoil_scale->get_float();
 
 	aim_punch.x *= rcs_x;

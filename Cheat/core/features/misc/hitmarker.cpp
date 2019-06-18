@@ -1,6 +1,6 @@
 #include "hitmarker.hpp"
 #include "../misc/logs.hpp"
-
+#include "../../../SDK/crypto/XorStr.h"
 c_hitmarker hitmarker;
 
 int hitmarker_time = 0;
@@ -35,13 +35,13 @@ void c_hitmarker::event(i_game_event* event) noexcept {
 		case 0:
 			break;
 		case 1:
-			interfaces::surface->play_sound("buttons\\arena_switch_press_02.wav");
+			interfaces::surface->play_sound(XorStr("buttons\\arena_switch_press_02.wav"));
 			break;
 		case 2:
-			interfaces::surface->play_sound("survival\\money_collect_01.wav");
+			interfaces::surface->play_sound(XorStr("survival\\money_collect_01.wav"));
 			break;
 		case 3:
-			interfaces::surface->play_sound("survival\\turret_idle_01.wav");
+			interfaces::surface->play_sound(XorStr("survival\\turret_idle_01.wav"));
 			break;
 		}
 	}

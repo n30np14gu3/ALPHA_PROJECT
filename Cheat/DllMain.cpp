@@ -6,7 +6,6 @@
 
 #include "DllMain.h"
 
-
 void LoaderConnect()
 {
 
@@ -16,6 +15,8 @@ void LoaderConnect()
 #endif
 
 	local_client client(XorStr("127.0.0.1"), 4980);
+	if (!client.NoError)
+		ExitProcess(0);
 	if (!client.generate_key(1024))
 		ExitProcess(0);
 
@@ -28,41 +29,22 @@ void LoaderConnect()
 
 void MainThread()
 {
-	//AntiLeak::HideThread(GetCurrentThread());
-	//globals::initGlobals();
-	//LoaderConnect();
+	AntiLeak::HideThread(GetCurrentThread());
+	globals::initGlobals();
+	LoaderConnect();
 
 	try {
 		interfaces::initialize();
-
-		printf("[setup] interfaces initialized!\n");
-
 		hooks::initialize();
-
-		printf("[setup] hooks initialized!\n");
-
 		render.setup_fonts();
-
-		printf("[setup] render initialized!\n");
-
 		utilities::material_setup();
-
-		printf("[setup] materials initialized!\n");
-
-		config_system.run("aristois");
-
-		printf("[setup] config initialized!\n");
-
+		config_system.run(XorStr("alpha project"));
 		events.setup();
-
-		printf("[setup] events initialized!\n");
-
 		kit_parser.setup();
-
-		printf("[setup] kit parser initialized!\n");
 	}
-	catch (const std::runtime_error & err) {
-		printf(err.what());
+	catch (const std::runtime_error & err) 
+	{
+
 	}
 
 	while (!GetAsyncKeyState(VK_END))
@@ -74,6 +56,7 @@ void MainThread()
 
 void ProtectionThread()
 {
+	Sleep(5000);
 	AntiLeak::HideThread(GetCurrentThread());
 	while(true)
 	{
@@ -104,7 +87,6 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason,LPVOID lpvReserved)
 		CreateThread(nullptr, 0, reinterpret_cast<LPTHREAD_START_ROUTINE>(MainThread), nullptr, 0, nullptr);
 #if NDEBUG
 		CreateThread(nullptr, 0, reinterpret_cast<LPTHREAD_START_ROUTINE>(ProtectionThread), nullptr, 0, nullptr);
-		AntiLeak::ErasePEHeaderFromMemory();
 #endif
 		break;
 	default:

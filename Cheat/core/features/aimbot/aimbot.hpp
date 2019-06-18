@@ -14,7 +14,6 @@ private:
 	vec3_t angle;
 	int kill_delay;
 public:
-
 	void run(c_usercmd*) noexcept;
 	void event_player_death(i_game_event* event) noexcept;
 	void auto_pistol(c_usercmd* user_cmd);

@@ -154,10 +154,17 @@ namespace AntiLeak
 		DWORD OldProtect = 0;
 
 		// Get base address of module
-		char *pBaseAddr = reinterpret_cast<char*>(GetModuleHandle(nullptr));
-		VirtualProtect(pBaseAddr, 4096, // Assume x86 page size
+		char *pBaseAddr = (char*)GetModuleHandle(NULL);
+
+		SYSTEM_INFO systemInfo;
+		GetSystemInfo(&systemInfo);
+
+		// Change memory protection
+		VirtualProtect(pBaseAddr, systemInfo.dwPageSize,
 			PAGE_READWRITE, &OldProtect);
-		ZeroMemory(pBaseAddr, 4096);
+
+		// Erase the header
+		SecureZeroMemory(pBaseAddr, systemInfo.dwPageSize);
 	}
 
 	void ChangeSizeOfImage(DWORD NewSize)

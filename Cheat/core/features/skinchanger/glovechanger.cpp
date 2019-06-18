@@ -1,4 +1,5 @@
 #include "glovechanger.hpp"
+#include "../../../SDK/crypto/XorStr.h"
 
 //thanks to choZen https://github.com/ChoZenTime/aristois-pasted-by-choZen/blob/master/core/features/skinchanger/glovechanger.cpp
 
@@ -22,7 +23,7 @@ static auto make_glove(int entry, int serial) -> attributable_item_t* {
 
 	const auto glove = static_cast<attributable_item_t*>(interfaces::entity_list->get_client_entity(entry));
 	assert(glove); {
-		static auto set_abs_origin_addr = utilities::pattern_scan(GetModuleHandleA("client_panorama.dll"), "55 8B EC 83 E4 F8 51 53 56 57 8B F1 E8");
+		static auto set_abs_origin_addr = utilities::pattern_scan(GetModuleHandleA(XorStr("client_panorama.dll")), XorStr("55 8B EC 83 E4 F8 51 53 56 57 8B F1 E8"));
 		const auto set_abs_origin_fn = reinterpret_cast<void(__thiscall*)(void*, const std::array<float, 3>&)>(set_abs_origin_addr);
 		static constexpr std::array<float, 3> new_pos = { 10000.f, 10000.f, 10000.f };
 		set_abs_origin_fn(glove, new_pos);
@@ -57,21 +58,21 @@ void c_glovechanger::run() noexcept {
 		return;
 
 	if (config_system.item.glovechanger_enable) {
-		auto model_blood = "models/weapons/v_models/arms/glove_bloodhound/v_glove_bloodhound.mdl";
-		auto model_sport = "models/weapons/v_models/arms/glove_sporty/v_glove_sporty.mdl";
-		auto model_slick = "models/weapons/v_models/arms/glove_slick/v_glove_slick.mdl";
-		auto model_leath = "models/weapons/v_models/arms/glove_handwrap_leathery/v_glove_handwrap_leathery.mdl";
-		auto model_moto = "models/weapons/v_models/arms/glove_motorcycle/v_glove_motorcycle.mdl";
-		auto model_speci = "models/weapons/v_models/arms/glove_specialist/v_glove_specialist.mdl";
-		auto model_hydra = "models/weapons/v_models/arms/glove_bloodhound/v_glove_bloodhound_hydra.mdl";
+		auto model_blood = XorStr("models/weapons/v_models/arms/glove_bloodhound/v_glove_bloodhound.mdl");
+		auto model_sport = XorStr("models/weapons/v_models/arms/glove_sporty/v_glove_sporty.mdl");
+		auto model_slick = XorStr("models/weapons/v_models/arms/glove_slick/v_glove_slick.mdl");
+		auto model_leath = XorStr("models/weapons/v_models/arms/glove_handwrap_leathery/v_glove_handwrap_leathery.mdl");
+		auto model_moto = XorStr("models/weapons/v_models/arms/glove_motorcycle/v_glove_motorcycle.mdl");
+		auto model_speci = XorStr("models/weapons/v_models/arms/glove_specialist/v_glove_specialist.mdl");
+		auto model_hydra = XorStr("models/weapons/v_models/arms/glove_bloodhound/v_glove_bloodhound_hydra.mdl");
 
-		auto index_blood = interfaces::model_info->get_model_index(("models/weapons/v_models/arms/glove_bloodhound/v_glove_bloodhound.mdl"));
-		auto index_sport = interfaces::model_info->get_model_index(("models/weapons/v_models/arms/glove_sporty/v_glove_sporty.mdl"));
-		auto index_slick = interfaces::model_info->get_model_index(("models/weapons/v_models/arms/glove_slick/v_glove_slick.mdl"));
-		auto index_leath = interfaces::model_info->get_model_index(("models/weapons/v_models/arms/glove_handwrap_leathery/v_glove_handwrap_leathery.mdl"));
-		auto index_moto = interfaces::model_info->get_model_index(("models/weapons/v_models/arms/glove_motorcycle/v_glove_motorcycle.mdl"));
-		auto index_speci = interfaces::model_info->get_model_index(("models/weapons/v_models/arms/glove_specialist/v_glove_specialist.mdl"));
-		auto index_hydra = interfaces::model_info->get_model_index(("models/weapons/v_models/arms/glove_bloodhound/v_glove_bloodhound_hydra.mdl"));
+		auto index_blood = interfaces::model_info->get_model_index((XorStr("models/weapons/v_models/arms/glove_bloodhound/v_glove_bloodhound.mdl")));
+		auto index_sport = interfaces::model_info->get_model_index((XorStr("models/weapons/v_models/arms/glove_sporty/v_glove_sporty.mdl")));
+		auto index_slick = interfaces::model_info->get_model_index((XorStr("models/weapons/v_models/arms/glove_slick/v_glove_slick.mdl")));
+		auto index_leath = interfaces::model_info->get_model_index((XorStr("models/weapons/v_models/arms/glove_handwrap_leathery/v_glove_handwrap_leathery.mdl")));
+		auto index_moto = interfaces::model_info->get_model_index((XorStr("models/weapons/v_models/arms/glove_motorcycle/v_glove_motorcycle.mdl")));
+		auto index_speci = interfaces::model_info->get_model_index((XorStr("models/weapons/v_models/arms/glove_specialist/v_glove_specialist.mdl")));
+		auto index_hydra = interfaces::model_info->get_model_index((XorStr("models/weapons/v_models/arms/glove_bloodhound/v_glove_bloodhound_hydra.mdl")));
 
 		//credit to namazso for nskinz
 

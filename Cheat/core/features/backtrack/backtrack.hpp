@@ -1,7 +1,7 @@
 #pragma once
 #include "../../../dependencies/common_includes.hpp"
 #include "../../../dependencies/math/math.hpp"
-
+#include "../../../SDK/crypto/XorStr.h"
 struct stored_records {
 	vec3_t head;
 	float simulation_time;
@@ -28,20 +28,16 @@ public:
 	float get_lerp_time() noexcept;
 	int time_to_ticks(float time) noexcept;
 	bool valid_tick(float simtime) noexcept;
-
-	bool isActive = true;
-	const int moduleId = 0;
-
 	static void init() {
 		records->clear();
 
-		cvars.update_rate = interfaces::console->get_convar("cl_updaterate");
-		cvars.max_update_rate = interfaces::console->get_convar("sv_maxupdaterate");
-		cvars.interp = interfaces::console->get_convar("cl_interp");
-		cvars.interp_ratio = interfaces::console->get_convar("cl_interp_ratio");
-		cvars.min_interp_ratio = interfaces::console->get_convar("sv_client_min_interp_ratio");
-		cvars.max_interp_ratio = interfaces::console->get_convar("sv_client_max_interp_ratio");
-		cvars.max_unlag = interfaces::console->get_convar("sv_maxunlag");
+		cvars.update_rate = interfaces::console->get_convar(XorStr("cl_updaterate"));
+		cvars.max_update_rate = interfaces::console->get_convar(XorStr("sv_maxupdaterate"));
+		cvars.interp = interfaces::console->get_convar(XorStr("cl_interp"));
+		cvars.interp_ratio = interfaces::console->get_convar(XorStr("cl_interp_ratio"));
+		cvars.min_interp_ratio = interfaces::console->get_convar(XorStr("sv_client_min_interp_ratio"));
+		cvars.max_interp_ratio = interfaces::console->get_convar(XorStr("sv_client_max_interp_ratio"));
+		cvars.max_unlag = interfaces::console->get_convar(XorStr("sv_maxunlag"));
 	}
 };
 

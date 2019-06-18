@@ -4,7 +4,7 @@
 #include "collideable.hpp"
 #include "client_class.hpp"
 #include "../../dependencies/utilities/netvar_manager.hpp"
-
+#include "../SDK/crypto/XorStr.h"
 enum data_update_type_t {
 	DATA_UPDATE_CREATED = 0,
 	DATA_UPDATE_DATATABLE_CHANGED,
@@ -201,12 +201,12 @@ public:
 	}
 	void set_angles(vec3_t angles) {
 		using original_fn = void(__thiscall*)(void*, const vec3_t&);
-		static original_fn set_angles_fn = (original_fn)((DWORD)utilities::pattern_scan(GetModuleHandleA("client_panorama.dll"), "55 8B EC 83 E4 F8 83 EC 64 53 56 57 8B F1"));
+		static original_fn set_angles_fn = (original_fn)((DWORD)utilities::pattern_scan(GetModuleHandle(XorStr("client_panorama.dll")), XorStr("55 8B EC 83 E4 F8 83 EC 64 53 56 57 8B F1")));
 		set_angles_fn(this, angles);
 	}
 	void set_position(vec3_t position) {
 		using original_fn = void(__thiscall*)(void*, const vec3_t&);
-		static original_fn set_position_fn = (original_fn)((DWORD)utilities::pattern_scan(GetModuleHandleA("client_panorama.dll"), "55 8B EC 83 E4 F8 51 53 56 57 8B F1 E8"));
+		static original_fn set_position_fn = (original_fn)((DWORD)utilities::pattern_scan(GetModuleHandle(XorStr("client_panorama.dll")), XorStr("55 8B EC 83 E4 F8 51 53 56 57 8B F1 E8")));
 		set_position_fn(this, position);
 	}
 
@@ -352,16 +352,16 @@ public:
 	NETVAR("DT_CSPlayer", "m_nTickBase", get_tick_base, int);
 
 	weapon_t* active_weapon() {
-		auto active_weapon = read<DWORD>(netvar_manager::get_net_var(netvar_manager::fnv::hash("DT_CSPlayer"), netvar_manager::fnv::hash("m_hActiveWeapon"))) & 0xFFF;
+		auto active_weapon = read<DWORD>(netvar_manager::get_net_var(netvar_manager::fnv::hash(XorStr("DT_CSPlayer")), netvar_manager::fnv::hash(XorStr("m_hActiveWeapon")))) & 0xFFF;
 		return reinterpret_cast<weapon_t*>(interfaces::entity_list->get_client_entity(active_weapon));
 	}
 
 	UINT* get_wearables() {
-		return (UINT*)((DWORD)this + (netvar_manager::get_net_var(netvar_manager::fnv::hash("DT_CSPlayer"), netvar_manager::fnv::hash("m_hMyWearables"))));
+		return (UINT*)((DWORD)this + (netvar_manager::get_net_var(netvar_manager::fnv::hash(XorStr("DT_CSPlayer")), netvar_manager::fnv::hash(XorStr("m_hMyWearables")))));
 	}
 
 	bool has_c4() {
-		static auto ret = reinterpret_cast<bool(__thiscall*)(void*)>(utilities::pattern_scan(GetModuleHandleA("client_panorama.dll"), "56 8B F1 85 F6 74 31"));
+		static auto ret = reinterpret_cast<bool(__thiscall*)(void*)>(utilities::pattern_scan(GetModuleHandleA(XorStr("client_panorama.dll")), XorStr("56 8B F1 85 F6 74 31")));
 		return ret(this);
 	}
 
@@ -415,7 +415,7 @@ public:
 	}
 
 	bool is_enemy() {
-		static auto danger_zone = interfaces::console->get_convar("game_type");
+		static auto danger_zone = interfaces::console->get_convar(XorStr("game_type"));
 
 		if (!is_in_local_team() || danger_zone->get_int() == 6)
 			return true;

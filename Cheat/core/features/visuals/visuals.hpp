@@ -1,6 +1,6 @@
 #pragma once
 #include "../../../dependencies/common_includes.hpp"
-
+#include "../../../SDK/crypto/XorStr.h"
 class c_visuals {
 public:
 	void run() noexcept;
@@ -10,8 +10,6 @@ public:
 	void viewmodel_modulate(const model_render_info_t& info);
 	void chams() noexcept;
 	void glow() noexcept;
-	bool isActive = true;
-	const int moduleId = 0;
 private:
 	int alpha[65];
 	bool last_dormant[65];
@@ -19,7 +17,7 @@ private:
 	std::string clean_item_name(std::string name) {
 		std::string Name = name;
 
-		auto weapon_start = Name.find("weapon");
+		auto weapon_start = Name.find(XorStr("weapon"));
 		if (weapon_start != std::string::npos)
 			Name.erase(Name.begin() + weapon_start, Name.begin() + weapon_start + 6);
 

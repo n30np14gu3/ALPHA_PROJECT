@@ -15,6 +15,7 @@
 #include "../features/skinchanger/parser.hpp"
 #include "../features/visuals/nightmode.hpp"
 #include "../features/skinchanger/glovechanger.hpp"
+#include "../../SDK/crypto/XorStr.h"
 
 std::unique_ptr<vmt_hook> hooks::client_hook;
 std::unique_ptr<vmt_hook> hooks::clientmode_hook;
@@ -31,7 +32,6 @@ HWND hooks::window;
 WNDPROC hooks::wndproc_original = NULL;
 
 void hooks::initialize() noexcept {
-
 	client_hook = std::make_unique<vmt_hook>();
 	clientmode_hook = std::make_unique<vmt_hook>();
 	panel_hook = std::make_unique<vmt_hook>();
@@ -62,8 +62,8 @@ void hooks::initialize() noexcept {
 	modelrender_hook->setup(interfaces::model_render);
 	modelrender_hook->hook_index(21, reinterpret_cast<void*>(draw_model_execute)); //hooked for backtrack chams
 
-	present_address = utilities::pattern_scan(GetModuleHandleW(L"gameoverlayrenderer.dll"), "FF 15 ? ? ? ? 8B F8 85 DB") + 0x2;
-	reset_address = utilities::pattern_scan(GetModuleHandleW(L"gameoverlayrenderer.dll"), "FF 15 ? ? ? ? 8B F8 85 FF 78 18") + 0x2;
+	present_address = utilities::pattern_scan(GetModuleHandle(XorStr("gameoverlayrenderer.dll")), XorStr("FF 15 ? ? ? ? 8B F8 85 DB")) + 0x2;
+	reset_address = utilities::pattern_scan(GetModuleHandle(XorStr("gameoverlayrenderer.dll")), XorStr("FF 15 ? ? ? ? 8B F8 85 FF 78 18")) + 0x2;
 
 	original_present = **reinterpret_cast<present_fn**>(present_address);
 	original_reset = **reinterpret_cast<reset_fn**>(reset_address);
@@ -71,14 +71,14 @@ void hooks::initialize() noexcept {
 	**reinterpret_cast<void***>(present_address) = reinterpret_cast<void*>(&present);
 	**reinterpret_cast<void***>(reset_address) = reinterpret_cast<void*>(&reset);
 
-	window = FindWindowW(L"Valve001", NULL);
+	window = FindWindow(XorStr("Valve001"), NULL);
 	wndproc_original = reinterpret_cast<WNDPROC>(SetWindowLongW(window, GWL_WNDPROC, reinterpret_cast<LONG>(wndproc)));
 
-	interfaces::console->get_convar("crosshair")->set_value(1);
-	interfaces::console->get_convar("viewmodel_fov")->callbacks.set_size(false);
-	interfaces::console->get_convar("viewmodel_offset_x")->callbacks.set_size(false);
-	interfaces::console->get_convar("viewmodel_offset_y")->callbacks.set_size(false);
-	interfaces::console->get_convar("viewmodel_offset_z")->callbacks.set_size(false);
+	interfaces::console->get_convar(XorStr("crosshair"))->set_value(1);
+	interfaces::console->get_convar(XorStr("viewmodel_fov"))->callbacks.set_size(false);
+	interfaces::console->get_convar(XorStr("viewmodel_offset_x"))->callbacks.set_size(false);
+	interfaces::console->get_convar(XorStr("viewmodel_offset_y"))->callbacks.set_size(false);
+	interfaces::console->get_convar(XorStr("viewmodel_offset_z"))->callbacks.set_size(false);
 }
 
 
@@ -95,7 +95,7 @@ void hooks::shutdown() noexcept {
 	**reinterpret_cast<void***>(present_address) = reinterpret_cast<void*>(original_present);
 	**reinterpret_cast<void***>(reset_address) = reinterpret_cast<void*>(original_reset);
 
-	SetWindowLongW(FindWindowW(L"Valve001", NULL), GWL_WNDPROC, reinterpret_cast<LONG>(wndproc_original));
+	SetWindowLongW(FindWindow(XorStr("Valve001"), NULL), GWL_WNDPROC, reinterpret_cast<LONG>(wndproc_original));
 }
 
 float __stdcall hooks::viewmodel_fov() noexcept {
@@ -121,13 +121,13 @@ void __stdcall hooks::draw_set_color(int r, int g, int b, int a) noexcept {
 	auto outline_alpha = config_system.item.clr_crosshair_outline[3] * 255;
 
 	if (config_system.item.crosshair_color) {
-		static const auto crosshair_color_fn = utilities::pattern_scan(GetModuleHandleA("client_panorama.dll"), "FF 50 3C 80 7D 20 00") + 3;
+		static const auto crosshair_color_fn = utilities::pattern_scan(GetModuleHandleA(XorStr("client_panorama.dll")), XorStr("FF 50 3C 80 7D 20 00")) + 3;
 		if (_ReturnAddress() == reinterpret_cast<void*>(crosshair_color_fn))
 			return original_fn(interfaces::surface, color_red, color_green, color_blue, color_alpha);
 	}
 
 	if (config_system.item.crosshair_outline_color) {
-		static const auto crosshair_outline_color_fn = utilities::pattern_scan(GetModuleHandleA("client_panorama.dll"), "FF 50 3C F3 0F 10 4D ? 66 0F 6E C6") + 3;
+		static const auto crosshair_outline_color_fn = utilities::pattern_scan(GetModuleHandleA(XorStr("client_panorama.dll")), XorStr("FF 50 3C F3 0F 10 4D ? 66 0F 6E C6")) + 3;
 		if (_ReturnAddress() == reinterpret_cast<void*>(crosshair_outline_color_fn))
 			return original_fn(interfaces::surface, outline_red, outline_green, outline_blue, outline_alpha);
 	}
@@ -243,7 +243,7 @@ void __stdcall hooks::frame_stage_notify(int frame_stage) noexcept {
 	original_fn(interfaces::client, frame_stage);
 }
 void __stdcall hooks::paint_traverse(unsigned int panel, bool force_repaint, bool allow_force) noexcept {
-	if (strstr(interfaces::panel->get_panel_name(panel), "HudZoom")) {
+	if (strstr(interfaces::panel->get_panel_name(panel), XorStr("HudZoom"))) {
 		if (interfaces::engine->is_connected() && interfaces::engine->is_in_game()) {
 			if (config_system.item.remove_scope)
 				return;
@@ -252,7 +252,7 @@ void __stdcall hooks::paint_traverse(unsigned int panel, bool force_repaint, boo
 
 	reinterpret_cast<paint_traverse_fn>(panel_hook->get_original(41))(interfaces::panel, panel, force_repaint, allow_force);
 
-	if (strstr(interfaces::panel->get_panel_name(panel), "MatSystemTopPanel")) {
+	if (strstr(interfaces::panel->get_panel_name(panel), XorStr("MatSystemTopPanel"))) {
 		visuals.run();
 		hitmarker.run();
 		event_logs.run();

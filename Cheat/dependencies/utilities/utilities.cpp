@@ -1,9 +1,10 @@
 #include "utilities.hpp"
 #include "../common_includes.hpp"
+#include "../../SDK/crypto/XorStr.h"
 #include <psapi.h>
 
 void utilities::change_name(const char* name_to_change) {
-	auto name = interfaces::console->get_convar("name");
+	auto name = interfaces::console->get_convar(XorStr("name"));
 	name->callbacks.set_size(0);
 
 	name->set_value(name_to_change);
@@ -11,8 +12,7 @@ void utilities::change_name(const char* name_to_change) {
 
 void utilities::dump_steam_id() {
 	if (!interfaces::engine->is_connected() && !interfaces::engine->is_in_game()) {
-		utilities::console_warning("[dump id] ");
-		interfaces::console->console_printf("you must be in game to dump player info. \n");
+		utilities::console_warning(XorStr("[dump id] "));
 		return;
 	}
 
@@ -35,12 +35,12 @@ void utilities::dump_steam_id() {
 		std::transform(player_name.begin(), player_name.end(), player_name.begin(), ::tolower);
 
 		if (!info.fakeplayer) {
-			utilities::console_warning("[dump id] ");
-			output << "player " << player_name.c_str() << ": " << "steamcommunity.com/profiles/" << steam_id64 << "/" << "\n";
+			utilities::console_warning(XorStr("[dump id] "));
+			output << XorStr("player ") << player_name.c_str() << ": " << XorStr("steamcommunity.com/profiles/") << steam_id64 << "/" << "\n";
 		}
 		else {
-			utilities::console_warning("[dump id] ");
-			output << "player " << player_name.c_str() << ": " << "bot" << "\n";
+			utilities::console_warning(XorStr("[dump id] "));
+			output << XorStr("player ") << player_name.c_str() << ": " << XorStr("bot") << "\n";
 		}
 
 		interfaces::console->console_printf("%s", output.str());
@@ -50,17 +50,17 @@ void utilities::dump_steam_id() {
 
 template<class T>
 static T* utilities::find_hud_element(const char* name) {
-	static auto fn = *reinterpret_cast<DWORD**>(utilities::pattern_scan(GetModuleHandleA("client_panorama.dll"), ("B9 ? ? ? ? E8 ? ? ? ? 8B 5D 08")) + 1);
+	static auto fn = *reinterpret_cast<DWORD**>(utilities::pattern_scan(GetModuleHandleA(XorStr("client_panorama.dll")), XorStr("B9 ? ? ? ? E8 ? ? ? ? 8B 5D 08")) + 1);
 
-	static auto find_hud_element = reinterpret_cast<DWORD(__thiscall*)(void*, const char*)>(utilities::pattern_scan(GetModuleHandleA("client_panorama.dll"), ("55 8B EC 53 8B 5D 08 56 57 8B F9 33 F6 39 77 28")));
+	static auto find_hud_element = reinterpret_cast<DWORD(__thiscall*)(void*, const char*)>(utilities::pattern_scan(GetModuleHandle(XorStr("client_panorama.dll")), XorStr("55 8B EC 53 8B 5D 08 56 57 8B F9 33 F6 39 77 28")));
 	return (T*)find_hud_element(fn, name);
 }
 
 
 void utilities::force_update() {
-	static auto fn = reinterpret_cast<std::int32_t(__thiscall*)(void*, std::int32_t)>(utilities::pattern_scan(GetModuleHandleA("client_panorama.dll"), ("55 8B EC 51 53 56 8B 75 08 8B D9 57 6B FE 2C")));
+	static auto fn = reinterpret_cast<std::int32_t(__thiscall*)(void*, std::int32_t)>(utilities::pattern_scan(GetModuleHandle(XorStr("client_panorama.dll")), XorStr("55 8B EC 51 53 56 8B 75 08 8B D9 57 6B FE 2C")));
 
-	auto element = find_hud_element<std::uintptr_t*>(("CCSGO_HudWeaponSelection"));
+	auto element = find_hud_element<std::uintptr_t*>(XorStr("CCSGO_HudWeaponSelection"));
 
 	auto hud_weapons = reinterpret_cast<hud_weapons_t*>(std::uintptr_t(element) - 0xA0);
 	if (hud_weapons == nullptr)
@@ -79,7 +79,7 @@ void utilities::console_warning(const char* msg, ...) {
 	if (msg == nullptr)
 		return;
 	typedef void(__cdecl* console_warning_fn)(const char* msg, va_list);
-	static console_warning_fn fn = (console_warning_fn)GetProcAddress(GetModuleHandle("tier0.dll"), "Warning");
+	static console_warning_fn fn = (console_warning_fn)GetProcAddress(GetModuleHandle(XorStr("tier0.dll")), XorStr("Warning"));
 	char buffer[989];
 	va_list list;
 	va_start(list, msg);
@@ -91,19 +91,19 @@ void utilities::console_warning(const char* msg, ...) {
 const char* utilities::hitgroup_name(int hitgroup) {
 	switch (hitgroup) {
 	case hitgroup_head:
-		return "head";
+		return XorStr("head");
 	case hitgroup_leftleg:
-		return "left leg";
+		return XorStr("left leg");
 	case hitgroup_rightleg:
-		return "right leg";
+		return XorStr("right leg");
 	case hitgroup_stomach:
-		return "stomach";
+		return XorStr("stomach");
 	case hitgroup_leftarm:
-		return "left arm";
+		return XorStr("left arm");
 	case hitgroup_rightarm:
-		return "right arm";
+		return XorStr("right arm");
 	default:
-		return "body";
+		return XorStr("body");
 	}
 }
 
@@ -175,13 +175,13 @@ int utilities::epoch_time() {
 
 void utilities::apply_clan_tag(const char * name) {
 	using Fn = int(__fastcall *)(const char *, const char *);
-	static auto apply_clan_tag_fn = reinterpret_cast<Fn>(utilities::pattern_scan(GetModuleHandleA("engine.dll"), "53 56 57 8B DA 8B F9 FF 15"));
+	static auto apply_clan_tag_fn = reinterpret_cast<Fn>(utilities::pattern_scan(GetModuleHandleA(XorStr("engine.dll")), XorStr("53 56 57 8B DA 8B F9 FF 15")));
 	apply_clan_tag_fn(name, name);
 };
 
 void utilities::load_named_sky(const char* sky_name) {
 	using Fn = void(__fastcall*)(const char*);
-	static auto load_named_sky_fn = reinterpret_cast<Fn>(utilities::pattern_scan(GetModuleHandleA("engine.dll"), "55 8B EC 81 EC ? ? ? ? 56 57 8B F9 C7 45"));
+	static auto load_named_sky_fn = reinterpret_cast<Fn>(utilities::pattern_scan(GetModuleHandleA(XorStr("engine.dll")), XorStr("55 8B EC 81 EC ? ? ? ? 56 57 8B F9 C7 45")));
 	load_named_sky_fn(sky_name);
 }
 
@@ -190,7 +190,7 @@ bool utilities::is_behind_smoke(vec3_t start_pos, vec3_t end_pos) {
 	static line_goes_through_smoke line_goes_through_smoke_fn = 0;
 
 	if (!line_goes_through_smoke_fn)
-		line_goes_through_smoke_fn = reinterpret_cast<line_goes_through_smoke>(utilities::pattern_scan(GetModuleHandleA("client_panorama.dll"), "55 8B EC 83 EC 08 8B 15 ? ? ? ? 0F 57 C0"));
+		line_goes_through_smoke_fn = reinterpret_cast<line_goes_through_smoke>(utilities::pattern_scan(GetModuleHandleA(XorStr("client_panorama.dll")), XorStr("55 8B EC 83 EC 08 8B 15 ? ? ? ? 0F 57 C0")));
 
 	if (line_goes_through_smoke_fn)
 		return line_goes_through_smoke_fn(start_pos, end_pos);
@@ -199,16 +199,15 @@ bool utilities::is_behind_smoke(vec3_t start_pos, vec3_t end_pos) {
 
 void* utilities::game::capture_interface(const char* mod, const char* iface) {
 	using fn_capture_iface_t = void*(*)(const char*, int*);
-	auto fn_addr = reinterpret_cast<fn_capture_iface_t>(GetProcAddress(GetModuleHandleA(mod), "CreateInterface"));
+	auto fn_addr = reinterpret_cast<fn_capture_iface_t>(GetProcAddress(GetModuleHandleA(mod), XorStr("CreateInterface")));
 
 	auto iface_addr = fn_addr(iface, nullptr);
-	printf("[interfaces] found %s at 0x%p\n", iface, fn_addr(iface, nullptr));
 
 	return iface_addr;
 }
 
 void utilities::material_setup() {
-	std::ofstream("csgo/materials/aristois_material.vmt") << R"#("VertexLitGeneric" {
+	std::ofstream(XorStr("csgo/materials/alpha_project_material.vmt")) << XorStr(R"#("VertexLitGeneric" {
             "$basetexture" "vgui/white_additive"
             "$ignorez"      "0"
             "$envmap"       ""
@@ -221,9 +220,9 @@ void utilities::material_setup() {
             "$flat"         "0"
 			"$phong"		"1"
 			"$rimlight"		"1"
-        })#";
+        })#");
 
-	std::ofstream("csgo/materials/aristois_reflective.vmt") << R"#("VertexLitGeneric" {
+	std::ofstream(XorStr("csgo/materials/alpha_project_reflective.vmt")) << XorStr(R"#("VertexLitGeneric" {
 			"$basetexture" "vgui/white_additive"
 			"$ignorez" "0"
 			"$envmap" "env_cubemap"
@@ -236,5 +235,5 @@ void utilities::material_setup() {
 			"$halflambert" "1"
 			"$znearer" "0"
 			"$flat" "1"
-		})#";
+		})#");
 }
