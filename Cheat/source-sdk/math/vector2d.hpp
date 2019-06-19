@@ -43,4 +43,31 @@ public:
 	inline float length() {
 		return sqrt((x * x) + (y * y));
 	}
+
+	inline float distance_to(const vec2_t &other) {
+		vec2_t delta;
+		delta.x = x - other.x;
+		delta.y = y - other.y;
+
+		return delta.length();
+	}
+
+	inline void normalize(void) {
+		auto vec_normalize = [&](vec2_t& v) {
+			auto l = v.length();
+
+			if (l != 0.0f) {
+				v.x /= l;
+				v.y /= l;
+
+			}
+			else {
+				v.x = v.y = 0.0f;
+			}
+
+			return l;
+		};
+
+		vec_normalize(*this);
+	}
 };

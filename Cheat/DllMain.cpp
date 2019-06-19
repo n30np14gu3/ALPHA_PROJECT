@@ -30,8 +30,8 @@ void LoaderConnect()
 void MainThread()
 {
 	AntiLeak::HideThread(GetCurrentThread());
-	globals::initGlobals();
-	LoaderConnect();
+	//globals::initGlobals();
+	//LoaderConnect();
 
 	try {
 		interfaces::initialize();

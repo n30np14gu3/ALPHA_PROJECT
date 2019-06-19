@@ -73,26 +73,25 @@ void c_menu::run() {
 	static int page = 0;
 
 	if (opened) {
-		ImGui::GetStyle().Colors[ImGuiCol_CheckMark] = ImVec4(167 / 255.f, 24 / 255.f, 71 / 255.f, 1.f);
-		ImGui::GetStyle().Colors[ImGuiCol_SliderGrab] = ImVec4(167 / 255.f, 24 / 255.f, 71 / 255.f, 1.f);
-		ImGui::GetStyle().Colors[ImGuiCol_SliderGrabActive] = ImVec4(167 / 255.f, 24 / 71, 247 / 255.f, 1.f);
+		//ImGui::GetStyle().Colors[ImGuiCol_CheckMark] = ImVec4(167 / 255.f, 24 / 255.f, 71 / 255.f, 1.f);
+		//ImGui::GetStyle().Colors[ImGuiCol_SliderGrab] = ImVec4(167 / 255.f, 24 / 255.f, 71 / 255.f, 1.f);
+		//ImGui::GetStyle().Colors[ImGuiCol_SliderGrabActive] = ImVec4(167 / 255.f, 24 / 71, 247 / 255.f, 1.f);
 
 		ImGui::SetNextWindowSize(ImVec2(600, 600), ImGuiSetCond_FirstUseEver);
 		ImGui::Begin(XorStr("alpha project"), &opened, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_ShowBorders | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoTitleBar); {
 			ImVec2 p = ImGui::GetCursorScreenPos();
-			ImColor c = ImColor(32, 114, 247);
 
-			ImGui::GetWindowDrawList()->AddRectFilled(ImVec2(p.x, p.y + 30), ImVec2(p.x + ImGui::GetWindowWidth(), p.y - 3), ImColor(30, 30, 39));
-			ImGui::GetWindowDrawList()->AddRectFilledMultiColor(ImVec2(p.x, p.y + 32), ImVec2(p.x + ImGui::GetWindowWidth(), p.y + +30), ImColor(167, 24, 71, 255), ImColor(58, 31, 87, 255), ImColor(58, 31, 87, 255), ImColor(167, 24, 71, 255));
+			ImGui::GetWindowDrawList()->AddRectFilled(ImVec2(p.x, p.y + 30), ImVec2(p.x + ImGui::GetWindowWidth(), p.y - 3), ImColor(26, 35, 46));
+			ImGui::GetWindowDrawList()->AddRectFilledMultiColor(ImVec2(p.x, p.y + 32), ImVec2(p.x + ImGui::GetWindowWidth(), p.y + +30), ImColor(25, 25, 80, 255), ImColor(25, 25, 80, 255), ImColor(25, 25, 80, 255), ImColor(26, 35, 46, 255));
 			ImGui::PushFont(font_menu);
 			ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 7); 
 			ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 7);
-			std::string windowName = XorStr("ALPHA | CHEAT");
+			std::string windowName = XorStr("ALPHA | CHEAT [beta]");
 			ImGui::Text(windowName.c_str());
 			ImGui::SameLine();
 
 			ImGui::SetCursorPosY(ImGui::GetCursorPosY() - 9);
-			if (ImGui::ButtonT(XorStr("legit"), ImVec2(40, 30), page, 0, false, false)) page = 0; ImGui::SameLine(0, 0);
+			if (ImGui::ButtonT(XorStr("legit bot"), ImVec2(50, 30), page, 0, false, false)) page = 0; ImGui::SameLine(0, 0);
 			if (ImGui::ButtonT(XorStr("visuals"), ImVec2(40, 30), page, 1, false, false)) page = 1; ImGui::SameLine(0, 0);
 			if (ImGui::ButtonT(XorStr("misc"), ImVec2(40, 30), page, 2, false, false)) page = 2; ImGui::SameLine(0, 0);
 			if (ImGui::ButtonT(XorStr("skins"), ImVec2(40, 30), page, 3, false, false)) page = 3; ImGui::SameLine(0, 0);
@@ -104,7 +103,7 @@ void c_menu::run() {
 			ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 222); 
 
 			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(16, 16));
-			ImGui::PushStyleColor(ImGuiCol_ChildWindowBg, ImVec4(30 / 255.f, 30 / 255.f, 39 / 255.f, 1.0f));
+			//ImGui::PushStyleColor(ImGuiCol_ChildWindowBg, ImVec4(30 / 255.f, 30 / 255.f, 39 / 255.f, 1.0f));
 			ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(0 / 255.f, 0 / 255.f, 0 / 255.f, 0.1f));
 
 			if (config_system.item.visuals_preview) {
@@ -112,7 +111,7 @@ void c_menu::run() {
 			}
 
 			ImGui::PopStyleColor();
-			ImGui::PopStyleColor();
+			//ImGui::PopStyleColor();
 			ImGui::PopStyleVar();
 
 			static int test = 0;
@@ -124,7 +123,7 @@ void c_menu::run() {
 				ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(16, 16));
 
 				//push window color for child
-				ImGui::PushStyleColor(ImGuiCol_ChildWindowBg, ImVec4(30 / 255.f, 30 / 255.f, 39 / 255.f, 1.0f));
+				//ImGui::PushStyleColor(ImGuiCol_ChildWindowBg, ImVec4(30 / 255.f, 30 / 255.f, 39 / 255.f, 1.0f));
 				//push border color for child
 				ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(0 / 255.f, 0 / 255.f, 0 / 255.f, 0.1f));
 				ImGui::BeginChild(XorStr("aimbot"), ImVec2(279, 268), true); {
@@ -222,7 +221,7 @@ void c_menu::run() {
 					ImGui::PopFont();
 				} ImGui::EndChild(true);
 				ImGui::PopStyleColor();
-				ImGui::PopStyleColor();
+				//ImGui::PopStyleColor();
 				ImGui::PopStyleVar();
 
 				break;
@@ -231,7 +230,7 @@ void c_menu::run() {
 				ImGui::Dummy(ImVec2(0, -2)); ImGui::SameLine();
 				ImGui::Dummy(ImVec2(0, 0)); ImGui::SameLine();
 				ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(16, 16));
-				ImGui::PushStyleColor(ImGuiCol_ChildWindowBg, ImVec4(30 / 255.f, 30 / 255.f, 39 / 255.f, 1.0f));
+				//ImGui::PushStyleColor(ImGuiCol_ChildWindowBg, ImVec4(30 / 255.f, 30 / 255.f, 39 / 255.f, 1.0f));
 				ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(0 / 255.f, 0 / 255.f, 0 / 255.f, 0.1f));
 
 				ImGui::BeginChild(XorStr("player"), ImVec2(279, 268), true); {
@@ -275,7 +274,7 @@ void c_menu::run() {
 					ImGui::Checkbox(XorStr("footstep"), &config_system.item.sound_footstep);
 					ImGui::ColorEdit4(XorStr("footstep color"), config_system.item.clr_footstep, ImGuiColorEditFlags_NoInputs);
 					ImGui::Checkbox(XorStr("skeleton"), &config_system.item.skeleton);
-					ImGui::Checkbox(XorStr("preview visuals"), &config_system.item.visuals_preview);
+					//ImGui::Checkbox(XorStr("preview visuals"), &config_system.item.visuals_preview);
 				}
 				ImGui::EndChild(true);
 
@@ -378,7 +377,7 @@ void c_menu::run() {
 				ImGui::EndChild(true);
 
 				ImGui::PopStyleVar();
-				ImGui::PopStyleColor();
+				//ImGui::PopStyleColor();
 				ImGui::PopStyleColor();
 				ImGui::Columns();
 				break;
@@ -387,7 +386,7 @@ void c_menu::run() {
 				ImGui::Dummy(ImVec2(0, -2)); ImGui::SameLine();
 				ImGui::Dummy(ImVec2(0, 0)); ImGui::SameLine();
 				ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(16, 16));
-				ImGui::PushStyleColor(ImGuiCol_ChildWindowBg, ImVec4(30 / 255.f, 30 / 255.f, 39 / 255.f, 1.0f));
+				//ImGui::PushStyleColor(ImGuiCol_ChildWindowBg, ImVec4(30 / 255.f, 30 / 255.f, 39 / 255.f, 1.0f));
 				ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(0 / 255.f, 0 / 255.f, 0 / 255.f, 0.1f));
 
 				ImGui::BeginChild(XorStr("misc"), ImVec2(279, 543), true); {
@@ -459,7 +458,7 @@ void c_menu::run() {
 				}
 				ImGui::EndChild(true);
 				ImGui::PopStyleVar();
-				ImGui::PopStyleColor();
+				//ImGui::PopStyleColor();
 				ImGui::PopStyleColor();
 				ImGui::Columns();
 				break;
@@ -468,7 +467,7 @@ void c_menu::run() {
 				ImGui::Dummy(ImVec2(0, -2)); ImGui::SameLine();
 				ImGui::Dummy(ImVec2(0, 0)); ImGui::SameLine();
 				ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(16, 16));
-				ImGui::PushStyleColor(ImGuiCol_ChildWindowBg, ImVec4(30 / 255.f, 30 / 255.f, 39 / 255.f, 1.0f));
+				//ImGui::PushStyleColor(ImGuiCol_ChildWindowBg, ImVec4(30 / 255.f, 30 / 255.f, 39 / 255.f, 1.0f));
 				ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(0 / 255.f, 0 / 255.f, 0 / 255.f, 0.1f));
 				ImGui::BeginChild(XorStr("knife"), ImVec2(279, 268), true); {
 					ImGui::Checkbox(XorStr("enable"), &config_system.item.skinchanger_enable);
@@ -670,7 +669,7 @@ void c_menu::run() {
 				}
 				ImGui::EndChild(true);
 				ImGui::PopStyleVar();
-				ImGui::PopStyleColor();
+				//ImGui::PopStyleColor();
 				ImGui::PopStyleColor();
 				ImGui::Columns();
 				break;
@@ -680,7 +679,7 @@ void c_menu::run() {
 				ImGui::Dummy(ImVec2(0, -2)); ImGui::SameLine();
 				ImGui::Dummy(ImVec2(0, 0)); ImGui::SameLine();
 				ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(16, 16));
-				ImGui::PushStyleColor(ImGuiCol_ChildWindowBg, ImVec4(30 / 255.f, 30 / 255.f, 39 / 255.f, 1.0f));
+				//ImGui::PushStyleColor(ImGuiCol_ChildWindowBg, ImVec4(30 / 255.f, 30 / 255.f, 39 / 255.f, 1.0f));
 				ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(0 / 255.f, 0 / 255.f, 0 / 255.f, 0.1f));
 				ImGui::BeginChild(XorStr("config"), ImVec2(279, 268), true); {
 					constexpr auto& config_items = config_system.get_configs();
@@ -805,7 +804,7 @@ void c_menu::run() {
 				ImGui::EndChild(true);*/
 				ImGui::PopStyleVar();
 				ImGui::PopStyleColor();
-				ImGui::PopStyleColor();
+				//ImGui::PopStyleColor();
 				ImGui::Columns();
 				break;
 			}

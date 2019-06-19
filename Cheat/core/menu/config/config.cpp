@@ -2,6 +2,7 @@
 #include <ShlObj.h>
 #include "archivex.hpp"
 #include "config.hpp"
+#include "../../../SDK/rapidjson/rapidjson.h"
 
 c_config config_system;
 

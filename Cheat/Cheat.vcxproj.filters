@@ -109,6 +109,9 @@
     <Filter Include="core\features\visuals">
       <UniqueIdentifier>{20288c82-e50a-47c6-8128-57a74e4464a6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="core\features\BackDrop">
+      <UniqueIdentifier>{69e28deb-7020-4718-bf45-07d913f609c0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DllMain.cpp" />
@@ -225,6 +228,9 @@
     </ClCompile>
     <ClCompile Include="core\menu\menu.cpp">
       <Filter>core\menu</Filter>
+    </ClCompile>
+    <ClCompile Include="core\features\BackDrop\BackDrop.cpp">
+      <Filter>core\features\BackDrop</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -606,6 +612,9 @@
     </ClInclude>
     <ClInclude Include="core\menu\menu.hpp">
       <Filter>core\menu</Filter>
+    </ClInclude>
+    <ClInclude Include="core\features\BackDrop\BackDrop.h">
+      <Filter>core\features\BackDrop</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

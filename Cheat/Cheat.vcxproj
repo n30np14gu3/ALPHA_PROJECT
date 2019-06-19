@@ -141,6 +141,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="core\features\aimbot\aimbot.cpp" />
+    <ClCompile Include="core\features\BackDrop\BackDrop.cpp" />
     <ClCompile Include="core\features\backtrack\backtrack.cpp" />
     <ClCompile Include="core\features\misc\events.cpp" />
     <ClCompile Include="core\features\misc\hitmarker.cpp" />
@@ -182,6 +183,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core\features\aimbot\aimbot.hpp" />
+    <ClInclude Include="core\features\BackDrop\BackDrop.h" />
     <ClInclude Include="core\features\backtrack\backtrack.hpp" />
     <ClInclude Include="core\features\misc\events.hpp" />
     <ClInclude Include="core\features\misc\hitmarker.hpp" />

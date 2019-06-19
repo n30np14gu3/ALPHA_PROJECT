@@ -16,6 +16,29 @@ public:
 		return configs;
 	}
 
+	struct legit_aim_setting
+	{
+		bool enabled{ false };
+		bool silent{ false };
+		bool backtrack{ false };
+
+
+		float fov{ 0 };
+		float smooth{ 0 };
+
+		int hitbox{ 0 };
+		bool nearest{ false };
+
+		float rcs_x{ 0 };
+		float rcs_y{ 0 };
+	};
+
+	struct weapon_skin_data
+	{
+		int paint_kit{ 0 };
+		int wear{ 0 };
+	};
+
 	struct {
 		bool backtrack{ false };
 		bool backtrack_chams{ false };
@@ -212,11 +235,14 @@ public:
 		int glove_wear{ 0 };
 		float rcs_standalone_x{ 0.0f };
 		float rcs_standalone_y{ 0.0f };
+		legit_aim_setting legit_settings[530]{ };
+		weapon_skin_data skins_info[530]{ };
 	} item;
 
 private:
 	std::filesystem::path path;
 	std::vector<std::string> configs;
+
 };
 
 extern c_config config_system;

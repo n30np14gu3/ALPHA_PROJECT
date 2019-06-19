@@ -86,7 +86,6 @@ void c_skinchanger::run() noexcept {
 	auto index_stiletto = interfaces::model_info->get_model_index(XorStr("models/weapons/v_knife_stiletto.mdl"));
 	auto index_talon = interfaces::model_info->get_model_index(XorStr("models/weapons/v_knife_widowmaker.mdl"));
 	auto index_ursus = interfaces::model_info->get_model_index(XorStr("models/weapons/v_knife_ursus.mdl"));
-
 	auto my_weapons = local_player->weapons();
 	for (size_t i = 0; my_weapons[i] != INVALID_EHANDLE_INDEX; i++) {
 		auto weapon = reinterpret_cast<attributable_item_t*>(interfaces::entity_list->get_client_entity_handle(my_weapons[i]));

@@ -55,6 +55,7 @@ void c_aimbot::weapon_settings(weapon_t* weapon) noexcept {
 	if (!weapon)
 		return;
 
+
 	if (is_pistol(weapon)) {
 		switch (config_system.item.aim_bone_pistol) {
 		case 0:

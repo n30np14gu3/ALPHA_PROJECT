@@ -16,7 +16,7 @@
 #include "../features/visuals/nightmode.hpp"
 #include "../features/skinchanger/glovechanger.hpp"
 #include "../../SDK/crypto/XorStr.h"
-
+#include "../features/BackDrop/BackDrop.h"
 std::unique_ptr<vmt_hook> hooks::client_hook;
 std::unique_ptr<vmt_hook> hooks::clientmode_hook;
 std::unique_ptr<vmt_hook> hooks::panel_hook;
@@ -251,6 +251,14 @@ void __stdcall hooks::paint_traverse(unsigned int panel, bool force_repaint, boo
 	}
 
 	reinterpret_cast<paint_traverse_fn>(panel_hook->get_original(41))(interfaces::panel, panel, force_repaint, allow_force);
+
+	if (strstr(interfaces::panel->get_panel_name(panel), XorStr("FocusOverlayPanel"))) {
+
+		if (menu.opened)
+		{
+			BackDrop::DrawBackDrop();
+		}
+	}
 
 	if (strstr(interfaces::panel->get_panel_name(panel), XorStr("MatSystemTopPanel"))) {
 		visuals.run();
