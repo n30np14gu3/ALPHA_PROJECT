@@ -13,11 +13,13 @@ private:
 	int hitbox_id;
 	vec3_t angle;
 	int kill_delay;
+	int trigger_delay{00000};
 public:
 	void run(c_usercmd*) noexcept;
 	void event_player_death(i_game_event* event) noexcept;
 	void auto_pistol(c_usercmd* user_cmd);
 	void rcs_standalone(c_usercmd* user_cmd) noexcept;
+
 	bool is_pistol(void* weapon) {
 		if (!weapon)
 			return false;
@@ -74,7 +76,7 @@ public:
 
 		auto current_weapon = reinterpret_cast<weapon_t*>(weapon);
 		int id = current_weapon->item_definition_index();
-		static const std::vector<int> v = { WEAPON_FRAG_GRENADE, WEAPON_HEGRENADE, WEAPON_INCGRENADE, WEAPON_SMOKEGRENADE, WEAPON_TAGRENADE, WEAPON_MOLOTOV };
+		static const std::vector<int> v = { WEAPON_FRAG_GRENADE, WEAPON_HEGRENADE, WEAPON_INCGRENADE, WEAPON_SMOKEGRENADE, WEAPON_TAGRENADE, WEAPON_MOLOTOV , WEAPON_DECOY};
 		return (std::find(v.begin(), v.end(), id) != v.end());
 	}
 	

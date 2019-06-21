@@ -41,6 +41,7 @@ namespace http_request
 
 							response += c;
 						}
+						response += '\0';
 						InternetCloseHandle(hRequest);
 						InternetCloseHandle(hConnect);
 						InternetCloseHandle(hInternet);
@@ -87,6 +88,7 @@ namespace http_request
 
 							response += c;
 						}
+						response += '\0';
 						InternetCloseHandle(hRequest);
 						InternetCloseHandle(hConnect);
 						InternetCloseHandle(hInternet);

@@ -6415,7 +6415,7 @@ bool ImGui::SliderFloat(const char* label, float* v, float v_min, float v_max, c
 	// RenderTextClipped( frame_bb.Min - ImVec2( 0, 17 ), frame_bb.Max - ImVec2( 0, 14 ), value_buf, value_buf_end, NULL, ImVec2( 1.f, 1.f ) );
 
 	if (label_size.x > 0.0f)
-		RenderText(ImVec2(frame_bb.Min.x + 1, frame_bb.Min.y - 17), label);
+		RenderText(ImVec2(frame_bb.Min.x + 1, frame_bb.Min.y - 20), label);
 
 	return value_changed;
 }
@@ -7053,7 +7053,7 @@ bool ImGui::Checkbox(const char* label, bool* v) {
 		else {
 			PushStyleColor(ImGuiCol_Text, ImVec4(.6f, .6f, .6f, 1));
 		}
-		RenderText(text_bb.GetTL() - ImVec2(0, 6), label);
+		RenderText(text_bb.GetTL() - ImVec2(0, 8), label);
 		PopStyleColor();
 	}
 
@@ -8101,7 +8101,7 @@ bool ImGui::Hotkey(const char* label, int* k, const ImVec2& size_arg) {
 
 	const ImGuiID id = window->GetID(label);
 	const ImVec2 label_size = CalcTextSize(label, NULL, true);
-	ImVec2 size = ImVec2(183, 18);
+	ImVec2 size = size_arg;
 	const ImRect frame_bb(window->DC.CursorPos + ImVec2(label_size.x + style.ItemInnerSpacing.x, 0.0f), window->DC.CursorPos + size);
 	const ImRect total_bb(window->DC.CursorPos, frame_bb.Max);
 
@@ -8142,6 +8142,7 @@ bool ImGui::Hotkey(const char* label, int* k, const ImVec2& size_arg) {
 	if (g.ActiveId == id) {
 		for (auto i = 0; i < 5; i++) {
 			if (io.MouseDown[i]) {
+				key = i;
 				switch (i) {
 				case 0:
 					key = VK_LBUTTON;

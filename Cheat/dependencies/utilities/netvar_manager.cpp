@@ -4,7 +4,7 @@
 namespace netvar_manager {
 	using netvar_key_value_map = std::unordered_map< uint32_t, uintptr_t >;
 	using netvar_table_map = std::unordered_map< uint32_t, netvar_key_value_map >;
-	void initProps(netvar_table_map &table_map);
+	void initProps(netvar_table_map& table_map);
 
 	uintptr_t get_net_var(const uint32_t table,
 		const uint32_t prop) {
@@ -17,7 +17,7 @@ namespace netvar_manager {
 			return 0;
 		}
 
-		netvar_key_value_map &table_map = map.at(table);
+		netvar_key_value_map& table_map = map.at(table);
 		if (table_map.find(prop) == table_map.end()) {
 			return 0;
 		}
@@ -25,9 +25,9 @@ namespace netvar_manager {
 		return table_map.at(prop);
 	}
 
-	void add_props_for_table(netvar_table_map &table_map, const uint32_t table_name_hash, const std::string &table_name, recv_table *table, const bool dump_vars, std::map< std::string, std::map< uintptr_t, std::string > > &var_dump, const size_t child_offset = 0) {
+	void add_props_for_table(netvar_table_map& table_map, const uint32_t table_name_hash, const std::string& table_name, recv_table* table, const bool dump_vars, std::map< std::string, std::map< uintptr_t, std::string > >& var_dump, const size_t child_offset = 0) {
 		for (auto i = 0; i < table->props_count; ++i) {
-			auto &prop = table->props[i];
+			auto& prop = table->props[i];
 
 			if (prop.data_table && prop.elements_count > 0) {
 				if (std::string(prop.prop_name).substr(0, 1) == std::string("0"))
@@ -53,7 +53,7 @@ namespace netvar_manager {
 		}
 	}
 
-	void initProps(netvar_table_map &table_map) {
+	void initProps(netvar_table_map & table_map) {
 		const auto dump_vars = true;  //true if netvar dump
 
 		std::map< std::string, std::map< uintptr_t, std::string > > var_dump;
@@ -72,3 +72,4 @@ namespace netvar_manager {
 		}
 	}
 }
+

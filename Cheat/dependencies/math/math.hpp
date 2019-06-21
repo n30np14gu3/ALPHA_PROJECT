@@ -6,8 +6,10 @@ constexpr double pi = 3.14159265358979323846;
 
 class c_math {
 public:
+
 	float distance_based_fov(float distance, vec3_t angle, c_usercmd * cmd);
 	vec3_t calculate_angle(const vec3_t & source, const vec3_t & destination, const vec3_t & viewAngles);
+	vec3_t calculate_angle_se(const vec3_t& vec_source, const vec3_t& vec_destination);
 	void sin_cos(float r, float* s, float* c);
 	vec3_t angle_vector(vec3_t angle);
 	float point_to_line(vec3_t point, vec3_t line_origin, vec3_t dir);

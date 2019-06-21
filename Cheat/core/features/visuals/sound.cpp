@@ -1,5 +1,4 @@
 #include "sound.hpp"
-#include "../../../SDK/crypto/XorStr.h"
 
 c_sound_esp sound_esp;
 
@@ -8,8 +7,8 @@ std::vector<c_sound_info> sound_logs;
 void c_sound_esp::draw_circle(color colors, vec3_t position) noexcept {
 	BeamInfo_t beam_info;
 	beam_info.m_nType = TE_BEAMRINGPOINT;
-	beam_info.m_pszModelName = XorStr("sprites/purplelaser1.vmt");
-	beam_info.m_nModelIndex = interfaces::model_info->get_model_index(XorStr("sprites/purplelaser1.vmt"));
+	beam_info.m_pszModelName = "sprites/purplelaser1.vmt";
+	beam_info.m_nModelIndex = interfaces::model_info->get_model_index("sprites/purplelaser1.vmt");
 	beam_info.m_nHaloIndex = -1;
 	beam_info.m_flHaloScale = 5;
 	beam_info.m_flLife = .50f;
@@ -49,7 +48,7 @@ void c_sound_esp::event_player_footstep(i_game_event * event) noexcept {
 	if (!local_player)
 		return;
 
-	auto walker = reinterpret_cast<player_t*>(interfaces::entity_list->get_client_entity(interfaces::engine->get_player_for_user_id(event->get_int(XorStr("userid")))));
+	auto walker = reinterpret_cast<player_t*>(interfaces::entity_list->get_client_entity(interfaces::engine->get_player_for_user_id(event->get_int("userid"))));
 
 	if (!walker)
 		return;
@@ -66,7 +65,7 @@ void c_sound_esp::event_player_footstep(i_game_event * event) noexcept {
 
 	if (walker->team() != local_player->team()) {
 		if (walker && timer < 1) {
-			sound_logs.push_back(c_sound_info(walker->abs_origin(), interfaces::globals->cur_time, event->get_int(XorStr("userid"))));
+			sound_logs.push_back(c_sound_info(walker->abs_origin(), interfaces::globals->cur_time, event->get_int("userid")));
 		}
 	}
 
@@ -87,12 +86,12 @@ void c_sound_esp::event_player_hurt(i_game_event * event) noexcept {
 	if (!local_player)
 		return;
 
-	auto attacker = interfaces::entity_list->get_client_entity(interfaces::engine->get_player_for_user_id(event->get_int(XorStr("attacker"))));
+	auto attacker = interfaces::entity_list->get_client_entity(interfaces::engine->get_player_for_user_id(event->get_int("attacker")));
 
 	if (!attacker)
 		return;
 
-	auto victim = reinterpret_cast<player_t*>(interfaces::entity_list->get_client_entity(interfaces::engine->get_player_for_user_id(event->get_int(XorStr("userid")))));
+	auto victim = reinterpret_cast<player_t*>(interfaces::entity_list->get_client_entity(interfaces::engine->get_player_for_user_id(event->get_int("userid"))));
 
 	if (!victim)
 		return;
@@ -106,7 +105,7 @@ void c_sound_esp::event_player_hurt(i_game_event * event) noexcept {
 
 	if (attacker == local_player) {
 		if (timer < 1) {
-			sound_logs.push_back(c_sound_info(victim->abs_origin(), interfaces::globals->cur_time, event->get_int(XorStr("userid"))));
+			sound_logs.push_back(c_sound_info(victim->abs_origin(), interfaces::globals->cur_time, event->get_int("userid")));
 		}
 	}
 }

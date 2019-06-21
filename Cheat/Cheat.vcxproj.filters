@@ -31,18 +31,6 @@
     <Filter Include="SDK\globals">
       <UniqueIdentifier>{70d10e6b-f568-494a-adf9-5d03f5bac99c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="SDK\rapidjson">
-      <UniqueIdentifier>{a8287d2c-bf94-4a95-a3c8-eadd504a34d8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="SDK\rapidjson\error">
-      <UniqueIdentifier>{09fd0525-8e35-49d5-8da8-8049f2d67161}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="SDK\rapidjson\internal">
-      <UniqueIdentifier>{369961dc-9155-437b-b4a8-e042b7b43e76}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="SDK\rapidjson\msinttypes">
-      <UniqueIdentifier>{cfbd876d-97c2-450d-b801-18db841506a1}</UniqueIdentifier>
-    </Filter>
     <Filter Include="SDK\protection">
       <UniqueIdentifier>{73244cde-20d8-4f4e-bff2-d9f1407b6933}</UniqueIdentifier>
     </Filter>
@@ -111,6 +99,27 @@
     </Filter>
     <Filter Include="core\features\BackDrop">
       <UniqueIdentifier>{69e28deb-7020-4718-bf45-07d913f609c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core\features\nade_pred">
+      <UniqueIdentifier>{d11714d5-04aa-48db-89dd-135a20b7d0c5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SDK\static">
+      <UniqueIdentifier>{9250f5e2-938c-4815-80a6-19189744ae05}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SDK\static\fonts">
+      <UniqueIdentifier>{e0c1019b-e66e-43e4-89cf-76af0e8f7212}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SDK\protection\rapidjson">
+      <UniqueIdentifier>{a8287d2c-bf94-4a95-a3c8-eadd504a34d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SDK\protection\rapidjson\error">
+      <UniqueIdentifier>{09fd0525-8e35-49d5-8da8-8049f2d67161}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SDK\protection\rapidjson\internal">
+      <UniqueIdentifier>{369961dc-9155-437b-b4a8-e042b7b43e76}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SDK\protection\rapidjson\msinttypes">
+      <UniqueIdentifier>{cfbd876d-97c2-450d-b801-18db841506a1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -184,9 +193,6 @@
     <ClCompile Include="core\hooks\hooks.cpp">
       <Filter>core\hooks</Filter>
     </ClCompile>
-    <ClCompile Include="core\features\aimbot\aimbot.cpp">
-      <Filter>core\features\aimbot</Filter>
-    </ClCompile>
     <ClCompile Include="core\features\backtrack\backtrack.cpp">
       <Filter>core\features\backtrack</Filter>
     </ClCompile>
@@ -232,6 +238,21 @@
     <ClCompile Include="core\features\BackDrop\BackDrop.cpp">
       <Filter>core\features\BackDrop</Filter>
     </ClCompile>
+    <ClCompile Include="core\features\aimbot\aimbot.cpp">
+      <Filter>core\features\aimbot</Filter>
+    </ClCompile>
+    <ClCompile Include="core\features\aimbot\trigger_simple.cpp">
+      <Filter>core\features\aimbot</Filter>
+    </ClCompile>
+    <ClCompile Include="core\features\misc\damage_indicator.cpp">
+      <Filter>core\features\misc</Filter>
+    </ClCompile>
+    <ClCompile Include="core\features\nade_pred\nade_pred.cpp">
+      <Filter>core\features\nade_pred</Filter>
+    </ClCompile>
+    <ClCompile Include="core\features\skinchanger\knifehook.cpp">
+      <Filter>core\features\skinchanger</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SDK\license\license_manager.h">
@@ -262,109 +283,109 @@
       <Filter>SDK\globals</Filter>
     </ClInclude>
     <ClInclude Include="SDK\rapidjson\allocators.h">
-      <Filter>SDK\rapidjson</Filter>
+      <Filter>SDK\protection\rapidjson</Filter>
     </ClInclude>
     <ClInclude Include="SDK\rapidjson\document.h">
-      <Filter>SDK\rapidjson</Filter>
+      <Filter>SDK\protection\rapidjson</Filter>
     </ClInclude>
     <ClInclude Include="SDK\rapidjson\encodedstream.h">
-      <Filter>SDK\rapidjson</Filter>
+      <Filter>SDK\protection\rapidjson</Filter>
     </ClInclude>
     <ClInclude Include="SDK\rapidjson\encodings.h">
-      <Filter>SDK\rapidjson</Filter>
+      <Filter>SDK\protection\rapidjson</Filter>
     </ClInclude>
     <ClInclude Include="SDK\rapidjson\filereadstream.h">
-      <Filter>SDK\rapidjson</Filter>
+      <Filter>SDK\protection\rapidjson</Filter>
     </ClInclude>
     <ClInclude Include="SDK\rapidjson\filewritestream.h">
-      <Filter>SDK\rapidjson</Filter>
+      <Filter>SDK\protection\rapidjson</Filter>
     </ClInclude>
     <ClInclude Include="SDK\rapidjson\fwd.h">
-      <Filter>SDK\rapidjson</Filter>
+      <Filter>SDK\protection\rapidjson</Filter>
     </ClInclude>
     <ClInclude Include="SDK\rapidjson\istreamwrapper.h">
-      <Filter>SDK\rapidjson</Filter>
+      <Filter>SDK\protection\rapidjson</Filter>
     </ClInclude>
     <ClInclude Include="SDK\rapidjson\memorybuffer.h">
-      <Filter>SDK\rapidjson</Filter>
+      <Filter>SDK\protection\rapidjson</Filter>
     </ClInclude>
     <ClInclude Include="SDK\rapidjson\memorystream.h">
-      <Filter>SDK\rapidjson</Filter>
+      <Filter>SDK\protection\rapidjson</Filter>
     </ClInclude>
     <ClInclude Include="SDK\rapidjson\ostreamwrapper.h">
-      <Filter>SDK\rapidjson</Filter>
+      <Filter>SDK\protection\rapidjson</Filter>
     </ClInclude>
     <ClInclude Include="SDK\rapidjson\pointer.h">
-      <Filter>SDK\rapidjson</Filter>
+      <Filter>SDK\protection\rapidjson</Filter>
     </ClInclude>
     <ClInclude Include="SDK\rapidjson\prettywriter.h">
-      <Filter>SDK\rapidjson</Filter>
+      <Filter>SDK\protection\rapidjson</Filter>
     </ClInclude>
     <ClInclude Include="SDK\rapidjson\rapidjson.h">
-      <Filter>SDK\rapidjson</Filter>
+      <Filter>SDK\protection\rapidjson</Filter>
     </ClInclude>
     <ClInclude Include="SDK\rapidjson\reader.h">
-      <Filter>SDK\rapidjson</Filter>
+      <Filter>SDK\protection\rapidjson</Filter>
     </ClInclude>
     <ClInclude Include="SDK\rapidjson\schema.h">
-      <Filter>SDK\rapidjson</Filter>
+      <Filter>SDK\protection\rapidjson</Filter>
     </ClInclude>
     <ClInclude Include="SDK\rapidjson\stream.h">
-      <Filter>SDK\rapidjson</Filter>
+      <Filter>SDK\protection\rapidjson</Filter>
     </ClInclude>
     <ClInclude Include="SDK\rapidjson\stringbuffer.h">
-      <Filter>SDK\rapidjson</Filter>
+      <Filter>SDK\protection\rapidjson</Filter>
     </ClInclude>
     <ClInclude Include="SDK\rapidjson\writer.h">
-      <Filter>SDK\rapidjson</Filter>
+      <Filter>SDK\protection\rapidjson</Filter>
     </ClInclude>
     <ClInclude Include="SDK\rapidjson\error\en.h">
-      <Filter>SDK\rapidjson\error</Filter>
+      <Filter>SDK\protection\rapidjson\error</Filter>
     </ClInclude>
     <ClInclude Include="SDK\rapidjson\error\error.h">
-      <Filter>SDK\rapidjson\error</Filter>
+      <Filter>SDK\protection\rapidjson\error</Filter>
     </ClInclude>
     <ClInclude Include="SDK\rapidjson\internal\biginteger.h">
-      <Filter>SDK\rapidjson\internal</Filter>
+      <Filter>SDK\protection\rapidjson\internal</Filter>
     </ClInclude>
     <ClInclude Include="SDK\rapidjson\internal\diyfp.h">
-      <Filter>SDK\rapidjson\internal</Filter>
+      <Filter>SDK\protection\rapidjson\internal</Filter>
     </ClInclude>
     <ClInclude Include="SDK\rapidjson\internal\dtoa.h">
-      <Filter>SDK\rapidjson\internal</Filter>
+      <Filter>SDK\protection\rapidjson\internal</Filter>
     </ClInclude>
     <ClInclude Include="SDK\rapidjson\internal\ieee754.h">
-      <Filter>SDK\rapidjson\internal</Filter>
+      <Filter>SDK\protection\rapidjson\internal</Filter>
     </ClInclude>
     <ClInclude Include="SDK\rapidjson\internal\itoa.h">
-      <Filter>SDK\rapidjson\internal</Filter>
+      <Filter>SDK\protection\rapidjson\internal</Filter>
     </ClInclude>
     <ClInclude Include="SDK\rapidjson\internal\meta.h">
-      <Filter>SDK\rapidjson\internal</Filter>
+      <Filter>SDK\protection\rapidjson\internal</Filter>
     </ClInclude>
     <ClInclude Include="SDK\rapidjson\internal\pow10.h">
-      <Filter>SDK\rapidjson\internal</Filter>
+      <Filter>SDK\protection\rapidjson\internal</Filter>
     </ClInclude>
     <ClInclude Include="SDK\rapidjson\internal\regex.h">
-      <Filter>SDK\rapidjson\internal</Filter>
+      <Filter>SDK\protection\rapidjson\internal</Filter>
     </ClInclude>
     <ClInclude Include="SDK\rapidjson\internal\stack.h">
-      <Filter>SDK\rapidjson\internal</Filter>
+      <Filter>SDK\protection\rapidjson\internal</Filter>
     </ClInclude>
     <ClInclude Include="SDK\rapidjson\internal\strfunc.h">
-      <Filter>SDK\rapidjson\internal</Filter>
+      <Filter>SDK\protection\rapidjson\internal</Filter>
     </ClInclude>
     <ClInclude Include="SDK\rapidjson\internal\strtod.h">
-      <Filter>SDK\rapidjson\internal</Filter>
+      <Filter>SDK\protection\rapidjson\internal</Filter>
     </ClInclude>
     <ClInclude Include="SDK\rapidjson\internal\swap.h">
-      <Filter>SDK\rapidjson\internal</Filter>
+      <Filter>SDK\protection\rapidjson\internal</Filter>
     </ClInclude>
     <ClInclude Include="SDK\rapidjson\msinttypes\inttypes.h">
-      <Filter>SDK\rapidjson\msinttypes</Filter>
+      <Filter>SDK\protection\rapidjson\msinttypes</Filter>
     </ClInclude>
     <ClInclude Include="SDK\rapidjson\msinttypes\stdint.h">
-      <Filter>SDK\rapidjson\msinttypes</Filter>
+      <Filter>SDK\protection\rapidjson\msinttypes</Filter>
     </ClInclude>
     <ClInclude Include="SDK\protection\AntiLeak.h">
       <Filter>SDK\protection</Filter>
@@ -568,9 +589,6 @@
     <ClInclude Include="core\hooks\hooks.hpp">
       <Filter>core\hooks</Filter>
     </ClInclude>
-    <ClInclude Include="core\features\aimbot\aimbot.hpp">
-      <Filter>core\features\aimbot</Filter>
-    </ClInclude>
     <ClInclude Include="core\features\backtrack\backtrack.hpp">
       <Filter>core\features\backtrack</Filter>
     </ClInclude>
@@ -615,6 +633,30 @@
     </ClInclude>
     <ClInclude Include="core\features\BackDrop\BackDrop.h">
       <Filter>core\features\BackDrop</Filter>
+    </ClInclude>
+    <ClInclude Include="core\features\aimbot\aimbot.hpp">
+      <Filter>core\features\aimbot</Filter>
+    </ClInclude>
+    <ClInclude Include="core\features\aimbot\trigger_simple.hpp">
+      <Filter>core\features\aimbot</Filter>
+    </ClInclude>
+    <ClInclude Include="core\features\misc\damage_indicator.hpp">
+      <Filter>core\features\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="core\features\nade_pred\nade_pred.hpp">
+      <Filter>core\features\nade_pred</Filter>
+    </ClInclude>
+    <ClInclude Include="core\features\skinchanger\knifehook.hpp">
+      <Filter>core\features\skinchanger</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\static\fonts\DINPro.h">
+      <Filter>SDK\static\fonts</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\static\fonts\BeauSans.h">
+      <Filter>SDK\static\fonts</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\static\modules_ids.h">
+      <Filter>SDK\static</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

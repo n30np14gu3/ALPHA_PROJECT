@@ -1,7 +1,8 @@
 #pragma once
-
 #include <deque>
 #include "../../../dependencies/common_includes.hpp"
+
+#include "damage_indicator.hpp"
 
 class c_event_logs {
 public:

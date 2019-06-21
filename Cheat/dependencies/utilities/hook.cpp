@@ -176,3 +176,5 @@ void vmt_hook::release() {
 void* vmt_hook::get_original(size_t fn_index) {
 	return reinterpret_cast<void*>(old_vftbl[fn_index]);
 }
+
+

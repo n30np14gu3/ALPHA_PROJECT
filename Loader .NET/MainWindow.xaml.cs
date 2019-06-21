@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Sockets;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -21,6 +24,10 @@ using Loader.NET.SDK.Cryptography;
 using Loader.NET.SDK.Win32;
 using MaterialDesignThemes.Wpf;
 using Newtonsoft.Json;
+using Org.BouncyCastle.Crypto;
+using Org.BouncyCastle.Crypto.Encodings;
+using Org.BouncyCastle.Crypto.Engines;
+using Org.BouncyCastle.OpenSsl;
 using xNet;
 
 
@@ -99,8 +106,9 @@ namespace Loader.NET
             await Task.Run(() => runCsGo());
             await Task.Run(() => downloadLibs());
             await Task.Run(() => injectLibs());
-            LaunchBtn.IsEnabled = true;
+            await Task.Run(() => cheatSign());
 
+            MessageBox.Show("Запуск произошел успешно");
         }
 
         void downloadLibs()
@@ -121,6 +129,8 @@ namespace Loader.NET
                     {
                         _dlls.Add(Convert.FromBase64String(Encoding.UTF8.GetString(Crypto.FromHex(lib))));
                     }
+
+                    _dlls = _dlls.OrderBy(x => x.Length).ToList();
                 }
             }
             catch (Exception ex)
@@ -130,21 +140,52 @@ namespace Loader.NET
             }
         }
 
+        private void cheatSign()
+        {
+            IPAddress localAddr = IPAddress.Parse("127.0.0.1");
+            int port = 4980;
+            TcpListener server = new TcpListener(localAddr, port);
+            server.Start();
+
+            Socket socket = server.AcceptSocket();
+
+            IntPtr pBuf;
+
+            byte[] enc = new byte[72];
+            SERVER_RESPONSE response = new SERVER_RESPONSE();
+            response.access_token = Encoding.ASCII.GetBytes(ClientData.Data.access_token + "\0");
+            response.user_id = ClientData.Data.user_id;
+            pBuf = Marshal.AllocHGlobal(72);
+            Marshal.StructureToPtr(response, pBuf, true);
+            Marshal.Copy(pBuf, enc, 0, 72);
+            Marshal.FreeHGlobal(pBuf);
+
+            for (int i = 0; i < enc.Length; i++)
+                enc[i] ^= 0x9C;
+
+            socket.Send(BitConverter.GetBytes(enc.Length));
+            socket.Send(enc);
+            Thread.Sleep(2000);
+            socket.Close();
+            server.Stop();
+        }
         void injectLibs()
         {
             try
             {
                 foreach (byte[] raw in _dlls)
                 {
-                    //if (!Injector.ManualMapInject(raw, _csgoPid))
-                    //    throw new Exception("Не удалось запустить чит!");
-
-                    Thread.Sleep(1000);
+                    if (!Injector.ManualMapInject(_csgoPid, raw))
+                        throw new Exception("Не удалось запустить чит!");
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                _dlls.Clear();
             }
         }
 

@@ -1,22 +1,29 @@
-#pragma once
 #include "../../dependencies/common_includes.hpp"
 #include "../features/visuals/visuals.hpp"
 #include "../features/misc/movement.hpp"
 #include "../features/aimbot/aimbot.hpp"
+#include "../features/aimbot/trigger_simple.hpp"
 #include "../menu/menu.hpp"
 #include "../features/misc/hitmarker.hpp"
+#include "../features/misc/damage_indicator.hpp"
 #include "../features/backtrack/backtrack.hpp"
 #include "../features/misc/prediction.hpp"
 #include "../features/misc/misc.hpp"
 #include "../features/skinchanger/skinchanger.hpp"
+#include "../features/skinchanger/glovechanger.hpp"
+#include "../features/skinchanger/knifehook.hpp"
+#include "../features/nade_pred/nade_pred.hpp"
 #include "../features/misc/logs.hpp"
 #include "../features/misc/events.hpp"
 #include "../features/visuals/sound.hpp"
 #include "../features/skinchanger/parser.hpp"
 #include "../features/visuals/nightmode.hpp"
-#include "../features/skinchanger/glovechanger.hpp"
-#include "../../SDK/crypto/XorStr.h"
 #include "../features/BackDrop/BackDrop.h"
+
+#include "../../SDK/static/modules_ids.h"
+#include "../../SDK/globals/globals.h"
+#include "../../SDK/license/license_manager.h"
+
 std::unique_ptr<vmt_hook> hooks::client_hook;
 std::unique_ptr<vmt_hook> hooks::clientmode_hook;
 std::unique_ptr<vmt_hook> hooks::panel_hook;
@@ -31,13 +38,15 @@ hooks::reset_fn original_reset;
 HWND hooks::window;
 WNDPROC hooks::wndproc_original = NULL;
 
-void hooks::initialize() noexcept {
+void hooks::initialize() {
 	client_hook = std::make_unique<vmt_hook>();
 	clientmode_hook = std::make_unique<vmt_hook>();
 	panel_hook = std::make_unique<vmt_hook>();
 	renderview_hook = std::make_unique<vmt_hook>();
 	surface_hook = std::make_unique<vmt_hook>();
 	modelrender_hook = std::make_unique<vmt_hook>();
+
+	render.setup_fonts();
 
 	client_hook->setup(interfaces::client);
 	client_hook->hook_index(37, reinterpret_cast<void*>(frame_stage_notify));
@@ -48,6 +57,8 @@ void hooks::initialize() noexcept {
 	clientmode_hook->hook_index(44, reinterpret_cast<void*>(do_post_screen_effects));
 	clientmode_hook->hook_index(35, reinterpret_cast<void*>(viewmodel_fov));
 
+	clientmode_hook->hook_index(17, reinterpret_cast<void*>(should_draw_fog));
+
 	panel_hook->setup(interfaces::panel);
 	panel_hook->hook_index(41, reinterpret_cast<void*>(paint_traverse));
 
@@ -56,14 +67,13 @@ void hooks::initialize() noexcept {
 
 	surface_hook->setup(interfaces::surface);
 	surface_hook->hook_index(67, reinterpret_cast<void*>(lock_cursor));
-	surface_hook->hook_index(116, reinterpret_cast<void*>(on_screen_size_changed));	
-	surface_hook->hook_index(15, reinterpret_cast<void*>(draw_set_color));
+	surface_hook->hook_index(116, reinterpret_cast<void*>(on_screen_size_changed));
 
 	modelrender_hook->setup(interfaces::model_render);
 	modelrender_hook->hook_index(21, reinterpret_cast<void*>(draw_model_execute)); //hooked for backtrack chams
 
-	present_address = utilities::pattern_scan(GetModuleHandle(XorStr("gameoverlayrenderer.dll")), XorStr("FF 15 ? ? ? ? 8B F8 85 DB")) + 0x2;
-	reset_address = utilities::pattern_scan(GetModuleHandle(XorStr("gameoverlayrenderer.dll")), XorStr("FF 15 ? ? ? ? 8B F8 85 FF 78 18")) + 0x2;
+	present_address = utilities::pattern_scan(GetModuleHandleW(L"gameoverlayrenderer.dll"), "FF 15 ? ? ? ? 8B F8 85 DB") + 0x2;
+	reset_address = utilities::pattern_scan(GetModuleHandleW(L"gameoverlayrenderer.dll"), "FF 15 ? ? ? ? 8B F8 85 FF 78 18") + 0x2;
 
 	original_present = **reinterpret_cast<present_fn**>(present_address);
 	original_reset = **reinterpret_cast<reset_fn**>(reset_address);
@@ -71,18 +81,26 @@ void hooks::initialize() noexcept {
 	**reinterpret_cast<void***>(present_address) = reinterpret_cast<void*>(&present);
 	**reinterpret_cast<void***>(reset_address) = reinterpret_cast<void*>(&reset);
 
-	window = FindWindow(XorStr("Valve001"), NULL);
+	window = FindWindow("Valve001", NULL);
 	wndproc_original = reinterpret_cast<WNDPROC>(SetWindowLongW(window, GWL_WNDPROC, reinterpret_cast<LONG>(wndproc)));
 
-	interfaces::console->get_convar(XorStr("crosshair"))->set_value(1);
-	interfaces::console->get_convar(XorStr("viewmodel_fov"))->callbacks.set_size(false);
-	interfaces::console->get_convar(XorStr("viewmodel_offset_x"))->callbacks.set_size(false);
-	interfaces::console->get_convar(XorStr("viewmodel_offset_y"))->callbacks.set_size(false);
-	interfaces::console->get_convar(XorStr("viewmodel_offset_z"))->callbacks.set_size(false);
+	interfaces::console->get_convar("crosshair")->set_value(1);
+	interfaces::console->get_convar("viewmodel_fov")->callbacks.set_size(false);
+	interfaces::console->get_convar("viewmodel_offset_x")->callbacks.set_size(false);
+	interfaces::console->get_convar("viewmodel_offset_y")->callbacks.set_size(false);
+	interfaces::console->get_convar("viewmodel_offset_z")->callbacks.set_size(false);
+
+	if (license_manager::checkModuleActive(globals::user_modules, MODULE_WALLHACK))
+	{
+		events.setup();
+	}
+
+	kit_parser.setup();
+
 }
 
 
-void hooks::shutdown() noexcept {
+void hooks::shutdown() {
 	clientmode_hook->release();
 	client_hook->release();
 	panel_hook->release();
@@ -95,47 +113,36 @@ void hooks::shutdown() noexcept {
 	**reinterpret_cast<void***>(present_address) = reinterpret_cast<void*>(original_present);
 	**reinterpret_cast<void***>(reset_address) = reinterpret_cast<void*>(original_reset);
 
-	SetWindowLongW(FindWindow(XorStr("Valve001"), NULL), GWL_WNDPROC, reinterpret_cast<LONG>(wndproc_original));
+	SetWindowLongW(FindWindowW(L"Valve001", NULL), GWL_WNDPROC, reinterpret_cast<LONG>(wndproc_original));
 }
 
-float __stdcall hooks::viewmodel_fov() noexcept {
-	auto local_player = reinterpret_cast<player_t*>(interfaces::entity_list->get_client_entity(interfaces::engine->get_local_player()));
+float __stdcall hooks::viewmodel_fov() 
+{
+	if (license_manager::checkModuleActive(globals::user_modules, MODULE_WALLHACK))
+	{
+		auto local_player = reinterpret_cast<player_t*>(interfaces::entity_list->get_client_entity(interfaces::engine->get_local_player()));
 
-	if (local_player && local_player->is_alive()) 
-		return 68.f + config_system.item.viewmodel_fov;
-	else
-		return 68.f;
-}
-
-void __stdcall hooks::draw_set_color(int r, int g, int b, int a) noexcept {
-	static auto original_fn = reinterpret_cast<draw_set_color_fn>(surface_hook->get_original(15));
-
-	auto color_red = config_system.item.clr_crosshair[0] * 255;
-	auto color_green = config_system.item.clr_crosshair[1] * 255;
-	auto color_blue = config_system.item.clr_crosshair[2] * 255;
-	auto color_alpha = config_system.item.clr_crosshair[3] * 255;
-
-	auto outline_red = config_system.item.clr_crosshair_outline[0] * 255;
-	auto outline_green = config_system.item.clr_crosshair_outline[1] * 255;
-	auto outline_blue = config_system.item.clr_crosshair_outline[2] * 255;
-	auto outline_alpha = config_system.item.clr_crosshair_outline[3] * 255;
-
-	if (config_system.item.crosshair_color) {
-		static const auto crosshair_color_fn = utilities::pattern_scan(GetModuleHandleA(XorStr("client_panorama.dll")), XorStr("FF 50 3C 80 7D 20 00")) + 3;
-		if (_ReturnAddress() == reinterpret_cast<void*>(crosshair_color_fn))
-			return original_fn(interfaces::surface, color_red, color_green, color_blue, color_alpha);
+		if (local_player && local_player->is_alive()) {
+			return 68.f + config_system.item.viewmodel_fov;
+		}
+		else {
+			return 68.f;
+		}
 	}
 
-	if (config_system.item.crosshair_outline_color) {
-		static const auto crosshair_outline_color_fn = utilities::pattern_scan(GetModuleHandleA(XorStr("client_panorama.dll")), XorStr("FF 50 3C F3 0F 10 4D ? 66 0F 6E C6")) + 3;
-		if (_ReturnAddress() == reinterpret_cast<void*>(crosshair_outline_color_fn))
-			return original_fn(interfaces::surface, outline_red, outline_green, outline_blue, outline_alpha);
-	}
-
-	original_fn(interfaces::surface, r, g, b ,a);
+	return 68.f;
 }
 
-void __stdcall hooks::on_screen_size_changed(int old_width, int old_height) noexcept {
+bool __fastcall hooks::should_draw_fog(uintptr_t ecx, uintptr_t edx) {
+	if (license_manager::checkModuleActive(globals::user_modules, MODULE_WALLHACK))
+	{
+		return !config_system.item.remove_fog;
+	}
+
+	return true;
+}
+
+void __stdcall hooks::on_screen_size_changed(int old_width, int old_height) {
 	static auto original_fn = reinterpret_cast<on_screen_size_changed_fn>(surface_hook->get_original(116));
 
 	original_fn(interfaces::surface, old_width, old_height);
@@ -143,15 +150,19 @@ void __stdcall hooks::on_screen_size_changed(int old_width, int old_height) noex
 	render.setup_fonts();
 }
 
-int __stdcall hooks::do_post_screen_effects(int value) noexcept {
+int __stdcall hooks::do_post_screen_effects(int value) {
 	static auto original_fn = reinterpret_cast<do_post_screen_effects_fn>(clientmode_hook->get_original(44));
 
-	visuals.glow();
+	if(license_manager::checkModuleActive(globals::user_modules, MODULE_WALLHACK))
+	{
+		visuals.glow();
+		night_mode.ambient_light();
+	}
 
 	return original_fn(interfaces::clientmode, value);
 }
 
-bool __stdcall hooks::create_move(float frame_time, c_usercmd* user_cmd) noexcept {
+bool __stdcall hooks::create_move(float frame_time, c_usercmd* user_cmd) {
 	static auto original_fn = reinterpret_cast<create_move_fn>(clientmode_hook->get_original(24));
 	auto local_player = reinterpret_cast<player_t*>(interfaces::entity_list->get_client_entity(interfaces::engine->get_local_player()));
 	original_fn(interfaces::clientmode, frame_time, user_cmd); //fixed create move
@@ -164,123 +175,187 @@ bool __stdcall hooks::create_move(float frame_time, c_usercmd* user_cmd) noexcep
 
 	bool& send_packet = *reinterpret_cast<bool*>(*(static_cast<uintptr_t*>(_AddressOfReturnAddress()) - 1) - 0x1C);
 
-	//misc
-	movement.bunnyhop(user_cmd);
-	misc.clantag_spammer();
-	misc.viewmodel_offset();
-	misc.disable_post_processing();
-	misc.recoil_crosshair();
-	misc.force_crosshair();
-	misc.rank_reveal();
+	if (interfaces::engine->is_connected() && interfaces::engine->is_in_game()) 
+	{		
+		//misc
+		if(license_manager::checkModuleActive(globals::user_modules, MODULE_BUNNY_HOP))
+		{
+			movement.bunnyhop(user_cmd);
+			movement.autostrafe(user_cmd);
+		}
 
-	//legitbot and prediction stuff
-	movement.edge_jump_pre_prediction(user_cmd);
-	engine_prediction.start_prediction(user_cmd); //small note for prediction, we need to run bhop before prediction otherwise it will be buggy
+		if(license_manager::checkModuleActive(globals::user_modules, MODULE_WALLHACK))
+		{
+			misc.clantag_spammer();
+			misc.viewmodel_offset();
+			misc.disable_post_processing();
+			misc.recoil_crosshair();
+			misc.force_crosshair();
+			misc.rank_reveal();
+			nade_pred.trace(user_cmd);
+			night_mode.run();
+		}
 
-	aimbot.run(user_cmd);
-	backtrack.run(user_cmd);
+		//legitbot and prediction stuff
+		if(license_manager::checkModuleActive(globals::user_modules, MODULE_AIM_BOT))
+		{
+			movement.edge_jump_pre_prediction(user_cmd);
+			engine_prediction.start_prediction(user_cmd); //small note for prediction, we need to run bhop before prediction otherwise it will be buggy
 
-	engine_prediction.end_prediction();
-	movement.edge_jump_post_prediction(user_cmd);
+			aimbot.run(user_cmd);
+			backtrack.run(user_cmd);
+			if (config_system.item.trigger_enable && GetAsyncKeyState(config_system.item.trigger_key))
+				trigger.trigger(user_cmd);
 
-	night_mode.run();
+			engine_prediction.end_prediction();
+			movement.edge_jump_post_prediction(user_cmd);
+		}
 
-	//clamping movement
-	user_cmd->forwardmove = std::clamp(user_cmd->forwardmove, -450.0f, 450.0f);
-	user_cmd->sidemove = std::clamp(user_cmd->sidemove, -450.0f, 450.0f);
-	user_cmd->upmove = std::clamp(user_cmd->upmove, -450.0f, 450.0f);
+		//clamping movement
+		auto forward = user_cmd->forwardmove;
+		auto right = user_cmd->sidemove;
+		auto up = user_cmd->upmove;
 
-	// clamping angles
-	user_cmd->viewangles.x = std::clamp(user_cmd->viewangles.x, -89.0f, 89.0f);
-	user_cmd->viewangles.y = std::clamp(user_cmd->viewangles.y, -180.0f, 180.0f);
-	user_cmd->viewangles.z = 0.0f;
+		//clamping movement
+		user_cmd->forwardmove = std::clamp(user_cmd->forwardmove, -450.0f, 450.0f);
+		user_cmd->sidemove = std::clamp(user_cmd->sidemove, -450.0f, 450.0f);
+		user_cmd->upmove = std::clamp(user_cmd->upmove, -450.0f, 450.0f);
+
+		// clamping angles
+		user_cmd->viewangles.x = std::clamp(user_cmd->viewangles.x, -89.0f, 89.0f);
+		user_cmd->viewangles.y = std::clamp(user_cmd->viewangles.y, -180.0f, 180.0f);
+		user_cmd->viewangles.z = 0.0f;
+	}
 
 	return false;
 }
 
-void __fastcall hooks::override_view(void* _this, void* _edx, c_viewsetup* setup) noexcept {
+void __fastcall hooks::override_view(void* _this, void* _edx, c_viewsetup* setup) {
 	static auto original_fn = reinterpret_cast<override_view_fn>(clientmode_hook->get_original(18));
-	auto local_player = reinterpret_cast<player_t*>(interfaces::entity_list->get_client_entity(interfaces::engine->get_local_player()));
 
-	if (local_player && !local_player->is_scoped() && config_system.item.fov > 0 && config_system.item.visuals_enabled) {
-		setup->fov = 90 + config_system.item.fov;
+	if (license_manager::checkModuleActive(globals::user_modules, MODULE_WALLHACK))
+	{
+		auto local_player = reinterpret_cast<player_t*>(interfaces::entity_list->get_client_entity(interfaces::engine->get_local_player()));
+
+		if (local_player && !local_player->is_scoped() && config_system.item.fov > 0 && config_system.item.visuals_enabled) {
+			setup->fov = 90 + config_system.item.fov;
+		}
 	}
 
 	original_fn(interfaces::clientmode, _this, setup);
 }
 
-void __stdcall hooks::draw_model_execute(IMatRenderContext * ctx, const draw_model_state_t & state, const model_render_info_t & info, matrix_t * bone_to_world) noexcept {
+void __stdcall hooks::draw_model_execute(IMatRenderContext * ctx, const draw_model_state_t & state, const model_render_info_t & info, matrix_t * bone_to_world) {
 	static auto original_fn = reinterpret_cast<draw_model_execute_fn>(modelrender_hook->get_original(21));
 
-	visuals.backtrack_chams(ctx, state, info);
-	visuals.viewmodel_modulate(info);
+	if(license_manager::checkModuleActive(globals::user_modules, MODULE_WALLHACK))
+	{
+		visuals.backtrack_chams(ctx, state, info);
+		visuals.viewmodel_modulate(info);
+		visuals.chams_misc(info);
+	}
 
 	original_fn(interfaces::model_render, ctx, state, info, bone_to_world);
 }
 
-void __stdcall hooks::frame_stage_notify(int frame_stage) noexcept {
+void __stdcall hooks::frame_stage_notify(int frame_stage) 
+{
 	static auto original_fn = reinterpret_cast<frame_stage_notify_fn>(client_hook->get_original(37));
 	static auto backtrack_init = (backtrack.init(), false);
 
-	if (frame_stage == FRAME_RENDER_START) {
-		misc.remove_smoke();
-		misc.remove_flash();
+	if (frame_stage == FRAME_RENDER_START) 
+	{
+		if (license_manager::checkModuleActive(globals::user_modules, MODULE_WALLHACK))
+		{
+			misc.remove_smoke();
+			misc.remove_flash();
+		}
+
 	}
 
-	else if (frame_stage == FRAME_NET_UPDATE_POSTDATAUPDATE_START) {
-		skin_changer.run();
-		glove_changer.run();
+	else if (frame_stage == FRAME_NET_UPDATE_POSTDATAUPDATE_START) 
+	{
+		if (license_manager::checkModuleActive(globals::user_modules, MODULE_SKIN_CHANGER))
+		{
+			skin_changer.run();
+			glove_changer.run();
+		}
 	}
 
-	else if (frame_stage == FRAME_NET_UPDATE_START && interfaces::engine->is_in_game()) {
-		sound_esp.draw();
+	else if (frame_stage == FRAME_NET_UPDATE_START && interfaces::engine->is_in_game()) 
+	{
+		if (license_manager::checkModuleActive(globals::user_modules, MODULE_WALLHACK))
+		{
+			sound_esp.draw();
+		}
+
 	}
 
-	else if (frame_stage == FRAME_NET_UPDATE_END && interfaces::engine->is_in_game()) {
-		backtrack.update();
+	else if (frame_stage == FRAME_NET_UPDATE_END && interfaces::engine->is_in_game()) 
+	{
+		if (license_manager::checkModuleActive(globals::user_modules, MODULE_WALLHACK))
+		{
+			backtrack.update();
+		}
 	}
 
 	original_fn(interfaces::client, frame_stage);
 }
-void __stdcall hooks::paint_traverse(unsigned int panel, bool force_repaint, bool allow_force) noexcept {
-	if (strstr(interfaces::panel->get_panel_name(panel), XorStr("HudZoom"))) {
-		if (interfaces::engine->is_connected() && interfaces::engine->is_in_game()) {
-			if (config_system.item.remove_scope)
-				return;
+
+void __stdcall hooks::paint_traverse(unsigned int panel, bool force_repaint, bool allow_force) {
+	if (strstr(interfaces::panel->get_panel_name(panel), "HudZoom")) {
+		if (interfaces::engine->is_connected() && interfaces::engine->is_in_game()) 
+		{
+			if (license_manager::checkModuleActive(globals::user_modules, MODULE_WALLHACK))
+			{
+				if (config_system.item.remove_scope)
+					return;
+			}
+
 		}
 	}
 
-	reinterpret_cast<paint_traverse_fn>(panel_hook->get_original(41))(interfaces::panel, panel, force_repaint, allow_force);
-
-	if (strstr(interfaces::panel->get_panel_name(panel), XorStr("FocusOverlayPanel"))) {
-
+	if (strstr(interfaces::panel->get_panel_name(panel), ("FocusOverlayPanel"))) 
+	{
 		if (menu.opened)
 		{
 			BackDrop::DrawBackDrop();
 		}
 	}
 
-	if (strstr(interfaces::panel->get_panel_name(panel), XorStr("MatSystemTopPanel"))) {
-		visuals.run();
-		hitmarker.run();
-		event_logs.run();
-		misc.remove_scope();
-		misc.watermark();
-		misc.spectators();
+	reinterpret_cast<paint_traverse_fn>(panel_hook->get_original(41))(interfaces::panel, panel, force_repaint, allow_force);
+
+	if (strstr(interfaces::panel->get_panel_name(panel), "MatSystemTopPanel")) 
+	{
+		if (license_manager::checkModuleActive(globals::user_modules, MODULE_WALLHACK))
+		{
+			visuals.run();
+			hitmarker.run();
+			event_logs.run();
+			misc.remove_scope();
+			misc.watermark();
+			misc.spectators();
+			nade_pred.draw();
+			damage_indicator.draw();
+		}
 	}
 }
 
-void __stdcall hooks::scene_end() noexcept {
+void __stdcall hooks::scene_end() 
+{
 	static auto original_fn = reinterpret_cast<scene_end_fn>(renderview_hook->get_original(9));
 
-	visuals.chams();
-
+	if (license_manager::checkModuleActive(globals::user_modules, MODULE_WALLHACK))
+	{
+		visuals.chams();
+	}
+	
 	original_fn(interfaces::render_view);
 }
 
 extern LRESULT ImGui_ImplDX9_WndProcHandler(HWND hwnd, UINT message, WPARAM wparam, LPARAM lparam);
 
-LRESULT __stdcall hooks::wndproc(HWND hwnd, UINT message, WPARAM wparam, LPARAM lparam) noexcept {
+LRESULT __stdcall hooks::wndproc(HWND hwnd, UINT message, WPARAM wparam, LPARAM lparam) {
 	static bool pressed = false;
 
 	if (!pressed && GetAsyncKeyState(VK_INSERT)) {
@@ -306,7 +381,7 @@ LRESULT __stdcall hooks::wndproc(HWND hwnd, UINT message, WPARAM wparam, LPARAM 
 	return CallWindowProcA(wndproc_original, hwnd, message, wparam, lparam);
 }
 
-void __stdcall hooks::lock_cursor() noexcept {
+void __stdcall hooks::lock_cursor() {
 	static auto original_fn = reinterpret_cast<lock_cursor_fn>(surface_hook->get_original(67));
 
 	if (menu.opened) {
@@ -318,7 +393,7 @@ void __stdcall hooks::lock_cursor() noexcept {
 }
 
 static bool initialized = false;
-long __stdcall hooks::present(IDirect3DDevice9* device, RECT* source_rect, RECT* dest_rect, HWND dest_window_override, RGNDATA* dirty_region) noexcept {
+long __stdcall hooks::present(IDirect3DDevice9* device, RECT* source_rect, RECT* dest_rect, HWND dest_window_override, RGNDATA* dirty_region) {
 	if (!initialized) {
 		menu.apply_fonts();
 		menu.setup_resent(device);
@@ -336,7 +411,7 @@ long __stdcall hooks::present(IDirect3DDevice9* device, RECT* source_rect, RECT*
 	return original_present(device, source_rect, dest_rect, dest_window_override, dirty_region);
 }
 
-long __stdcall hooks::reset(IDirect3DDevice9* device, D3DPRESENT_PARAMETERS* present_parameters) noexcept {
+long __stdcall hooks::reset(IDirect3DDevice9* device, D3DPRESENT_PARAMETERS* present_parameters) {
 	if (!initialized)
 		original_reset(device, present_parameters);
 
@@ -346,3 +421,4 @@ long __stdcall hooks::reset(IDirect3DDevice9* device, D3DPRESENT_PARAMETERS* pre
 
 	return hr;
 }
+

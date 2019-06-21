@@ -87,6 +87,9 @@
       </EnableModules>
       <SDLCheck>false</SDLCheck>
       <AdditionalOptions>/std:c++latest %(AdditionalOptions)</AdditionalOptions>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <EnableFiberSafeOptimizations>false</EnableFiberSafeOptimizations>
+      <ControlFlowGuard>Guard</ControlFlowGuard>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -94,6 +97,7 @@
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <GenerateMapFile>false</GenerateMapFile>
+      <SetChecksum>true</SetChecksum>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_DBG|Win32'">
@@ -102,7 +106,7 @@
       <Optimization>Disabled</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>false</IntrinsicFunctions>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WIN32;NDEBUG;CHEAT_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WIN32;CHEAT_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
       <WholeProgramOptimization>false</WholeProgramOptimization>
@@ -141,15 +145,19 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="core\features\aimbot\aimbot.cpp" />
+    <ClCompile Include="core\features\aimbot\trigger_simple.cpp" />
     <ClCompile Include="core\features\BackDrop\BackDrop.cpp" />
     <ClCompile Include="core\features\backtrack\backtrack.cpp" />
+    <ClCompile Include="core\features\misc\damage_indicator.cpp" />
     <ClCompile Include="core\features\misc\events.cpp" />
     <ClCompile Include="core\features\misc\hitmarker.cpp" />
     <ClCompile Include="core\features\misc\logs.cpp" />
     <ClCompile Include="core\features\misc\misc.cpp" />
     <ClCompile Include="core\features\misc\movement.cpp" />
     <ClCompile Include="core\features\misc\prediction.cpp" />
+    <ClCompile Include="core\features\nade_pred\nade_pred.cpp" />
     <ClCompile Include="core\features\skinchanger\glovechanger.cpp" />
+    <ClCompile Include="core\features\skinchanger\knifehook.cpp" />
     <ClCompile Include="core\features\skinchanger\parser.cpp" />
     <ClCompile Include="core\features\skinchanger\skinchanger.cpp" />
     <ClCompile Include="core\features\visuals\nightmode.cpp" />
@@ -183,15 +191,19 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core\features\aimbot\aimbot.hpp" />
+    <ClInclude Include="core\features\aimbot\trigger_simple.hpp" />
     <ClInclude Include="core\features\BackDrop\BackDrop.h" />
     <ClInclude Include="core\features\backtrack\backtrack.hpp" />
+    <ClInclude Include="core\features\misc\damage_indicator.hpp" />
     <ClInclude Include="core\features\misc\events.hpp" />
     <ClInclude Include="core\features\misc\hitmarker.hpp" />
     <ClInclude Include="core\features\misc\logs.hpp" />
     <ClInclude Include="core\features\misc\misc.hpp" />
     <ClInclude Include="core\features\misc\movement.hpp" />
     <ClInclude Include="core\features\misc\prediction.hpp" />
+    <ClInclude Include="core\features\nade_pred\nade_pred.hpp" />
     <ClInclude Include="core\features\skinchanger\glovechanger.hpp" />
+    <ClInclude Include="core\features\skinchanger\knifehook.hpp" />
     <ClInclude Include="core\features\skinchanger\parser.hpp" />
     <ClInclude Include="core\features\skinchanger\skinchanger.hpp" />
     <ClInclude Include="core\features\visuals\nightmode.hpp" />
@@ -290,6 +302,9 @@
     <ClInclude Include="SDK\rapidjson\stream.h" />
     <ClInclude Include="SDK\rapidjson\stringbuffer.h" />
     <ClInclude Include="SDK\rapidjson\writer.h" />
+    <ClInclude Include="SDK\static\fonts\BeauSans.h" />
+    <ClInclude Include="SDK\static\fonts\DINPro.h" />
+    <ClInclude Include="SDK\static\modules_ids.h" />
     <ClInclude Include="source-sdk\classes\client_class.hpp" />
     <ClInclude Include="source-sdk\classes\collideable.hpp" />
     <ClInclude Include="source-sdk\classes\convar.hpp" />

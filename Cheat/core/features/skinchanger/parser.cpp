@@ -1,6 +1,6 @@
 #include <algorithm>
 #include "parser.hpp"
-#include "../../../SDK/crypto/XorStr.h"
+
 c_kit_parser kit_parser;
 
 std::vector<paint_kit> parser_skins;
@@ -53,8 +53,8 @@ void* get_export(const char* module_name, const char* export_name) {
 }
 
 void c_kit_parser::setup() noexcept {
-	const auto V_UCS2ToUTF8 = static_cast<int(*)(const wchar_t* ucs2, char* utf8, int len)>(get_export(XorStr("vstdlib.dll"), XorStr("V_UCS2ToUTF8")));
-	const auto sig_address = utilities::pattern_scan(GetModuleHandleA(XorStr("client_panorama.dll")), XorStr("E8 ? ? ? ? FF 76 0C 8D 48 04 E8"));
+	const auto V_UCS2ToUTF8 = static_cast<int(*)(const wchar_t* ucs2, char* utf8, int len)>(get_export("vstdlib.dll", "V_UCS2ToUTF8"));
+	const auto sig_address = utilities::pattern_scan(GetModuleHandleA("client_panorama.dll"), "E8 ? ? ? ? FF 76 0C 8D 48 04 E8");
 	const auto item_system_offset = *reinterpret_cast<std::int32_t*>(sig_address + 1);
 	const auto item_system_fn = reinterpret_cast<CCStrike15ItemSystem * (*)()>(sig_address + 5 + item_system_offset);
 	const auto item_schema = reinterpret_cast<CCStrike15ItemSchema*>(std::uintptr_t(item_system_fn()) + sizeof(void*));
@@ -80,4 +80,6 @@ void c_kit_parser::setup() noexcept {
 		std::sort(parser_skins.begin(), parser_skins.end());
 		std::sort(parser_gloves.begin(), parser_gloves.end());
 	}
+
+	printf("Kit Parser initialized!\n");
 }

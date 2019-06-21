@@ -2,7 +2,6 @@
 #include <ShlObj.h>
 #include "archivex.hpp"
 #include "config.hpp"
-#include "../../../SDK/rapidjson/rapidjson.h"
 
 c_config config_system;
 
@@ -11,7 +10,6 @@ void c_config::run(const char* name) noexcept {
 	if (SUCCEEDED(SHGetKnownFolderPath(FOLDERID_Documents, 0, NULL, &pathToDocuments))) {
 		path = pathToDocuments;
 		path /= name;
-		CoTaskMemFree(pathToDocuments);
 	}
 
 	if (!std::filesystem::is_directory(path)) {
@@ -73,3 +71,4 @@ void c_config::rename(size_t item, const char* newName) noexcept {
 void c_config::reset() noexcept {
 	item = { };
 }
+

@@ -12,7 +12,6 @@ public:
 	~local_client();
 
 	bool data_exchange();
-	bool generate_key(int bits);
 	byte* recivepacket(DWORD len, DWORD* lpRecived);
 	bool sendpacket(byte* data, DWORD data_size);
 private:
@@ -27,12 +26,8 @@ private:
 	struct SERVER_RESPONSE
 	{
 		DWORD user_id;
-		byte access_token[64];
-		byte key[32];
-		byte iv[16];
+		byte access_token[65];
 	};
-
-	RSA* m_rsa;
 
 	std::string m_sSessionKey;
 

@@ -198,7 +198,7 @@ struct trace_t {
 	short physicsBone;
 	player_t* entity;
 	int hitbox;
-
+	
 	bool DidHitWorld() const {
 		return false;
 	}

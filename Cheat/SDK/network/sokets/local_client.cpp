@@ -1,9 +1,5 @@
 #include <WinSock.h>
 
-#include <openssl/rsa.h>
-#include <openssl/engine.h>
-#include <openssl/pem.h>
-
 #include "local_client.h"
 
 #include "../../crypto/hash/sha256.hpp"
@@ -23,7 +19,6 @@ std::ifstream::pos_type filesize(const char* filename)
 
 local_client::local_client(const char* ip, u_short port)
 {
-	m_rsa = nullptr;
 	m_sClient = 0;
 	m_iErrorCode = 0;
 
@@ -65,54 +60,16 @@ local_client::~local_client()
 	closesocket(m_sClient);
 	WSACleanup();
 
-	RSA_free(m_rsa);
 }
 
 
 
 bool local_client::data_exchange()
 {
-	//IMPORT PUBLIC KEY
-	BIO* bp = BIO_new_file(XorStr("public.pem"), XorStr("w+"));
-	PEM_write_bio_RSAPublicKey(bp, m_rsa);
-	BIO_free_all(bp);
 
-	//READ PUBLIC KEY AND DELETE FILE
-	DWORD keySize = static_cast<DWORD>(filesize(XorStr("public.pem")));
-	FILE* public_key = nullptr;
-	byte* key_data = new byte[keySize];
-	memset(key_data, 0, keySize);
-	
-	byte* rnd_data = new byte[keySize];
-	RAND_bytes(rnd_data, keySize);
-
-	fopen_s(&public_key, XorStr("public.pem"), XorStr("rb"));
-	fread_s(key_data, keySize, 1, keySize, public_key);
-	fclose(public_key);
-
-	fopen_s(&public_key, XorStr("public.pem"), XorStr("wb"));
-	fwrite(rnd_data, 1, keySize, public_key);
-	fclose(public_key);
-	remove(XorStr("public.pem"));
-
-	//SEND PROTOCOL HEADER
-	std::string hash = sha256(std::string(reinterpret_cast<char*>(key_data)) + m_sSessionKey);
-	
-	PROTO_HEADER header = {};
-	ZeroMemory(&header, sizeof(PROTO_HEADER));
-
-	header.key_length = keySize;
-	memcpy((void*)header.hash, hash.c_str(), hash.length());
-	OPENSSL_cleanse(rnd_data, keySize);
-	hash.clear();
-	delete[] rnd_data;
-
-	if(!sendpacket(reinterpret_cast<byte*>(&header), sizeof(PROTO_HEADER)))
-		return false;
-
-	if(!sendpacket(key_data, keySize))
-		return false;
-
+#if !NDEBUG
+	MessageBox(nullptr, ("Get Length" + std::to_string(sizeof(SERVER_RESPONSE))).c_str(), "", MB_OK);
+#endif
 	//RECV KEYS & DECRYPT
 	DWORD recived = 0;
 	DWORD* encryptedSize = reinterpret_cast<DWORD*>(recivepacket(sizeof(DWORD), &recived));
@@ -120,43 +77,29 @@ bool local_client::data_exchange()
 		return false;
 
 	DWORD encryptedRecv = 0;
+
+#if !NDEBUG
+	MessageBox(nullptr, "Get Data", "", MB_OK);
+#endif
+
 	byte* encryptedData = recivepacket(*encryptedSize, &encryptedRecv);
 	if(*encryptedSize != encryptedRecv)
 		return false;
 
-	SERVER_RESPONSE response = {};
-	ZeroMemory(&response, sizeof(SERVER_RESPONSE));
+#if !NDEBUG
+	MessageBox(nullptr, "Decrypting", "", MB_OK);
+#endif
 
-	if(!RSA_private_decrypt(*encryptedSize, encryptedData, reinterpret_cast<byte*>(&response), m_rsa, RSA_PKCS1_PADDING))
-		return false;
+	SERVER_RESPONSE* response = (SERVER_RESPONSE*)encryptedData;
+
+	for (unsigned i = 0; i < *encryptedSize; i++)
+		encryptedData[i] ^= 0x9C;
 
 	//STORE DATA
-	globals::access_token = std::string(reinterpret_cast<char*>(response.access_token));
-	globals::crypto_key = std::string(reinterpret_cast<char*>(response.key));
-	globals::crypto_iv = std::string(reinterpret_cast<char*>(response.iv));
-	globals::user_id = response.user_id;
-
-	ZeroMemory(&response, sizeof(SERVER_RESPONSE));
+	globals::access_token = std::string(reinterpret_cast<char*>(response->access_token));
+	globals::user_id = response->user_id;
 
 	return true;
-}
-
-bool local_client::generate_key(int bits)
-{
-	int ret;
-	BIGNUM* bne;
-
-	unsigned long e = RSA_F4;
-
-	bne = BN_new();
-	ret = BN_set_word(bne, e);
-	if (ret == 1) 
-	{
-		m_rsa = RSA_new();
-		ret = RSA_generate_key_ex(m_rsa, bits, bne, nullptr);
-	}
-	BN_free(bne);
-	return ret == 1;
 }
 
 byte* local_client::recivepacket(DWORD len, DWORD* lpRecived)

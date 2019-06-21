@@ -1,7 +1,6 @@
 #include "prediction.hpp"
 #include "../../../dependencies/utilities/md5.hpp"
 #include "../../../dependencies/interfaces/interfaces.hpp"
-#include "../../../SDK/crypto/XorStr.h"
 #include <iostream>
 #include <fstream>
 
@@ -16,7 +15,7 @@ void c_prediction::start_prediction(c_usercmd* command) noexcept {
 	if (local_player) {
 		static bool initialized = false;
 		if (!initialized) {
-			prediction_random_seed = *(int**)(utilities::pattern_scan(GetModuleHandleA(XorStr("client_panorama.dll")), XorStr("8B 0D ? ? ? ? BA ? ? ? ? E8 ? ? ? ? 83 C4 04")) + 2);
+			prediction_random_seed = *(int**)(utilities::pattern_scan(GetModuleHandleA("client_panorama.dll"), "8B 0D ? ? ? ? BA ? ? ? ? E8 ? ? ? ? 83 C4 04") + 2);
 			initialized = true;
 		}
 

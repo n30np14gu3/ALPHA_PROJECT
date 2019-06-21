@@ -52,7 +52,7 @@ void c_backtrack::update() noexcept {
 		record.simulation_time = entity->simulation_time();
 
 		entity->setup_bones(record.matrix, 128, 0x7FF00, interfaces::globals->cur_time);
-
+		
 		records[i].push_front(record);
 
 		while (records[i].size() > 3 && records[i].size() > static_cast<size_t>(time_to_ticks(static_cast<float>(config_system.item.backtrack_ms) / 1000.f)))

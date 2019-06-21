@@ -1,5 +1,7 @@
 #pragma once
 #include "../../dependencies/common_includes.hpp"
+#include "../../SDK/static/fonts/DINPro.h"
+#include "../../SDK/static/fonts/BeauSans.h"
 
 extern IDirect3DStateBlock9 *state_block;
 
@@ -44,7 +46,7 @@ public:
 		style.WindowRounding = 0.0f;
 		style.WindowTitleAlign = ImVec2(0.0f, 0.5f);
 		style.ChildWindowRounding = 0.0f;
-		style.FramePadding = ImVec2(4, 3);
+		style.FramePadding = ImVec2(4, 4);
 		style.FrameRounding = 0.0f;
 		style.ItemSpacing = ImVec2(8, 8);
 		style.ItemInnerSpacing = ImVec2(8, 8);
@@ -107,8 +109,10 @@ public:
 	void apply_fonts() {
 		ImGui::CreateContext();
 
-		font_main = ImGui::GetIO().Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\Tahoma.ttf", 18);
-		font_menu = ImGui::GetIO().Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\Verdana.ttf", 12);
+		//font_main = ImGui::GetIO().Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\Tahoma.ttf", 18);
+		//font_menu = ImGui::GetIO().Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\Verdana.ttf", 12);
+		font_main = ImGui::GetIO().Fonts->AddFontFromMemoryTTF((void*)BeauSans, sizeof(BeauSans), 12);
+		font_menu = ImGui::GetIO().Fonts->AddFontFromMemoryTTF((void*)DINPro, sizeof(DINPro), 18);
 	}
 
 	void __stdcall end_present(IDirect3DDevice9* device) {

@@ -1,15 +1,10 @@
 #pragma once
 #include "../../dependencies/math/math.hpp"
 #include <array>
+#include <vector>
 #include "collideable.hpp"
 #include "client_class.hpp"
 #include "../../dependencies/utilities/netvar_manager.hpp"
-#include "../SDK/crypto/XorStr.h"
-enum data_update_type_t {
-	DATA_UPDATE_CREATED = 0,
-	DATA_UPDATE_DATATABLE_CHANGED,
-};
-
 
 enum move_type {
 	movetype_none = 0,
@@ -62,6 +57,7 @@ enum entity_flags {
 	fl_transragdoll = (1 << 29),
 	fl_unblockable_by_player = (1 << 30)
 };
+
 enum item_definition_indexes {
 	WEAPON_NONE = 0,
 	WEAPON_DEAGLE,
@@ -150,6 +146,11 @@ enum item_definition_indexes {
 	GLOVE_HYDRA = 5035
 };
 
+enum data_update_type_t {
+	DATA_UPDATE_CREATED = 0,
+	DATA_UPDATE_DATATABLE_CHANGED,
+};
+
 class entity_t {
 public:
 	void* animating() {
@@ -179,6 +180,13 @@ public:
 		using original_fn = bool(__thiscall*)(entity_t*);
 		return (*(original_fn**)this)[163](this);
 	}
+	vec3_t get_absolute_origin() {
+		__asm {
+			MOV ECX, this
+			MOV EAX, DWORD PTR DS : [ECX]
+			CALL DWORD PTR DS : [EAX + 0x28]
+		}
+	}
 	bool setup_bones(matrix_t* out, int max_bones, int mask, float time) {
 		if (!this) {
 			return false;
@@ -201,36 +209,26 @@ public:
 	}
 	void set_angles(vec3_t angles) {
 		using original_fn = void(__thiscall*)(void*, const vec3_t&);
-		static original_fn set_angles_fn = (original_fn)((DWORD)utilities::pattern_scan(GetModuleHandle(XorStr("client_panorama.dll")), XorStr("55 8B EC 83 E4 F8 83 EC 64 53 56 57 8B F1")));
+		static original_fn set_angles_fn = (original_fn)((DWORD)utilities::pattern_scan(GetModuleHandleA("client_panorama.dll"), "55 8B EC 83 E4 F8 83 EC 64 53 56 57 8B F1"));
 		set_angles_fn(this, angles);
 	}
 	void set_position(vec3_t position) {
 		using original_fn = void(__thiscall*)(void*, const vec3_t&);
-		static original_fn set_position_fn = (original_fn)((DWORD)utilities::pattern_scan(GetModuleHandle(XorStr("client_panorama.dll")), XorStr("55 8B EC 83 E4 F8 51 53 56 57 8B F1 E8")));
+		static original_fn set_position_fn = (original_fn)((DWORD)utilities::pattern_scan(GetModuleHandleA("client_panorama.dll"), "55 8B EC 83 E4 F8 51 53 56 57 8B F1 E8"));
 		set_position_fn(this, position);
 	}
+	vec3_t &get_world_space_center() {
+		vec3_t vec_origin = origin();
 
-	void set_model_index(int index) {
-		using original_fn = void(__thiscall*)(void*, int);
-		return (*(original_fn * *)this)[75](this, index);
+		vec3_t min = this->collideable()->mins() + vec_origin;
+		vec3_t max = this->collideable()->maxs() + vec_origin;
+
+		vec3_t size = max - min;
+		size /= 2.f;
+		size += min;
+
+		return size;
 	}
-
-	void net_pre_data_update(int update_type)
-	{
-		using original_fn = void(__thiscall*)(void*, int);
-		return (*(original_fn * *)networkable())[6](networkable(), update_type);
-	}
-
-	void net_release() {
-		using original_fn = void(__thiscall*)(void*);
-		return (*(original_fn * *)networkable())[1](networkable());
-	}
-
-	int net_set_destroyed_on_recreate_entities() {
-		using original_fn = int(__thiscall*)(void*);
-		return (*(original_fn * *)networkable())[13](networkable());
-	}
-
 	NETVAR("DT_CSPlayer", "m_fFlags", flags, int);
 	OFFSET(bool, dormant, 0xED);
 	NETVAR("DT_BaseEntity", "m_hOwnerEntity", owner_handle, unsigned long);
@@ -255,7 +253,7 @@ public:
 	NETVAR("DT_BaseViewModel", "m_nModelIndex", model_index, int);
 	NETVAR("DT_BaseViewModel", "m_nViewModelIndex", view_model_index, int);
 	NETVAR("DT_BaseViewModel", "m_hWeapon", m_hweapon, int);
-	NETVAR("DT_BaseViewModel", "m_hOwner", m_howner, int);
+	NETVAR("DT_BaseViewModel", "m_hOwner", m_howner, int);	
 };
 
 class attributable_item_t : public entity_t {
@@ -270,7 +268,36 @@ public:
 	NETVAR("DT_BaseAttributableItem", "m_flFallbackWear", fallback_wear, float);
 	NETVAR("DT_BaseCombatWeapon", "m_hWeaponWorldModel", world_model_handle, unsigned long);
 	NETVAR("DT_BaseAttributableItem", "m_iItemDefinitionIndex", item_definition_index, short);
-	NETVAR("DT_BaseAttributableItem", "m_iItemIDHigh", item_id_high, int);
+	NETVAR("DT_BaseAttributableItem", "m_iItemIDHigh", item_id_high, int); //jakby crash to wez offset z hazedumpera
+	NETVAR("DT_BaseAttributableItem", "m_iAccountID", acc_id, int);
+
+	void net_pre_data_update(int update_type){
+		using original_fn = void(__thiscall*)(void*, int);
+		return (*(original_fn * *)networkable())[6](networkable(), update_type);
+	}
+	
+	void net_release() {
+		using original_fn = void(__thiscall*)(void*);
+		return (*(original_fn * *)networkable())[1](networkable());
+	}
+
+	int net_set_destroyed_on_recreate_entities() {
+		using original_fn = int(__thiscall*)(void*);
+		return (*(original_fn * *)networkable())[13](networkable());
+	}
+
+	void set_model_index(int index) {
+		using original_fn = void(__thiscall*)(void*, int);
+		return (*(original_fn * *)this)[75](this, index);
+	}
+
+	base_view_model* get_view_model(){
+		return (base_view_model*)(DWORD)this;
+	}
+
+	econ_view_item_t& item() {
+		return *(econ_view_item_t*)this;
+	}
 };
 
 class weapon_t : public entity_t {
@@ -299,10 +326,311 @@ public:
 		using original_fn = void(__thiscall*)(void*);
 		(*(original_fn**)this)[477](this);
 	}
-
 	weapon_info_t* get_weapon_data() {
 		using original_fn = weapon_info_t * (__thiscall*)(void*);
 		return (*(original_fn**)this)[454](this); //skinchanger crash
+	}
+
+	auto* weapon_name_definition(){
+		switch (this->item_definition_index()) {
+		case item_definition_indexes::WEAPON_BAYONET:
+		case item_definition_indexes::WEAPON_KNIFE_FLIP:
+		case item_definition_indexes::WEAPON_KNIFE_GUT:
+		case item_definition_indexes::WEAPON_KNIFE_KARAMBIT:
+		case item_definition_indexes::WEAPON_KNIFE_M9_BAYONET:
+		case item_definition_indexes::WEAPON_KNIFE_TACTICAL:
+		case item_definition_indexes::WEAPON_KNIFE_FALCHION:
+		case item_definition_indexes::WEAPON_KNIFE_SURVIVAL_BOWIE:
+		case item_definition_indexes::WEAPON_KNIFE_BUTTERFLY:
+		case item_definition_indexes::WEAPON_KNIFE_PUSH:
+		case item_definition_indexes::WEAPON_KNIFE_URSUS:
+		case item_definition_indexes::WEAPON_KNIFE_GYPSY_JACKKNIFE:
+		case item_definition_indexes::WEAPON_KNIFE_STILETTO:
+		case item_definition_indexes::WEAPON_KNIFE_WIDOWMAKER:
+		case item_definition_indexes::WEAPON_KNIFE:
+		case item_definition_indexes::WEAPON_KNIFE_T:
+			return "knife";
+			break;
+		case item_definition_indexes::WEAPON_DEAGLE:
+			return "deagle";
+			break;
+		case item_definition_indexes::WEAPON_AUG:
+			return "aug";
+			break;
+		case item_definition_indexes::WEAPON_G3SG1:
+			return "g3sg1";
+			break;
+		case item_definition_indexes::WEAPON_MAC10:
+			return "mac10";
+			break;
+		case item_definition_indexes::WEAPON_P90:
+			return "p90";
+			break;
+		case item_definition_indexes::WEAPON_SSG08:
+			return "ssg08";
+			break;
+		case item_definition_indexes::WEAPON_SCAR20:
+			return "scar20";
+			break;
+		case item_definition_indexes::WEAPON_UMP45:
+			return "ump45";
+			break;
+		case item_definition_indexes::WEAPON_ELITE:
+			return "elite";
+			break;
+		case item_definition_indexes::WEAPON_FAMAS:
+			return "famas";
+			break;
+		case item_definition_indexes::WEAPON_FIVESEVEN:
+			return "fiveseven";
+			break;
+		case item_definition_indexes::WEAPON_GALILAR:
+			return "galilar";
+			break;
+		case item_definition_indexes::WEAPON_M4A1_SILENCER:
+			return "m4a1_s";
+			break;
+		case item_definition_indexes::WEAPON_M4A1:
+			return "m4a4";
+			break;
+		case item_definition_indexes::WEAPON_P250:
+			return "p250";
+			break;
+		case item_definition_indexes::WEAPON_M249:
+			return "m249";
+			break;
+		case item_definition_indexes::WEAPON_XM1014:
+			return "xm1014";
+			break;
+		case item_definition_indexes::WEAPON_GLOCK:
+			return "glock";
+			break;
+		case item_definition_indexes::WEAPON_USP_SILENCER:
+			return "usp_s";
+			break;
+		case item_definition_indexes::WEAPON_HKP2000:
+			return "p2000";
+			break;
+		case item_definition_indexes::WEAPON_AK47:
+			return "ak47";
+			break;
+		case item_definition_indexes::WEAPON_AWP:
+			return "awp";
+			break;
+		case item_definition_indexes::WEAPON_BIZON:
+			return "bizon";
+			break;
+		case item_definition_indexes::WEAPON_MAG7:
+			return "mag7";
+			break;
+		case item_definition_indexes::WEAPON_NEGEV:
+			return "negev";
+			break;
+		case item_definition_indexes::WEAPON_SAWEDOFF:
+			return "sawedoff";
+			break;
+		case item_definition_indexes::WEAPON_TEC9:
+			return "tec9";
+			break;
+		case item_definition_indexes::WEAPON_TASER:
+			return "zeus";
+			break;
+		case item_definition_indexes::WEAPON_NOVA:
+			return "nova";
+			break;
+		case item_definition_indexes::WEAPON_CZ75A:
+			return "cz75";
+			break;
+		case item_definition_indexes::WEAPON_SG556:
+			return "sg553";
+			break;
+		case item_definition_indexes::WEAPON_REVOLVER:
+			return "revolver";
+			break;
+		case item_definition_indexes::WEAPON_MP7:
+			return "mp7";
+			break;
+		case item_definition_indexes::WEAPON_MP9:
+			return "mp9";
+			break;
+		case item_definition_indexes::WEAPON_MP5SD:  //same icon as ump
+			return "mp5";
+			break;
+		case item_definition_indexes::WEAPON_C4:
+			return "c4";
+			break;
+		case item_definition_indexes::WEAPON_FRAG_GRENADE:
+			return "grenade";
+			break;
+		case item_definition_indexes::WEAPON_SMOKEGRENADE:
+			return "smoke";
+			break;
+		case item_definition_indexes::WEAPON_MOLOTOV:
+			return "fire_molo";
+			break;
+		case item_definition_indexes::WEAPON_INCGRENADE:
+			return "fire_inc";
+			break;
+		case item_definition_indexes::WEAPON_FLASHBANG:
+			return "flash";
+			break;
+		case item_definition_indexes::WEAPON_DECOY:
+			return "decoy";
+			break;
+		}
+		return " ";
+	}
+
+	auto* weapon_icon_definition(){
+		switch (this->item_definition_index()){
+		case item_definition_indexes::WEAPON_BAYONET:
+		case item_definition_indexes::WEAPON_KNIFE_FLIP:
+		case item_definition_indexes::WEAPON_KNIFE_GUT:
+		case item_definition_indexes::WEAPON_KNIFE_KARAMBIT:
+		case item_definition_indexes::WEAPON_KNIFE_M9_BAYONET:
+		case item_definition_indexes::WEAPON_KNIFE_TACTICAL:
+		case item_definition_indexes::WEAPON_KNIFE_FALCHION:
+		case item_definition_indexes::WEAPON_KNIFE_SURVIVAL_BOWIE:
+		case item_definition_indexes::WEAPON_KNIFE_BUTTERFLY:
+		case item_definition_indexes::WEAPON_KNIFE_PUSH:
+		case item_definition_indexes::WEAPON_KNIFE_URSUS:
+		case item_definition_indexes::WEAPON_KNIFE_GYPSY_JACKKNIFE:
+		case item_definition_indexes::WEAPON_KNIFE_STILETTO:
+		case item_definition_indexes::WEAPON_KNIFE_WIDOWMAKER:
+		case item_definition_indexes::WEAPON_KNIFE:
+			return "]";
+			break;
+		case item_definition_indexes::WEAPON_KNIFE_T:
+			return "[";
+			break;
+		case item_definition_indexes::WEAPON_DEAGLE:
+			return "A";
+			break;
+		case item_definition_indexes::WEAPON_AUG:
+			return "U";
+			break;
+		case item_definition_indexes::WEAPON_G3SG1:
+			return "X";
+			break;
+		case item_definition_indexes::WEAPON_MAC10:
+			return "K";
+			break;
+		case item_definition_indexes::WEAPON_P90:
+			return "P";
+			break;
+		case item_definition_indexes::WEAPON_SSG08:
+			return "a";
+			break;
+		case item_definition_indexes::WEAPON_SCAR20:
+			return "Y";
+			break;
+		case item_definition_indexes::WEAPON_UMP45:
+			return "L";
+			break;
+		case item_definition_indexes::WEAPON_ELITE:
+			return "B";
+			break;
+		case item_definition_indexes::WEAPON_FAMAS:
+			return "R";
+			break;
+		case item_definition_indexes::WEAPON_FIVESEVEN:
+			return "C";
+			break;
+		case item_definition_indexes::WEAPON_GALILAR:
+			return "Q";
+			break;
+		case item_definition_indexes::WEAPON_M4A1_SILENCER:
+			return "T";
+			break;
+		case item_definition_indexes::WEAPON_M4A1:
+			return "S";
+			break;
+		case item_definition_indexes::WEAPON_P250:
+			return "F";
+			break;
+		case item_definition_indexes::WEAPON_M249:
+			return "g";
+			break;
+		case item_definition_indexes::WEAPON_XM1014:
+			return "b";
+			break;
+		case item_definition_indexes::WEAPON_GLOCK:
+			return "D";
+			break;
+		case item_definition_indexes::WEAPON_USP_SILENCER:
+			return "G";
+			break;
+		case item_definition_indexes::WEAPON_HKP2000:
+			return "E";
+			break;
+		case item_definition_indexes::WEAPON_AK47:
+			return "W";
+			break;
+		case item_definition_indexes::WEAPON_AWP:
+			return "Z";
+			break;
+		case item_definition_indexes::WEAPON_BIZON:
+			return "M";
+			break;
+		case item_definition_indexes::WEAPON_MAG7:
+			return "d";
+			break;
+		case item_definition_indexes::WEAPON_NEGEV:
+			return "f";
+			break;
+		case item_definition_indexes::WEAPON_SAWEDOFF:
+			return "c";
+			break;
+		case item_definition_indexes::WEAPON_TEC9:
+			return "H";
+			break;
+		case item_definition_indexes::WEAPON_TASER:
+			return "h";
+			break;
+		case item_definition_indexes::WEAPON_NOVA:	
+			return "e";
+			break;
+		case item_definition_indexes::WEAPON_CZ75A:	
+			return "I";
+			break;
+		case item_definition_indexes::WEAPON_SG556:	
+			return "V";
+			break;
+		case item_definition_indexes::WEAPON_REVOLVER:	
+			return "J";
+			break;
+		case item_definition_indexes::WEAPON_MP7:
+			return "N";
+			break;
+		case item_definition_indexes::WEAPON_MP9:		
+			return "O";
+			break;
+		case item_definition_indexes::WEAPON_MP5SD:  //same icon as ump
+			return "L";
+			break;
+		case item_definition_indexes::WEAPON_C4:	
+			return "o";
+			break;
+		case item_definition_indexes::WEAPON_FRAG_GRENADE:
+			return "j";
+			break;
+		case item_definition_indexes::WEAPON_SMOKEGRENADE:
+			return "k";
+			break;
+		case item_definition_indexes::WEAPON_MOLOTOV:
+			return "l";
+			break;
+		case item_definition_indexes::WEAPON_INCGRENADE:
+			return "n";
+			break;
+		case item_definition_indexes::WEAPON_FLASHBANG:
+			return "i";
+			break;
+		case item_definition_indexes::WEAPON_DECOY:
+			return "m";
+			break;
+		}
+		return " ";
 	}
 };
 
@@ -320,6 +648,15 @@ private:
 
 public:
 	NETVAR("DT_BasePlayer", "m_hViewModel[0]", view_model, int); //tutaj
+	NETVAR("DT_BasePlayer", "m_viewPunchAngle", punch_angle, vec3_t);
+	NETVAR("DT_BasePlayer", "m_aimPunchAngle", aim_punch_angle, vec3_t);
+	NETVAR("DT_BasePlayer", "m_vecVelocity[0]", velocity, vec3_t);
+	NETVAR("DT_BasePlayer", "m_flMaxspeed", max_speed, float);
+	NETVAR("DT_BaseEntity", "m_flShadowCastDistance", m_flFOVTime, float);
+	NETVAR("DT_BasePlayer", "m_iObserverMode", observer_mode, int);
+	NETVAR("DT_BasePlayer", "m_hObserverTarget", observer_target, int);
+	NETVAR("DT_BasePlayer", "m_nHitboxSet", hitbox_set, int);
+
 	NETVAR("DT_CSPlayer", "m_bHasDefuser", has_defuser, bool);
 	NETVAR("DT_CSPlayer", "m_bGunGameImmunity", has_gun_game_immunity, bool);
 	NETVAR("DT_CSPlayer", "m_iShotsFired", shots_fired, int);
@@ -338,30 +675,36 @@ public:
 	NETVAR("DT_CSPlayer", "m_iHealth", health, int);
 	NETVAR("DT_CSPlayer", "m_lifeState", life_state, int);
 	NETVAR("DT_CSPlayer", "m_fFlags", flags, int);
-	NETVAR("DT_BasePlayer", "m_viewPunchAngle", punch_angle, vec3_t);
-	NETVAR("DT_BasePlayer", "m_aimPunchAngle", aim_punch_angle, vec3_t);
-	NETVAR("DT_BasePlayer", "m_vecVelocity[0]", velocity, vec3_t);
-	NETVAR("DT_BasePlayer", "m_flMaxspeed", max_speed, float);
-	NETVAR("DT_BaseEntity", "m_flShadowCastDistance", m_flFOVTime, float);
-	NETVAR("DT_BasePlayer", "m_hObserverTarget", observer_target, unsigned long);
-	NETVAR("DT_BasePlayer", "m_nHitboxSet", hitbox_set, int);
 	NETVAR("DT_CSPlayer", "m_flDuckAmount", duck_amount, float);
 	NETVAR("DT_CSPlayer", "m_bHasHeavyArmor", has_heavy_armor, bool);
-	NETVAR("DT_PlantedC4", "m_flC4Blow", c4_blow_time, float);
-	NETVAR("DT_SmokeGrenadeProjectile", "m_nSmokeEffectTickBegin", smoke_grenade_tick_begin, int);
 	NETVAR("DT_CSPlayer", "m_nTickBase", get_tick_base, int);
 
+	NETVAR("DT_PlantedC4", "m_bBombTicking", c4_is_ticking, bool);
+	NETVAR("DT_PlantedC4", "m_bBombDefused", c4_is_defused, bool);
+	NETVAR("DT_PlantedC4", "m_hBombDefuser", c4_gets_defused, float);
+	NETVAR("DT_PlantedC4", "m_flC4Blow", c4_blow_time, float);
+	NETVAR("DT_PlantedC4", "m_flDefuseCountDown", c4_defuse_countdown, float);
+
+	NETVAR("DT_SmokeGrenadeProjectile", "m_nSmokeEffectTickBegin", smoke_grenade_tick_begin, int);
+	
+
 	weapon_t* active_weapon() {
-		auto active_weapon = read<DWORD>(netvar_manager::get_net_var(netvar_manager::fnv::hash(XorStr("DT_CSPlayer")), netvar_manager::fnv::hash(XorStr("m_hActiveWeapon")))) & 0xFFF;
+		auto active_weapon = read<uintptr_t>(netvar_manager::get_net_var(netvar_manager::fnv::hash("DT_CSPlayer"), netvar_manager::fnv::hash("m_hActiveWeapon"))) & 0xFFF;
 		return reinterpret_cast<weapon_t*>(interfaces::entity_list->get_client_entity(active_weapon));
 	}
-
-	UINT* get_wearables() {
-		return (UINT*)((DWORD)this + (netvar_manager::get_net_var(netvar_manager::fnv::hash(XorStr("DT_CSPlayer")), netvar_manager::fnv::hash(XorStr("m_hMyWearables")))));
+	
+	char* get_callout()
+	{
+		return (char*)((uintptr_t)this + (netvar_manager::get_net_var(netvar_manager::fnv::hash("DT_BasePlayer"), netvar_manager::fnv::hash("m_szLastPlaceName"))));
+	}
+	
+	UINT* get_wearables()
+	{
+		return (UINT*)((uintptr_t)this + (netvar_manager::get_net_var(netvar_manager::fnv::hash("DT_CSPlayer"), netvar_manager::fnv::hash("m_hMyWearables"))));
 	}
 
 	bool has_c4() {
-		static auto ret = reinterpret_cast<bool(__thiscall*)(void*)>(utilities::pattern_scan(GetModuleHandleA(XorStr("client_panorama.dll")), XorStr("56 8B F1 85 F6 74 31")));
+		static auto ret = reinterpret_cast<bool(__thiscall*)(void*)>(utilities::pattern_scan(GetModuleHandleA("client_panorama.dll"), "56 8B F1 85 F6 74 31"));
 		return ret(this);
 	}
 
@@ -413,9 +756,34 @@ public:
 		}
 		return vec3_t{};
 	}
+	vec3_t get_hitbox(int hitbox) {
+		matrix_t matrix[128];
+
+		if (this->setup_bones(matrix, 128, 256, interfaces::globals->cur_time)) {
+			studio_hdr_t* hdr = interfaces::model_info->get_studio_model(this->model());
+			studio_hitbox_set_t* set = hdr->hitbox_set(0);
+			studio_box_t* box = set->hitbox(hitbox);
+
+			if (box) {
+				vec3_t min, max, vec_center, screen_center;
+				math.transform_vector(box->mins, matrix[box->bone], min);
+				math.transform_vector(box->maxs, matrix[box->bone], max);
+				vec_center = (min + max) * 0.5;
+
+				return vec_center;
+			}
+		}
+
+		return vec3_t(0, 0, 0);
+	}
+	
+	vec3_t get_head_pos()
+	{
+		return this->get_bone_position(6);
+	}
 
 	bool is_enemy() {
-		static auto danger_zone = interfaces::console->get_convar(XorStr("game_type"));
+		static auto danger_zone = interfaces::console->get_convar("game_type");
 
 		if (!is_in_local_team() || danger_zone->get_int() == 6)
 			return true;
@@ -467,6 +835,11 @@ public:
 	}
 	int	move_type() {
 		return *reinterpret_cast<int*> (reinterpret_cast<uintptr_t>(this) + 0x25C); //hazedumper
+	}
+	vec3_t eye_pos() {
+		vec3_t ret;
+		utilities::call_virtual<void(__thiscall*)(void*, vec3_t&)>(this, 281)(this, ret); // this is the real eye pos
+		return ret;
 	}
 
 	int* weapons() { //tu jesli skinchanger

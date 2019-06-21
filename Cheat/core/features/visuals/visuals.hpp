@@ -1,14 +1,17 @@
 #pragma once
 #include "../../../dependencies/common_includes.hpp"
-#include "../../../SDK/crypto/XorStr.h"
+
 class c_visuals {
 public:
+	color grenade_color;
 	void run() noexcept;
-	void entity_esp(player_t * entity) noexcept;
-	void skeleton(player_t * entity) noexcept;
+	void entity_esp(player_t* entity) noexcept;
+	void skeleton(player_t* entity) noexcept;
+	void backtrack_skeleton(player_t* entity) noexcept;
 	void backtrack_chams(IMatRenderContext* ctx, const draw_model_state_t& state, const model_render_info_t& info);
 	void viewmodel_modulate(const model_render_info_t& info);
 	void chams() noexcept;
+	void chams_misc(const model_render_info_t& info) noexcept;
 	void glow() noexcept;
 private:
 	int alpha[65];
@@ -17,7 +20,7 @@ private:
 	std::string clean_item_name(std::string name) {
 		std::string Name = name;
 
-		auto weapon_start = Name.find(XorStr("weapon"));
+		auto weapon_start = Name.find("weapon");
 		if (weapon_start != std::string::npos)
 			Name.erase(Name.begin() + weapon_start, Name.begin() + weapon_start + 6);
 
@@ -41,11 +44,11 @@ private:
 		}
 	};
 
-	bool get_playerbox(player_t* ent, box& in) {
+	bool get_playerbox(entity_t* ent, box& in) {
 		vec3_t origin, min, max, flb, brt, blb, frt, frb, brb, blt, flt;
 		float left, top, right, bottom;
 
-		origin = ent->abs_origin();
+		origin = ent->get_absolute_origin();
 		min = ent->collideable()->mins() + origin;
 		max = ent->collideable()->maxs() + origin;
 
@@ -95,6 +98,7 @@ private:
 	void player_rendering(player_t * entity) noexcept;
 	void dropped_weapons(player_t * entity) noexcept;
 	void projectiles(player_t * entity) noexcept;
+	void bomb_defuse_esp(player_t* entity) noexcept;
 	void bomb_esp(player_t * entity) noexcept;
 };
 

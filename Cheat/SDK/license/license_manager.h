@@ -27,4 +27,6 @@ namespace license_manager
 	bool getModulesInfo();
 
 	bool checkModuleActive(LICENSE_DATA data, int moduleId);
+	bool allModulesExpired();
+
 }

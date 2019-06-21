@@ -176,7 +176,7 @@ namespace Loader.NET
                             if (DateTime.Parse(updateInfo.data.last_update) > ClientData.LastUpdate)
                             {
                                 MessageBox.Show(
-                                    "Доступно новое обновление! Подождите, пока мастер обновления закончит работу!", "NEW UPDATE FOUNDED!", MessageBoxButton.OK, MessageBoxImage.Asterisk);
+                                    "Доступно новое обновление! Загрузите новый лоадер с сайта!", "NEW UPDATE FOUNDED!", MessageBoxButton.OK, MessageBoxImage.Asterisk);
                                 Environment.Exit(0);
                             }
                             break;

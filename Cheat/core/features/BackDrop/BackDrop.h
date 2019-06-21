@@ -33,8 +33,8 @@ public:
 			{
 				vec2_t Dir = ((*i)->RelativePosition - RelativePosition);
 				Dir.normalize();
-				int alpha = 128 / 100 * Dist * 255;
-				interfaces::surface->set_drawing_color(69, 140, 230, alpha);
+				//int alpha = 128 / 100 * Dist * 255;
+				interfaces::surface->set_drawing_color(69, 140, 230, 255);
 				interfaces::surface->draw_line(Pos.x, Pos.y, (Pos + Dir * Dist).x, (Pos + Dir * Dist).y);
 			
 			}

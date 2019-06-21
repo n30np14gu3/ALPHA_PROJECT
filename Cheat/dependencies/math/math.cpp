@@ -28,6 +28,19 @@ vec3_t c_math::calculate_angle(const vec3_t& source, const vec3_t& destination, 
 	angles.normalize_aimbot();
 	return angles;
 }
+vec3_t c_math::calculate_angle_se(const vec3_t& vec_source, const vec3_t& vec_destination)
+{
+	vec3_t qAngles;
+	vec3_t delta = vec3_t((vec_source[0] - vec_destination[0]), (vec_source[1] - vec_destination[1]), (vec_source[2] - vec_destination[2]));
+	double hyp = std::sqrtf(delta[0] * delta[0] + delta[1] * delta[1]);
+	qAngles[0] = (float)(std::atan(delta[2] / hyp) * (180.0 / M_PI));
+	qAngles[1] = (float)(std::atan(delta[1] / delta[0]) * (180.0 / M_PI));
+	qAngles[2] = 0.f;
+	if (delta[0] >= 0.f)
+		qAngles[1] += 180.f;
+
+	return qAngles;
+}
 
 void c_math::sin_cos(float r, float* s, float* c) {
 	*s = sin(r);
@@ -251,3 +264,4 @@ float c_math::distance_to_ray(vec3_t &pos, vec3_t &ray_start, vec3_t &ray_end, f
 
 	return range;
 }
+

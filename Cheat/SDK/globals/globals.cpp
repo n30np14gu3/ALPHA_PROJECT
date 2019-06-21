@@ -12,7 +12,7 @@ namespace globals
 
 	void initGlobals()
 	{
-		server_url = XorStr("alpha-cheat.io");
+		server_url = XorStr("alphacheat.com");
 		lib_user_agent = XorStr("alphacheat dll");
 	}
 }

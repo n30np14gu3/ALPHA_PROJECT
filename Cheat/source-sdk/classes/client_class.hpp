@@ -1,6 +1,7 @@
 #pragma once
 #include "recv_props.hpp"
 
+class i_client_unknown;
 class client_class;
 class i_client_networkable;
 
@@ -291,6 +292,7 @@ enum class_ids {
     sporeexplosion,
     sporetrail,
 };
+
 class c_client_class {
 public:
 	create_client_class_fn create_fn;
@@ -300,3 +302,4 @@ public:
 	c_client_class* next_ptr;
 	class_ids class_id;
 };
+
