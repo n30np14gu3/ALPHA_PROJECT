@@ -177,6 +177,8 @@ bool __stdcall hooks::create_move(float frame_time, c_usercmd* user_cmd) {
 
 	if (interfaces::engine->is_connected() && interfaces::engine->is_in_game()) 
 	{		
+		aimbot.apply_player_weapon(user_cmd);
+
 		//misc
 		if(license_manager::checkModuleActive(globals::user_modules, MODULE_BUNNY_HOP))
 		{
@@ -204,9 +206,7 @@ bool __stdcall hooks::create_move(float frame_time, c_usercmd* user_cmd) {
 
 			aimbot.run(user_cmd);
 			backtrack.run(user_cmd);
-			if (config_system.item.trigger_enable && GetAsyncKeyState(config_system.item.trigger_key))
-				trigger.trigger(user_cmd);
-
+			trigger.trigger(user_cmd);
 			engine_prediction.end_prediction();
 			movement.edge_jump_post_prediction(user_cmd);
 		}

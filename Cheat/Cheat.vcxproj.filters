@@ -121,6 +121,9 @@
     <Filter Include="SDK\protection\rapidjson\msinttypes">
       <UniqueIdentifier>{cfbd876d-97c2-450d-b801-18db841506a1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="source-sdk\valve parser">
+      <UniqueIdentifier>{7ae670c1-bb1a-4f9c-ae2b-0d9a91fc45e1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DllMain.cpp" />
@@ -252,6 +255,12 @@
     </ClCompile>
     <ClCompile Include="core\features\skinchanger\knifehook.cpp">
       <Filter>core\features\skinchanger</Filter>
+    </ClCompile>
+    <ClCompile Include="source-sdk\valve parser\valve_parser.h">
+      <Filter>source-sdk\valve parser</Filter>
+    </ClCompile>
+    <ClCompile Include="source-sdk\valve parser\valve_parser.cpp">
+      <Filter>source-sdk\valve parser</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

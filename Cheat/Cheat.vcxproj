@@ -188,6 +188,8 @@
     <ClCompile Include="SDK\protection\AntiLeak.cpp" />
     <ClCompile Include="source-sdk\math\vector3d.cpp" />
     <ClCompile Include="source-sdk\math\view_matrix.cpp" />
+    <ClCompile Include="source-sdk\valve parser\valve_parser.cpp" />
+    <ClCompile Include="source-sdk\valve parser\valve_parser.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core\features\aimbot\aimbot.hpp" />

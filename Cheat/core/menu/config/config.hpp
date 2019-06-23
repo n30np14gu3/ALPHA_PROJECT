@@ -19,39 +19,11 @@ public:
 	struct {
 		bool backtrack{ false };
 		bool backtrack_visualize{ false };
-		bool aim_enabled{ false };
 		bool scope_aim{ false };
 		bool smoke_check{ false };
-		bool aim_silent{ false };
 		bool aim_distance_based_fov{ false };
-		float aim_fov_pistol{ 0.0f };
-		float rcs_x_pistol{ 0.0f };
-		float rcs_y_pistol{ 0.0f };
-		float rcs_x_rifle{ 0.0f };
-		float rcs_y_rifle{ 0.0f };
-		float rcs_x_sniper{ 0.0f };
-		float rcs_y_sniper{ 0.0f };
-		float rcs_x_heavy{ 0.0f };
-		float rcs_y_heavy{ 0.0f };
-		float rcs_x_smg{ 0.0f };
-		float rcs_y_smg{ 0.0f };
-		float aim_smooth_pistol{ 5.f };
-		float aim_fov_rifle{ 0.0f };
-		float aim_smooth_rifle{ 5.f };
-		float aim_fov_sniper{ 0.0f };
-		float aim_smooth_sniper{ 5.f };
-		float aim_fov_heavy{ 0.0f };
-		float aim_smooth_heavy{ 5.f };
-		float aim_fov_smg{ 0.0f };
-		float aim_smooth_smg{ 5.f };
-		int aim_bone_smg{ 0 };
-		int aim_bone_sniper{ 0 };
-		int aim_bone_pistol{ 0 };
-		int aim_mode{ 0 };
-		int aim_bone_rifle{ 0 };
-		int aim_bone_heavy{ 0 };
-		int aim_weapon{ 0 };;
 		bool aim_team_check{ false };
+
 		bool bomb_planted{ false };
 		bool dropped_weapons{ false };
 		bool backtrack_skeleton{ false };
@@ -149,80 +121,13 @@ public:
 		bool edge_jump{ false };
 		bool edge_jump_duck_in_air{ false };
 		int edge_jump_key{ 0 };
-		int changer_skin{ 0 };
+
 		int paint_kit_vector_index_knife{ 0 };
 		int paint_kit_index_knife{ 0 };
 		int paint_kit_vector_index_glove{ 0 };
 		int paint_kit_index_glove{ 0 };
-		int paint_kit_vector_index_usp{ 0 };
-		int paint_kit_index_usp{ 0 };
-		int paint_kit_vector_index_p2000{ 0 };
-		int paint_kit_index_p2000{ 0 };
-		int paint_kit_vector_index_glock{ 0 };
-		int paint_kit_index_glock{ 0 };
-		int paint_kit_vector_index_p250{ 0 };
-		int paint_kit_index_p250{ 0 };
-		int paint_kit_vector_index_fiveseven{ 0 };
-		int paint_kit_index_fiveseven{ 0 };
-		int paint_kit_vector_index_tec{ 0 };
-		int paint_kit_index_tec{ 0 };
-		int paint_kit_vector_index_cz{ 0 };
-		int paint_kit_index_cz{ 0 };
-		int paint_kit_vector_index_duals{ 0 };
-		int paint_kit_index_duals{ 0 };
-		int paint_kit_vector_index_deagle{ 0 };
-		int paint_kit_index_deagle{ 0 };
-		int paint_kit_vector_index_revolver{ 0 };
-		int paint_kit_index_revolver{ 0 };
-		int paint_kit_vector_index_famas{ 0 };
-		int paint_kit_index_famas{ 0 };
-		int paint_kit_vector_index_galil{ 0 };
-		int paint_kit_index_galil{ 0 };
-		int paint_kit_vector_index_m4a4{ 0 };
-		int paint_kit_index_m4a4{ 0 };
-		int paint_kit_vector_index_m4a1{ 0 };
-		int paint_kit_index_m4a1{ 0 };
-		int paint_kit_vector_index_ak47{ 0 };
-		int paint_kit_index_ak47{ 0 };
-		int paint_kit_vector_index_sg553{ 0 };
-		int paint_kit_index_sg553{ 0 };
-		int paint_kit_vector_index_aug{ 0 };
-		int paint_kit_index_aug{ 0 };
-		int paint_kit_vector_index_ssg08{ 0 };
-		int paint_kit_index_ssg08{ 0 };
-		int paint_kit_vector_index_awp{ 0 };
-		int paint_kit_index_awp{ 0 };
-		int paint_kit_vector_index_scar{ 0 };
-		int paint_kit_index_scar{ 0 };
-		int paint_kit_vector_index_g3sg1{ 0 };
-		int paint_kit_index_g3sg1{ 0 };
-		int paint_kit_vector_index_sawoff{ 0 };
-		int paint_kit_index_sawoff{ 0 };
-		int paint_kit_vector_index_m249{ 0 };
-		int paint_kit_index_m249{ 0 };
-		int paint_kit_vector_index_negev{ 0 };
-		int paint_kit_index_negev{ 0 };
-		int paint_kit_vector_index_mag7{ 0 };
-		int paint_kit_index_mag7{ 0 };
-		int paint_kit_vector_index_xm1014{ 0 };
-		int paint_kit_index_xm1014{ 0 };
-		int paint_kit_vector_index_nova{ 0 };
-		int paint_kit_index_nova{ 0 };
-		int paint_kit_vector_index_bizon{ 0 };
-		int paint_kit_index_bizon{ 0 };
-		int paint_kit_vector_index_mp5sd{ 0 };
-		int paint_kit_index_mp5sd{ 0 };
-		int paint_kit_vector_index_mp7{ 0 };
-		int paint_kit_index_mp7{ 0 };
-		int paint_kit_vector_index_mp9{ 0 };
-		int paint_kit_index_mp9{ 0 };
-		int paint_kit_vector_index_mac10{ 0 };
-		int paint_kit_index_mac10{ 0 };
-		int paint_kit_vector_index_p90{ 0 };
-		int paint_kit_index_p90{ 0 };
-		int paint_kit_vector_index_ump45{ 0 };
-		int paint_kit_index_ump45{ 0 };
 		float backtrack_ms{ 0.0f };
+
 		int aim_key{ 0 };
 		bool vis_chams_smoke_check{ false };
 		bool disable_post_processing{ false };
@@ -237,14 +142,6 @@ public:
 		float rcs_standalone_x{ 0.0f };
 		float rcs_standalone_y{ 0.0f };
 		bool rcs_standalone{ false };
-		bool trigger_enable{ false };
-		bool trigger_hitbox_head{ false };
-		bool trigger_hitbox_body{ false };
-		bool trigger_hitbox_arms{ false };
-		bool trigger_hitbox_legs{ false };
-		int trigger_delay{ 0 };
-		int trigger_key{ 0 };
-		bool trigger_recoil{ false };
 		bool weapon_chams{ false };
 		bool hand_chams{ false };
 		bool sleeve_chams{ false };
@@ -258,7 +155,46 @@ public:
 		float clr_damage_indicator[4] = { 1.0f,1.0f,1.0f,255.0f };
 		bool dropped_weapons_icon{ false };
 
+		struct
+		{
+			int paint_kit;
+			int paint_kit_vecotor;
+			bool setted;
+		}weapon_skin_info[530]{};
+
+		struct
+		{
+			bool enable;
+			bool silent;
+
+			bool nearest;
+			int hitbox;
+
+			float fov;
+			float smooth;
+
+			float rcs_x;
+			float rcs_y;
+		}aim_bot_settings[530]{};
+
+
+		struct
+		{
+			bool enable;
+			bool on_key;
+			int key_id;
+			bool rcs;
+			bool hitbox_head;
+			bool hitbox_body;
+			bool hitbox_arms;
+			bool hitbox_legs;
+			int delay;
+		}trigger_bot[530]{};
+
 	} item;
+
+	int active_weapon = 0;
+	std::string weapon_name = "";
 
 private:
 	std::filesystem::path path;

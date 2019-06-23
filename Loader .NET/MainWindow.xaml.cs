@@ -216,5 +216,11 @@ namespace Loader.NET
 
             _csgoPid = Process.GetProcessesByName("csgo")[0].Id;
         }
+
+        private void LLogout_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            Properties.Settings.Default.Reset();
+            Environment.Exit(0);
+        }
     }
 }

@@ -65,6 +65,7 @@
             </materialDesign:Card>
             <Button x:Name="LaunchBtn" Content="ЗАПУСТИТЬ" HorizontalAlignment="Left" Margin="10,0,0,44" VerticalAlignment="Bottom" Width="286" Height="40" Click="LaunchBtn_Click"/>
             <Label x:Name="BrandLink" Content="alphacheat.com" HorizontalAlignment="Right" Margin="0,0,10,10" Width="286" Height="26" VerticalAlignment="Bottom" HorizontalContentAlignment="Center" Style="{DynamicResource linkStyle}" MouseLeftButtonUp="BrandLink_MouseLeftButtonUp"/>
+            <Label x:Name="LLogout" Content="ВЫХОД" HorizontalAlignment="Right" Margin="0,36,10,0" Width="77" Height="26" VerticalAlignment="Top" HorizontalContentAlignment="Center" Style="{DynamicResource linkStyle}" MouseLeftButtonUp="LLogout_MouseLeftButtonUp"/>
         </Grid>
     </Border>
 </Window>

@@ -207,7 +207,7 @@ void* utilities::game::capture_interface(const char* mod, const char* iface) {
 }
 
 void utilities::material_setup() {
-	std::ofstream("csgo/materials/aristois_material.vmt") << R"#("VertexLitGeneric" {
+	std::ofstream("csgo/materials/alpha_project_material.vmt") << R"#("VertexLitGeneric" {
             "$basetexture" "vgui/white_additive"
             "$ignorez"      "0"
             "$envmap"       ""
@@ -222,7 +222,7 @@ void utilities::material_setup() {
 			"$rimlight"		"1"
         })#";
 
-	std::ofstream("csgo/materials/aristois_reflective.vmt") << R"#("VertexLitGeneric" {
+	std::ofstream("csgo/materials/alpha_project_reflective.vmt") << R"#("VertexLitGeneric" {
 			"$basetexture" "vgui/white_additive"
 			"$ignorez" "0"
 			"$envmap" "env_cubemap"

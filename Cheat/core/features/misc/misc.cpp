@@ -256,7 +256,7 @@ void c_misc::watermark() noexcept {
 	std::string incoming = local_player ? std::to_string((int)(net_channel->get_latency(FLOW_INCOMING) * 1000)) : "0";
 	std::string outgoing = local_player ? std::to_string((int)(net_channel->get_latency(FLOW_OUTGOING) * 1000)) : "0";
 
-	ss << "aristois.me | fps: " << fps << " | incoming: " << incoming.c_str() << "ms" << " | outgoing: " << outgoing.c_str() << "ms";
+	ss << "alphacheat | fps: " << fps << " | incoming: " << incoming.c_str() << "ms" << " | outgoing: " << outgoing.c_str() << "ms";
 
 	render.draw_filled_rect(width - 275, 4, 260, 20, color(33, 35, 47, 255));
 	render.draw_outline(width - 275, 4, 260, 20, color(30, 30, 41, 255));
@@ -267,7 +267,7 @@ void c_misc::clantag_spammer() noexcept {
 	if (!config_system.item.clan_tag || !config_system.item.misc_enabled)
 		return;
 
-	static std::string tag = "aristois.me ";
+	static std::string tag = "[alphacheat.com]";
 	static float last_time = 0;
 
 	if (interfaces::globals->cur_time > last_time) {

@@ -779,8 +779,8 @@ void c_visuals::chams_misc(const model_render_info_t& info) noexcept {
 		return;
 
 	static i_material* mat = nullptr;
-	auto textured = interfaces::material_system->find_material("aristois_material", TEXTURE_GROUP_MODEL, true, nullptr);
-	auto metalic = interfaces::material_system->find_material("aristois_reflective", TEXTURE_GROUP_MODEL, true, nullptr);
+	auto textured = interfaces::material_system->find_material("alpha_project_material", TEXTURE_GROUP_MODEL, true, nullptr);
+	auto metalic = interfaces::material_system->find_material("alpha_project_reflective", TEXTURE_GROUP_MODEL, true, nullptr);
 	auto flat = interfaces::material_system->find_material("debug/debugdrawflat", TEXTURE_GROUP_MODEL, true, nullptr);
 	auto dogtag = interfaces::material_system->find_material("models/inventory_items/dogtags/dogtags_outline", TEXTURE_GROUP_MODEL, true, nullptr);
 	textured->increment_reference_count();

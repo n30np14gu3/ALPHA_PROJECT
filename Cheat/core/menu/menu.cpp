@@ -11,6 +11,16 @@
 
 c_menu menu;
 
+
+std::string utf8_encode(const std::wstring &wstr)
+{
+	if (wstr.empty()) return std::string();
+	int size_needed = WideCharToMultiByte(CP_UTF8, 0, &wstr[0], (int)wstr.size(), NULL, 0, NULL, NULL);
+	std::string strTo(size_needed, 0);
+	WideCharToMultiByte(CP_UTF8, 0, &wstr[0], (int)wstr.size(), &strTo[0], size_needed, NULL, NULL);
+	return strTo;
+}
+
 #define UNLEN 256
 IDirect3DStateBlock9 *state_block;
 bool reverse = false;
@@ -118,22 +128,17 @@ void c_menu::run() {
 				ImGui::Dummy(ImVec2(0, 0)); ImGui::SameLine();
 				ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(12, 12));
 				ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(0 / 255.f, 0 / 255.f, 0 / 255.f, 0.1f));
-				ImGui::BeginChild(XorStr("aimbot"), ImVec2(339, 300), true); {
+				ImGui::BeginChild(XorStr("aimbot [globals]"), ImVec2(339, 300), true); {
 					if (license_manager::checkModuleActive(globals::user_modules, MODULE_AIM_BOT))
 					{
 						ImGui::Spacing();
 						ImGui::Spacing();
-						ImGui::Checkbox("active", &config_system.item.aim_enabled);
-						ImGui::PushStyleColor(ImGuiCol_Text, config_system.item.aim_enabled ? ImVec4(1.f, 1.f, 1.f, 1) : ImVec4(.6f, .6f, .6f, 1));
-						ImGui::Combo("mode", &config_system.item.aim_mode, "hitbox\0nearest\0"); //todo add custom bone selection - designer
 						ImGui::Checkbox("dynamic fov", &config_system.item.aim_distance_based_fov);
-						ImGui::Checkbox("silent aim", &config_system.item.aim_silent);
-						ImGui::Checkbox("scope aim", &config_system.item.scope_aim);
+						ImGui::Checkbox("aim in scope only", &config_system.item.scope_aim);
 						ImGui::Checkbox("smoke check", &config_system.item.smoke_check);
 						ImGui::Checkbox("friendly fire", &config_system.item.aim_team_check);
 						ImGui::Checkbox("auto pistol", &config_system.item.aimbot_auto_pistol);
 						ImGui::SliderInt("kill delay", &config_system.item.aimbot_delay_after_kill, 0, 350);
-						ImGui::PopStyleColor();
 					}
 					else
 					{
@@ -167,111 +172,84 @@ void c_menu::run() {
 							ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10);
 						}
 					}
-
-					if (license_manager::checkModuleActive(globals::user_modules, MODULE_TRIGGER_BOT))
-					{
-						ImGui::Checkbox("triggerbot", &config_system.item.trigger_enable);
-						if (config_system.item.trigger_enable) {
-							ImGui::Hotkey("##triger key", &config_system.item.trigger_key, ImVec2(130, 30));
-							ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10);
-							if (ImGui::BeginCombo("hitbox", "...", ImVec2(0, 105))) {
-								ImGui::SetCursorPosY(ImGui::GetCursorPosY() - 8);
-								ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 4);
-								ImGui::Selectable(("head"), &config_system.item.trigger_hitbox_head, ImGuiSelectableFlags_::ImGuiSelectableFlags_DontClosePopups);
-								ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 4);
-								ImGui::Selectable(("body"), &config_system.item.trigger_hitbox_body, ImGuiSelectableFlags_::ImGuiSelectableFlags_DontClosePopups);
-								ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 4);
-								ImGui::Selectable(("arms"), &config_system.item.trigger_hitbox_arms, ImGuiSelectableFlags_::ImGuiSelectableFlags_DontClosePopups);
-								ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 4);
-								ImGui::Selectable(("legs"), &config_system.item.trigger_hitbox_legs, ImGuiSelectableFlags_::ImGuiSelectableFlags_DontClosePopups);
-								ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10);
-								ImGui::EndCombo();
-								ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10);
-							}
-							ImGui::SliderInt("trigger delay", &config_system.item.trigger_delay, 1, 50);
-							ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10);
-							ImGui::Checkbox("trigger recoil", &config_system.item.trigger_recoil);
-							ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10);
-						}
-					}
-					else
-					{
-						ImGui::Text("TRIGGER BOT EXPIRED!");
-					}
 				}
 				ImGui::EndChild(true);
 
 				ImGui::NextColumn();
 
-				ImGui::BeginChild(XorStr("settings"), ImVec2(339, 670), true); {
+				ImGui::BeginChild(("settings [" + std::string(config_system.weapon_name) + "]").c_str(), ImVec2(339, 670), true); {
 
 					if (license_manager::checkModuleActive(globals::user_modules, MODULE_AIM_BOT))
 					{
-						if (ImGui::ButtonT(XorStr("pistol"), ImVec2(50, 30), test, 0, false, ImColor(0, 0, 0))) test = 0; ImGui::SameLine(0, 0);
-						if (ImGui::ButtonT(XorStr("rifle"), ImVec2(50, 30), test, 1, false, false)) test = 1; ImGui::SameLine(0, 0);
-						if (ImGui::ButtonT(XorStr("sniper"), ImVec2(50, 30), test, 2, false, false)) test = 2; ImGui::SameLine(0, 0);
-						if (ImGui::ButtonT(XorStr("smg"), ImVec2(50, 30), test, 3, false, false)) test = 3; ImGui::SameLine(0, 0);
-						if (ImGui::ButtonT(XorStr("heavy"), ImVec2(50, 30), test, 4, false, false)) test = 4;
-
 						ImGui::PushFont(font_menu);
 
-						ImGui::PushStyleColor(ImGuiCol_Text, config_system.item.aim_enabled ? ImVec4(1.f, 1.f, 1.f, 1) : ImVec4(.6f, .6f, .6f, 1));
-						switch (test) {
-						case 0:
-							if (config_system.item.aim_mode == 0) {
-								ImGui::Combo(XorStr("pistol hitbox"), &config_system.item.aim_bone_pistol, XorStr("head\0neck\0chest\0stomach\0pelvis"));
-							}
-							ImGui::SliderFloat(XorStr("pistol fov"), &config_system.item.aim_fov_pistol, 0.0f, 180.0f, XorStr("%.2f"));
-							ImGui::SliderFloat(XorStr("pistol smooth"), &config_system.item.aim_smooth_pistol, 1.f, 10.f, XorStr("%.2f"));
-							ImGui::SliderFloat(XorStr("pistol rcs x"), &config_system.item.rcs_x_pistol, 0.0f, 1.0f, XorStr("%.2f"));
-							ImGui::SliderFloat(XorStr("pistol rcs y"), &config_system.item.rcs_y_pistol, 0.0f, 1.0f, XorStr("%.2f"));
-							break;
-						case 1:
-							if (config_system.item.aim_mode == 0) {
-								ImGui::Combo(XorStr("rifle hitbox"), &config_system.item.aim_bone_rifle, XorStr("head\0neck\0chest\0stomach\0pelvis"));
-							}
-							ImGui::SliderFloat(XorStr("rifle fov"), &config_system.item.aim_fov_rifle, 0.0f, 180.0f, XorStr("%.2f"));
-							ImGui::SliderFloat(XorStr("rifle smooth"), &config_system.item.aim_smooth_rifle, 1.f, 10.f, XorStr("%.2f"));
-							ImGui::SliderFloat(XorStr("rifle rcs x"), &config_system.item.rcs_x_rifle, 0.0f, 1.0f, XorStr("%.2f"));
-							ImGui::SliderFloat(XorStr("rifle rcs y"), &config_system.item.rcs_y_rifle, 0.0f, 1.0f, XorStr("%.2f"));
-							break;
-						case 2:
-							if (config_system.item.aim_mode == 0) {
-								ImGui::Combo(XorStr("sniper hitbox"), &config_system.item.aim_bone_sniper, XorStr("head\0neck\0chest\0stomach\0pelvis"));
-							}
-							ImGui::SliderFloat(XorStr("sniper fov"), &config_system.item.aim_fov_sniper, 0.0f, 180.0f, XorStr("%.2f"));
-							ImGui::SliderFloat(XorStr("sniper smooth"), &config_system.item.aim_smooth_sniper, 1.f, 10.f, "%.2f");
-							ImGui::SliderFloat(XorStr("sniper rcs x"), &config_system.item.rcs_x_sniper, 0.0f, 1.0f, XorStr("%.2f"));
-							ImGui::SliderFloat(XorStr("sniper rcs y"), &config_system.item.rcs_y_sniper, 0.0f, 1.0f, XorStr("%.2f"));
-							break;
-						case 3:
-							if (config_system.item.aim_mode == 0) {
-								ImGui::Combo(XorStr("smg hitbox"), &config_system.item.aim_bone_smg, XorStr("head\0neck\0chest\0stomach\0pelvis"));
-							}
+						ImGui::Spacing();
+						ImGui::Spacing();
+						ImGui::Checkbox("aimbot enable", &config_system.item.aim_bot_settings[config_system.active_weapon].enable);
+						if(config_system.item.aim_bot_settings[config_system.active_weapon].enable)
+						{
+							ImGui::PushStyleColor(ImGuiCol_Text, config_system.item.aim_bot_settings[config_system.active_weapon].enable ? ImVec4(1.f, 1.f, 1.f, 1) : ImVec4(.6f, .6f, .6f, 1));
 
-							ImGui::SliderFloat(XorStr("smg fov"), &config_system.item.aim_fov_smg, 0.0f, 180.0f, XorStr("%.2f"));
-							ImGui::SliderFloat(XorStr("smg smooth"), &config_system.item.aim_smooth_smg, 1.f, 10.f, XorStr("%.2f"));
-							ImGui::SliderFloat(XorStr("smg rcs x"), &config_system.item.rcs_x_smg, 0.0f, 1.0f, XorStr("%.2f"));
-							ImGui::SliderFloat(XorStr("smg rcs y"), &config_system.item.rcs_y_smg, 0.0f, 1.0f, XorStr("%.2f"));
-							break;
-						case 4:
-							if (config_system.item.aim_mode == 0) {
-								ImGui::Combo(XorStr("heavy hitbox"), &config_system.item.aim_bone_heavy, XorStr("head\0neck\0chest\0stomach\0pelvis"));
+							ImGui::Checkbox("silent", &config_system.item.aim_bot_settings[config_system.active_weapon].silent);
+							ImGui::Checkbox("nearest", &config_system.item.aim_bot_settings[config_system.active_weapon].nearest);
+
+
+							if (!config_system.item.aim_bot_settings[config_system.active_weapon].nearest)
+							{
+								ImGui::Combo(XorStr("hitbox"), &config_system.item.aim_bot_settings[config_system.active_weapon].hitbox, XorStr("head\0neck\0chest\0stomach\0pelvis\0"));
 							}
-							ImGui::SliderFloat(XorStr("heavy fov"), &config_system.item.aim_fov_heavy, 0.0f, 180.0f, XorStr("%.2f"));
-							ImGui::SliderFloat(XorStr("heavy smooth"), &config_system.item.aim_smooth_heavy, 1.f, 10.f, XorStr("%.2f"));
-							ImGui::SliderFloat(XorStr("heavy rcs x"), &config_system.item.rcs_x_heavy, 0.0f, 1.0f, XorStr("%.2f"));
-							ImGui::SliderFloat(XorStr("heavy rcs y"), &config_system.item.rcs_y_heavy, 0.0f, 1.0f, XorStr("%.2f"));
-							break;
+							ImGui::SliderFloat(XorStr("fov"), &config_system.item.aim_bot_settings[config_system.active_weapon].fov, 0.0f, 180.0f, XorStr("%.2f"));
+							ImGui::SliderFloat(XorStr("smooth"), &config_system.item.aim_bot_settings[config_system.active_weapon].smooth, 1.f, 10.f, XorStr("%.2f"));
+							ImGui::SliderFloat(XorStr("rcs x"), &config_system.item.aim_bot_settings[config_system.active_weapon].rcs_x, 0.0f, 1.0f, XorStr("%.2f"));
+							ImGui::SliderFloat(XorStr("rcs y"), &config_system.item.aim_bot_settings[config_system.active_weapon].rcs_y, 0.0f, 1.0f, XorStr("%.2f"));
+
+							ImGui::PopStyleColor();
 						}
-						ImGui::PopStyleColor();
+						ImGui::Spacing();
+						ImGui::Spacing();
 
+
+						if (license_manager::checkModuleActive(globals::user_modules, MODULE_TRIGGER_BOT))
+						{
+							ImGui::Checkbox("triggerbot enable", &config_system.item.trigger_bot[config_system.active_weapon].enable);
+							if(config_system.item.trigger_bot[config_system.active_weapon].enable)
+							{
+								ImGui::Checkbox("on key", &config_system.item.trigger_bot[config_system.active_weapon].on_key);
+								if(config_system.item.trigger_bot[config_system.active_weapon].on_key)
+								{
+									ImGui::Hotkey("##triger key", &config_system.item.trigger_bot[config_system.active_weapon].key_id, ImVec2(130, 30));
+								}
+								ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10);
+								if (ImGui::BeginCombo("hitboxes", "...", ImVec2(0, 105))) {
+									ImGui::SetCursorPosY(ImGui::GetCursorPosY() - 8);
+									ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 4);
+									ImGui::Selectable(("head"), &config_system.item.trigger_bot[config_system.active_weapon].hitbox_head, ImGuiSelectableFlags_::ImGuiSelectableFlags_DontClosePopups);
+									ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 4);
+									ImGui::Selectable(("body"), &config_system.item.trigger_bot[config_system.active_weapon].hitbox_body, ImGuiSelectableFlags_::ImGuiSelectableFlags_DontClosePopups);
+									ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 4);
+									ImGui::Selectable(("arms"), &config_system.item.trigger_bot[config_system.active_weapon].hitbox_arms, ImGuiSelectableFlags_::ImGuiSelectableFlags_DontClosePopups);
+									ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 4);
+									ImGui::Selectable(("legs"), &config_system.item.trigger_bot[config_system.active_weapon].hitbox_legs, ImGuiSelectableFlags_::ImGuiSelectableFlags_DontClosePopups);
+									ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10);
+									ImGui::EndCombo();
+									ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10);
+								}
+								ImGui::SliderInt("trigger delay", &config_system.item.trigger_bot[config_system.active_weapon].delay, 1, 50);
+								ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10);
+								ImGui::Checkbox("trigger recoil", &config_system.item.trigger_bot[config_system.active_weapon].rcs);
+								ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10);
+							}
+
+						}
+						else
+						{
+							ImGui::Text("TRIGGER BOT EXPIRED!");
+						}
 						ImGui::PopFont();
 					}
-
+					
 				} ImGui::EndChild(true);
 				ImGui::PopStyleColor();
-				//ImGui::PopStyleColor();
 				ImGui::PopStyleVar();
 				break;
 			case 1:
@@ -498,11 +476,11 @@ void c_menu::run() {
 
 						ImGui::Checkbox("hitmarker", &config_system.item.hitmarker);
 						if (config_system.item.hitmarker) {
-							ImGui::Combo("hitmarker sound", &config_system.item.hitmarker_sound, "none\0one\0two\0three");
+							ImGui::Combo("hitmarker sound", &config_system.item.hitmarker_sound, "none\0one\0two\0three\0");
 						}
 						ImGui::Checkbox("anti screenshot", &config_system.item.anti_screenshot);
 						ImGui::Checkbox("spectators", &config_system.item.spectators_list);
-						ImGui::Checkbox("watermark", &config_system.item.watermark);
+						//ImGui::Checkbox("watermark", &config_system.item.watermark);
 						ImGui::Checkbox("disable post processing", &config_system.item.disable_post_processing);
 						ImGui::Checkbox("recoil crosshair", &config_system.item.recoil_crosshair);
 						ImGui::Checkbox("rank reveal", &config_system.item.rank_reveal);
@@ -520,8 +498,6 @@ void c_menu::run() {
 						//if (ImGui::Button("dump steam id")) {
 						//	utilities::dump_steam_id();
 						//}
-
-						ImGui::SameLine();
 						if (ImGui::Button("hide name")) {
 							utilities::change_name("\n\xAD\xAD\xAD");
 						}
@@ -576,14 +552,14 @@ void c_menu::run() {
 						ImGui::Spacing();
 						ImGui::Spacing();
 						ImGui::PushStyleColor(ImGuiCol_Text, config_system.item.skinchanger_enable ? ImVec4(1.f, 1.f, 1.f, 1) : ImVec4(.6f, .6f, .6f, 1));
-						ImGui::Combo("model", &config_system.item.knife_model, "default\0bayonet\0m9\0karambit\0bowie\0butterfly\0falchion\0flip\0gut\0huntsman\0shaddow daggers\0navaja\0stiletto\0talon\0ursus");
+						ImGui::Combo("model", &config_system.item.knife_model, "default\0bayonet\0m9\0karambit\0bowie\0butterfly\0falchion\0flip\0gut\0huntsman\0shaddow daggers\0navaja\0stiletto\0talon\0ursus\0");
 						ImGui::Combo(("skin"), &config_system.item.paint_kit_vector_index_knife, [](void* data, int idx, const char** out_text) {
 							*out_text = parser_skins[idx].name.c_str();
 							return true;
 						}, nullptr, parser_skins.size(), 10);
 						config_system.item.paint_kit_index_knife = parser_skins[config_system.item.paint_kit_vector_index_knife].id;
 						ImGui::Spacing();
-						ImGui::Combo("condition", &config_system.item.knife_wear, "factory new\0minimal wear\0field-tested\0well-worn\0battle-scarred");
+						ImGui::Combo("condition", &config_system.item.knife_wear, "factory new\0minimal wear\0field-tested\0well-worn\0battle-scarred\0");
 						ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 18);
 						ImGui::Spacing();
 						ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 18);
@@ -615,14 +591,14 @@ void c_menu::run() {
 						ImGui::Spacing();
 						ImGui::Spacing();
 						ImGui::PushStyleColor(ImGuiCol_Text, config_system.item.glovechanger_enable ? ImVec4(1.f, 1.f, 1.f, 1) : ImVec4(.6f, .6f, .6f, 1));
-						ImGui::Combo("collection", &config_system.item.glove_model, "default\0blood\0sport\0slick\0leather\0moto\0specin\0hydra");
+						ImGui::Combo("collection", &config_system.item.glove_model, "default\0blood\0sport\0slick\0leather\0moto\0specin\0hydra\0");
 						ImGui::Combo(("skin"), &config_system.item.paint_kit_vector_index_glove, [](void* data, int idx, const char** out_text) {
 							*out_text = parser_gloves[idx].name.c_str();
 							return true;
 						}, nullptr, parser_gloves.size(), 10);
 						config_system.item.paint_kit_index_glove = parser_gloves[config_system.item.paint_kit_vector_index_glove].id;
 						ImGui::Spacing();
-						ImGui::Combo("condition", &config_system.item.glove_wear, "factory new\0minimal wear\0field-tested\0well-worn\0battle-scarred");
+						ImGui::Combo("condition", &config_system.item.glove_wear, "factory new\0minimal wear\0field-tested\0well-worn\0battle-scarred\0");
 						ImGui::Spacing();
 						ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 18);
 						if (ImGui::Button("force update")) {
@@ -634,235 +610,24 @@ void c_menu::run() {
 
 					ImGui::NextColumn();
 
-					ImGui::BeginChild("weapons", ImVec2(339, 670), true); {
-						static int weapons_page = 0;
-						if (ImGui::ButtonT("pistol", ImVec2(50, 30), weapons_page, 0, false, ImColor(0, 0, 0))) weapons_page = 0; ImGui::SameLine(0, 0);
-						if (ImGui::ButtonT("rifle", ImVec2(50, 30), weapons_page, 1, false, false)) weapons_page = 1; ImGui::SameLine(0, 0);
-						if (ImGui::ButtonT("sniper", ImVec2(50, 30), weapons_page, 2, false, false)) weapons_page = 2; ImGui::SameLine(0, 0);
-						if (ImGui::ButtonT("smg", ImVec2(50, 30), weapons_page, 3, false, false)) weapons_page = 3; ImGui::SameLine(0, 0);
-						if (ImGui::ButtonT("heavy", ImVec2(50, 30), weapons_page, 4, false, false)) weapons_page = 4;
-
+					ImGui::BeginChild((config_system.weapon_name + " settings").c_str(), ImVec2(339, 670), true); {
+						ImGui::Spacing();
+						ImGui::Spacing();
 						ImGui::PushStyleColor(ImGuiCol_Text, config_system.item.skinchanger_enable ? ImVec4(1.f, 1.f, 1.f, 1) : ImVec4(.6f, .6f, .6f, 1));
-						switch (weapons_page) {
-						case 0:
-							ImGui::Combo(("p2000"), &config_system.item.paint_kit_vector_index_p2000, [](void* data, int idx, const char** out_text) {
-								*out_text = parser_skins[idx].name.c_str();
-								return true;
-							}, nullptr, parser_skins.size(), 10);
-							config_system.item.paint_kit_index_p2000 = parser_skins[config_system.item.paint_kit_vector_index_p2000].id;
 
+						ImGui::Combo((config_system.weapon_name + " skin").c_str(), &config_system.item.weapon_skin_info[config_system.active_weapon].paint_kit_vecotor, [](void* data, int idx, const char** out_text) {
+							*out_text = parser_skins[idx].name.c_str();
+							return true;
+						}, nullptr, parser_skins.size(), 10);
 
-							ImGui::Combo(("usp-s"), &config_system.item.paint_kit_vector_index_usp, [](void* data, int idx, const char** out_text) {
-								*out_text = parser_skins[idx].name.c_str();
-								return true;
-							}, nullptr, parser_skins.size(), 10);
-							config_system.item.paint_kit_index_usp = parser_skins[config_system.item.paint_kit_vector_index_usp].id;
-
-							ImGui::Combo(("glock"), &config_system.item.paint_kit_vector_index_glock, [](void* data, int idx, const char** out_text) {
-								*out_text = parser_skins[idx].name.c_str();
-								return true;
-							}, nullptr, parser_skins.size(), 10);
-							config_system.item.paint_kit_index_glock = parser_skins[config_system.item.paint_kit_vector_index_glock].id;
-
-							ImGui::Combo(("p250"), &config_system.item.paint_kit_vector_index_p250, [](void* data, int idx, const char** out_text) {
-								*out_text = parser_skins[idx].name.c_str();
-								return true;
-							}, nullptr, parser_skins.size(), 10);
-							config_system.item.paint_kit_index_p250 = parser_skins[config_system.item.paint_kit_vector_index_p250].id;
-
-							ImGui::Combo(("five-seven"), &config_system.item.paint_kit_vector_index_fiveseven, [](void* data, int idx, const char** out_text) {
-								*out_text = parser_skins[idx].name.c_str();
-								return true;
-							}, nullptr, parser_skins.size(), 10);
-							config_system.item.paint_kit_index_fiveseven = parser_skins[config_system.item.paint_kit_vector_index_fiveseven].id;
-
-							ImGui::Combo(("tec9"), &config_system.item.paint_kit_vector_index_tec, [](void* data, int idx, const char** out_text) {
-								*out_text = parser_skins[idx].name.c_str();
-								return true;
-							}, nullptr, parser_skins.size(), 10);
-							config_system.item.paint_kit_index_tec = parser_skins[config_system.item.paint_kit_vector_index_tec].id;
-
-							ImGui::Combo(("cz75a"), &config_system.item.paint_kit_vector_index_cz, [](void* data, int idx, const char** out_text) {
-								*out_text = parser_skins[idx].name.c_str();
-								return true;
-							}, nullptr, parser_skins.size(), 10);
-							config_system.item.paint_kit_index_cz = parser_skins[config_system.item.paint_kit_vector_index_cz].id;
-
-							ImGui::Combo(("duals"), &config_system.item.paint_kit_vector_index_duals, [](void* data, int idx, const char** out_text) {
-								*out_text = parser_skins[idx].name.c_str();
-								return true;
-							}, nullptr, parser_skins.size(), 10);
-							config_system.item.paint_kit_index_duals = parser_skins[config_system.item.paint_kit_vector_index_duals].id;
-
-							ImGui::Combo(("deagle"), &config_system.item.paint_kit_vector_index_deagle, [](void* data, int idx, const char** out_text) {
-								*out_text = parser_skins[idx].name.c_str();
-								return true;
-							}, nullptr, parser_skins.size(), 10);
-							config_system.item.paint_kit_index_deagle = parser_skins[config_system.item.paint_kit_vector_index_deagle].id;
-
-							ImGui::Combo(("revolver"), &config_system.item.paint_kit_vector_index_revolver, [](void* data, int idx, const char** out_text) {
-								*out_text = parser_skins[idx].name.c_str();
-								return true;
-							}, nullptr, parser_skins.size(), 10);
-							config_system.item.paint_kit_index_revolver = parser_skins[config_system.item.paint_kit_vector_index_revolver].id;
-
-							break;
-						case 1:
-							ImGui::Combo(("famas"), &config_system.item.paint_kit_vector_index_famas, [](void* data, int idx, const char** out_text) {
-								*out_text = parser_skins[idx].name.c_str();
-								return true;
-							}, nullptr, parser_skins.size(), 10);
-							config_system.item.paint_kit_index_famas = parser_skins[config_system.item.paint_kit_vector_index_famas].id;
-
-							ImGui::Combo(("galil"), &config_system.item.paint_kit_vector_index_galil, [](void* data, int idx, const char** out_text) {
-								*out_text = parser_skins[idx].name.c_str();
-								return true;
-							}, nullptr, parser_skins.size(), 10);
-							config_system.item.paint_kit_index_galil = parser_skins[config_system.item.paint_kit_vector_index_galil].id;
-
-							ImGui::Combo(("m4a4"), &config_system.item.paint_kit_vector_index_m4a4, [](void* data, int idx, const char** out_text) {
-								*out_text = parser_skins[idx].name.c_str();
-								return true;
-							}, nullptr, parser_skins.size(), 10);
-							config_system.item.paint_kit_index_m4a4 = parser_skins[config_system.item.paint_kit_vector_index_m4a4].id;
-
-							ImGui::Combo(("m4a1"), &config_system.item.paint_kit_vector_index_m4a1, [](void* data, int idx, const char** out_text) {
-								*out_text = parser_skins[idx].name.c_str();
-								return true;
-							}, nullptr, parser_skins.size(), 10);
-							config_system.item.paint_kit_index_m4a1 = parser_skins[config_system.item.paint_kit_vector_index_m4a1].id;
-
-							ImGui::Combo(("ak47"), &config_system.item.paint_kit_vector_index_ak47, [](void* data, int idx, const char** out_text) {
-								*out_text = parser_skins[idx].name.c_str();
-								return true;
-							}, nullptr, parser_skins.size(), 10);
-							config_system.item.paint_kit_index_ak47 = parser_skins[config_system.item.paint_kit_vector_index_ak47].id;
-
-							ImGui::Combo(("sg 553"), &config_system.item.paint_kit_vector_index_sg553, [](void* data, int idx, const char** out_text) {
-								*out_text = parser_skins[idx].name.c_str();
-								return true;
-							}, nullptr, parser_skins.size(), 10);
-							config_system.item.paint_kit_index_sg553 = parser_skins[config_system.item.paint_kit_vector_index_sg553].id;
-
-							ImGui::Combo(("aug"), &config_system.item.paint_kit_vector_index_aug, [](void* data, int idx, const char** out_text) {
-								*out_text = parser_skins[idx].name.c_str();
-								return true;
-							}, nullptr, parser_skins.size(), 10);
-							config_system.item.paint_kit_index_aug = parser_skins[config_system.item.paint_kit_vector_index_aug].id;
-
-							break;
-						case 2:
-							ImGui::Combo(("ssg08"), &config_system.item.paint_kit_vector_index_ssg08, [](void* data, int idx, const char** out_text) {
-								*out_text = parser_skins[idx].name.c_str();
-								return true;
-							}, nullptr, parser_skins.size(), 10);
-							config_system.item.paint_kit_index_ssg08 = parser_skins[config_system.item.paint_kit_vector_index_ssg08].id;
-
-							ImGui::Combo(("awp"), &config_system.item.paint_kit_vector_index_awp, [](void* data, int idx, const char** out_text) {
-								*out_text = parser_skins[idx].name.c_str();
-								return true;
-							}, nullptr, parser_skins.size(), 10);
-							config_system.item.paint_kit_index_awp = parser_skins[config_system.item.paint_kit_vector_index_awp].id;
-
-							ImGui::Combo(("scar20"), &config_system.item.paint_kit_vector_index_scar, [](void* data, int idx, const char** out_text) {
-								*out_text = parser_skins[idx].name.c_str();
-								return true;
-							}, nullptr, parser_skins.size(), 10);
-							config_system.item.paint_kit_index_scar = parser_skins[config_system.item.paint_kit_vector_index_scar].id;
-
-							ImGui::Combo(("g3sg1"), &config_system.item.paint_kit_vector_index_g3sg1, [](void* data, int idx, const char** out_text) {
-								*out_text = parser_skins[idx].name.c_str();
-								return true;
-							}, nullptr, parser_skins.size(), 10);
-							config_system.item.paint_kit_index_g3sg1 = parser_skins[config_system.item.paint_kit_vector_index_g3sg1].id;
-
-							break;
-						case 3:
-							ImGui::Combo(("bizon"), &config_system.item.paint_kit_vector_index_bizon, [](void* data, int idx, const char** out_text) {
-								*out_text = parser_skins[idx].name.c_str();
-								return true;
-							}, nullptr, parser_skins.size(), 10);
-							config_system.item.paint_kit_index_bizon = parser_skins[config_system.item.paint_kit_vector_index_bizon].id;
-
-							ImGui::Combo(("mp5"), &config_system.item.paint_kit_vector_index_mp5sd, [](void* data, int idx, const char** out_text) {
-								*out_text = parser_skins[idx].name.c_str();
-								return true;
-							}, nullptr, parser_skins.size(), 10);
-							config_system.item.paint_kit_index_mp5sd = parser_skins[config_system.item.paint_kit_vector_index_mp5sd].id;
-
-							ImGui::Combo(("mp7"), &config_system.item.paint_kit_vector_index_mp7, [](void* data, int idx, const char** out_text) {
-								*out_text = parser_skins[idx].name.c_str();
-								return true;
-							}, nullptr, parser_skins.size(), 10);
-							config_system.item.paint_kit_index_mp7 = parser_skins[config_system.item.paint_kit_vector_index_mp7].id;
-
-							ImGui::Combo(("mp9"), &config_system.item.paint_kit_vector_index_mp9, [](void* data, int idx, const char** out_text) {
-								*out_text = parser_skins[idx].name.c_str();
-								return true;
-							}, nullptr, parser_skins.size(), 10);
-							config_system.item.paint_kit_index_mp9 = parser_skins[config_system.item.paint_kit_vector_index_mp9].id;
-
-							ImGui::Combo(("mac10"), &config_system.item.paint_kit_vector_index_mac10, [](void* data, int idx, const char** out_text) {
-								*out_text = parser_skins[idx].name.c_str();
-								return true;
-							}, nullptr, parser_skins.size(), 10);
-							config_system.item.paint_kit_index_mac10 = parser_skins[config_system.item.paint_kit_vector_index_mac10].id;
-
-							ImGui::Combo(("p90"), &config_system.item.paint_kit_vector_index_p90, [](void* data, int idx, const char** out_text) {
-								*out_text = parser_skins[idx].name.c_str();
-								return true;
-							}, nullptr, parser_skins.size(), 10);
-							config_system.item.paint_kit_index_p90 = parser_skins[config_system.item.paint_kit_vector_index_p90].id;
-
-							ImGui::Combo(("ump45"), &config_system.item.paint_kit_vector_index_ump45, [](void* data, int idx, const char** out_text) {
-								*out_text = parser_skins[idx].name.c_str();
-								return true;
-							}, nullptr, parser_skins.size(), 10);
-							config_system.item.paint_kit_index_ump45 = parser_skins[config_system.item.paint_kit_vector_index_ump45].id;
-
-
-							break;
-						case 4:
-							ImGui::Combo(("sawoff"), &config_system.item.paint_kit_vector_index_sawoff, [](void* data, int idx, const char** out_text) {
-								*out_text = parser_skins[idx].name.c_str();
-								return true;
-							}, nullptr, parser_skins.size(), 10);
-							config_system.item.paint_kit_index_sawoff = parser_skins[config_system.item.paint_kit_vector_index_sawoff].id;
-
-							ImGui::Combo(("m249"), &config_system.item.paint_kit_vector_index_m249, [](void* data, int idx, const char** out_text) {
-								*out_text = parser_skins[idx].name.c_str();
-								return true;
-							}, nullptr, parser_skins.size(), 10);
-							config_system.item.paint_kit_index_m249 = parser_skins[config_system.item.paint_kit_vector_index_m249].id;
-
-							ImGui::Combo(("negev"), &config_system.item.paint_kit_vector_index_negev, [](void* data, int idx, const char** out_text) {
-								*out_text = parser_skins[idx].name.c_str();
-								return true;
-							}, nullptr, parser_skins.size(), 10);
-							config_system.item.paint_kit_index_negev = parser_skins[config_system.item.paint_kit_vector_index_negev].id;
-
-							ImGui::Combo(("mag7"), &config_system.item.paint_kit_vector_index_mag7, [](void* data, int idx, const char** out_text) {
-								*out_text = parser_skins[idx].name.c_str();
-								return true;
-							}, nullptr, parser_skins.size(), 10);
-							config_system.item.paint_kit_index_mag7 = parser_skins[config_system.item.paint_kit_vector_index_mag7].id;
-
-							ImGui::Combo(("xm1014"), &config_system.item.paint_kit_vector_index_xm1014, [](void* data, int idx, const char** out_text) {
-								*out_text = parser_skins[idx].name.c_str();
-								return true;
-							}, nullptr, parser_skins.size(), 10);
-							config_system.item.paint_kit_index_xm1014 = parser_skins[config_system.item.paint_kit_vector_index_xm1014].id;
-
-							ImGui::Combo(("nova"), &config_system.item.paint_kit_vector_index_nova, [](void* data, int idx, const char** out_text) {
-								*out_text = parser_skins[idx].name.c_str();
-								return true;
-							}, nullptr, parser_skins.size(), 10);
-							config_system.item.paint_kit_index_nova = parser_skins[config_system.item.paint_kit_vector_index_nova].id;
-
-							break;
-
+						if(ImGui::Button("apply skin"))
+						{
+							config_system.item.weapon_skin_info[config_system.active_weapon].paint_kit = parser_skins[config_system.item.weapon_skin_info[config_system.active_weapon].paint_kit_vecotor].id;
+							config_system.item.weapon_skin_info[config_system.active_weapon].setted = true;
+							utilities::force_update();
 						}
 						ImGui::PopStyleColor();
+
 					}
 					ImGui::EndChild(true);
 				}

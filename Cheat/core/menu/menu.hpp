@@ -109,10 +109,23 @@ public:
 	void apply_fonts() {
 		ImGui::CreateContext();
 
+		static const ImWchar ranges[] =
+		{
+			0x0020, 0x00FF, // Basic Latin + Latin Supplement
+			0x0400, 0x044F, // Cyrillic
+			0,
+		};
+
+		ImFontConfig font_config;
+		font_config.OversampleH = 1; //or 2 is the same
+		font_config.OversampleV = 1;
+		font_config.PixelSnapH = 1;
+
+
 		//font_main = ImGui::GetIO().Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\Tahoma.ttf", 18);
 		//font_menu = ImGui::GetIO().Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\Verdana.ttf", 12);
-		font_main = ImGui::GetIO().Fonts->AddFontFromMemoryTTF((void*)BeauSans, sizeof(BeauSans), 12);
-		font_menu = ImGui::GetIO().Fonts->AddFontFromMemoryTTF((void*)DINPro, sizeof(DINPro), 18);
+		font_main = ImGui::GetIO().Fonts->AddFontFromMemoryTTF((void*)BeauSans, sizeof(BeauSans), 12, &font_config, ranges);
+		font_menu = ImGui::GetIO().Fonts->AddFontFromMemoryTTF((void*)DINPro, sizeof(DINPro), 18, &font_config, ranges);
 	}
 
 	void __stdcall end_present(IDirect3DDevice9* device) {
@@ -168,8 +181,10 @@ public:
 	void __stdcall post_render() {
 		ImGui_ImplDX9_NewFrame();
 	}
+
 	ImFont* font_main;
 	ImFont* font_menu;
+
 	ImFont* font_main_caps;
 	bool opened = false;
 private:

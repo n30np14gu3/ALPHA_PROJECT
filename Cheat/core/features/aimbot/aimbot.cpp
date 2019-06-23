@@ -51,127 +51,12 @@ int c_aimbot::get_nearest_bone(player_t* entity, c_usercmd* user_cmd) noexcept {
 void c_aimbot::weapon_settings(weapon_t* weapon) noexcept {
 	if (!weapon)
 		return;
-
-	if (is_pistol(weapon)) {
-		switch (config_system.item.aim_bone_pistol) {
-		case 0:
-			hitbox_id = hitbox_head;
-			break;
-		case 1:
-			hitbox_id = hitbox_neck;
-			break;
-		case 2:
-			hitbox_id = hitbox_chest;
-			break;
-		case 3:
-			hitbox_id = hitbox_stomach;
-			break;
-		case 4:
-			hitbox_id = hitbox_pelvis;
-			break;
-		}
-
-		aim_smooth = config_system.item.aim_smooth_pistol;
-		aim_fov = config_system.item.aim_fov_pistol;
-		rcs_x = config_system.item.rcs_x_pistol;
-		rcs_y = config_system.item.rcs_y_pistol;
-	}
-	else if (is_rifle(weapon)) {
-		switch (config_system.item.aim_bone_rifle) {
-		case 0:
-			hitbox_id = hitbox_head;
-			break;
-		case 1:
-			hitbox_id = hitbox_neck;
-			break;
-		case 2:
-			hitbox_id = hitbox_chest;
-			break;
-		case 3:
-			hitbox_id = hitbox_stomach;
-			break;
-		case 4:
-			hitbox_id = hitbox_pelvis;
-			break;
-		}
-
-		aim_smooth = config_system.item.aim_smooth_rifle;
-		aim_fov = config_system.item.aim_fov_rifle;
-		rcs_x = config_system.item.rcs_x_rifle;
-		rcs_y = config_system.item.rcs_y_rifle;
-	}
-	else if (is_sniper(weapon)) {
-		switch (config_system.item.aim_bone_sniper) {
-		case 0:
-			hitbox_id = hitbox_head;
-			break;
-		case 1:
-			hitbox_id = hitbox_neck;
-			break;
-		case 2:
-			hitbox_id = hitbox_chest;
-			break;
-		case 3:
-			hitbox_id = hitbox_stomach;
-			break;
-		case 4:
-			hitbox_id = hitbox_pelvis;
-			break;
-		}
-
-		aim_smooth = config_system.item.aim_smooth_sniper;
-		aim_fov = config_system.item.aim_fov_sniper;
-		rcs_x = config_system.item.rcs_x_sniper;
-		rcs_y = config_system.item.rcs_y_sniper;
-	}
-	else if (is_heavy(weapon)) {
-		switch (config_system.item.aim_bone_heavy) {
-		case 0:
-			hitbox_id = hitbox_head;
-			break;
-		case 1:
-			hitbox_id = hitbox_neck;
-			break;
-		case 2:
-			hitbox_id = hitbox_chest;
-			break;
-		case 3:
-			hitbox_id = hitbox_stomach;
-			break;
-		case 4:
-			hitbox_id = hitbox_pelvis;
-			break;
-		}
-
-		aim_smooth = config_system.item.aim_smooth_heavy;
-		aim_fov = config_system.item.aim_fov_heavy;
-		rcs_x = config_system.item.rcs_x_heavy;
-		rcs_y = config_system.item.rcs_y_heavy;
-	}
-	else if (is_smg(weapon)) {
-		switch (config_system.item.aim_bone_smg) {
-		case 0:
-			hitbox_id = hitbox_head;
-			break;
-		case 1:
-			hitbox_id = hitbox_neck;
-			break;
-		case 2:
-			hitbox_id = hitbox_chest;
-			break;
-		case 3:
-			hitbox_id = hitbox_stomach;
-			break;
-		case 4:
-			hitbox_id = hitbox_pelvis;
-			break;
-		}
-
-		aim_smooth = config_system.item.aim_smooth_smg;
-		aim_fov = config_system.item.aim_fov_smg;
-		rcs_x = config_system.item.rcs_x_smg;
-		rcs_y = config_system.item.rcs_y_smg;
-	}
+	
+	hitbox_id = config_system.item.aim_bot_settings[config_system.active_weapon].hitbox;
+	aim_smooth = config_system.item.aim_bot_settings[config_system.active_weapon].smooth;
+	aim_fov = config_system.item.aim_bot_settings[config_system.active_weapon].fov;
+	rcs_x = config_system.item.aim_bot_settings[config_system.active_weapon].rcs_x;
+	rcs_y = config_system.item.aim_bot_settings[config_system.active_weapon].rcs_y;
 }
 
 int c_aimbot::find_target(c_usercmd* user_cmd) noexcept {
@@ -258,15 +143,39 @@ void c_aimbot::rcs_standalone(c_usercmd* user_cmd) noexcept {
 	auto recoil_scale = interfaces::console->get_convar("weapon_recoil_scale");
 	vec3_t aim_punch = local_player->aim_punch_angle() * recoil_scale->get_float();
 
-	aim_punch.x *= rcs_x;
-	aim_punch.y *= rcs_y;
 	rcs_x = config_system.item.rcs_standalone_x;
 	rcs_y = config_system.item.rcs_standalone_y;
+
+	aim_punch.x *= rcs_x;
+	aim_punch.y *= rcs_y;
+
 
 	auto rcs = user_cmd->viewangles += (old_punch - aim_punch);
 	interfaces::engine->set_view_angles(rcs);
 
 	old_punch = aim_punch;
+}
+
+void c_aimbot::apply_player_weapon(c_usercmd*) noexcept
+{
+	auto local_player = reinterpret_cast<player_t*>(interfaces::entity_list->get_client_entity(interfaces::engine->get_local_player()));
+	if (!local_player)
+		return;
+
+	auto weapon = local_player->active_weapon();
+	if(!weapon)
+		return;
+
+	if(is_pistol(weapon) || is_rifle(weapon) || is_sniper(weapon) || is_smg(weapon) || is_heavy(weapon) || is_heavy(weapon))
+	{
+		config_system.active_weapon = weapon->item_definition_index();
+		config_system.weapon_name = std::string(weapon->weapon_name_definition());
+	}
+	else
+	{
+		config_system.active_weapon = 0;
+		config_system.weapon_name = "UNKNOWN";
+	}
 }
 
 void c_aimbot::run(c_usercmd* user_cmd) noexcept {
@@ -283,7 +192,7 @@ void c_aimbot::run(c_usercmd* user_cmd) noexcept {
 	auto_pistol(user_cmd);
 	rcs_standalone(user_cmd);
 	
-	if (config_system.item.aim_enabled && user_cmd->buttons & in_attack || GetAsyncKeyState(config_system.item.aim_key)) {
+	if (config_system.item.aim_bot_settings[config_system.active_weapon].enable && user_cmd->buttons & in_attack || GetAsyncKeyState(config_system.item.aim_key)) {
 		if (auto target = find_target(user_cmd)) {
 			auto entity = reinterpret_cast<player_t*>(interfaces::entity_list->get_client_entity(target));
 
@@ -310,7 +219,7 @@ void c_aimbot::run(c_usercmd* user_cmd) noexcept {
 			aim_punch.x *= rcs_x;
 			aim_punch.y *= rcs_y;
 
-			switch (config_system.item.aim_mode) {
+			switch (config_system.item.aim_bot_settings[config_system.active_weapon].nearest) {
 			case 0:
 				angle = math.calculate_angle(local_player->get_eye_pos(), entity->get_hitbox_position(entity, hitbox_id), user_cmd->viewangles + aim_punch);
 				break;
@@ -322,7 +231,7 @@ void c_aimbot::run(c_usercmd* user_cmd) noexcept {
 			angle /= aim_smooth;
 			user_cmd->viewangles += angle;
 
-			if (!config_system.item.aim_silent) {
+			if (!config_system.item.aim_bot_settings[config_system.active_weapon].silent) {
 				interfaces::engine->set_view_angles(user_cmd->viewangles);
 			}
 		}

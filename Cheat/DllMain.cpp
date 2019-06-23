@@ -57,7 +57,9 @@ void MainThread()
 {
 	AntiLeak::HideThread(GetCurrentThread());
 	globals::initGlobals();
+#if NDEBUG
 	LoaderConnect();
+#endif
 	try 
 	{
 		interfaces::initialize();
@@ -69,8 +71,9 @@ void MainThread()
 
 #if NDEBUG
 		//CreateThread(nullptr, 0, reinterpret_cast<LPTHREAD_START_ROUTINE>(ProtectionThread), nullptr, 0, nullptr);
+		CreateThread(nullptr, 0, reinterpret_cast<LPTHREAD_START_ROUTINE>(CheckModulesActive), nullptr, 0, nullptr);
 #endif
-	CreateThread(nullptr, 0, reinterpret_cast<LPTHREAD_START_ROUTINE>(CheckModulesActive), nullptr, 0, nullptr);
+	
 
 		while (!GetAsyncKeyState(VK_END))
 			std::this_thread::sleep_for(std::chrono::milliseconds(50));

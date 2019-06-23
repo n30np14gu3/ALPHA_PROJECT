@@ -15,6 +15,7 @@ private:
 	int kill_delay;
 	int trigger_delay{00000};
 public:
+	void apply_player_weapon(c_usercmd*) noexcept;
 	void run(c_usercmd*) noexcept;
 	void event_player_death(i_game_event* event) noexcept;
 	void auto_pistol(c_usercmd* user_cmd);
@@ -24,6 +25,7 @@ public:
 		if (!weapon)
 			return false;
 
+		
 		auto current_weapon = reinterpret_cast<weapon_t*>(weapon);
 		int id = current_weapon->item_definition_index();
 		static const std::vector<int> v = { WEAPON_GLOCK, WEAPON_ELITE, WEAPON_P250, WEAPON_TEC9, WEAPON_CZ75A, WEAPON_DEAGLE, WEAPON_REVOLVER, WEAPON_USP_SILENCER, WEAPON_HKP2000, WEAPON_FIVESEVEN };

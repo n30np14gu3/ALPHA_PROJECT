@@ -84,6 +84,9 @@ namespace license_manager
 
 	bool checkModuleActive(LICENSE_DATA data, int moduleId)
 	{
+#if !NDEBUG
+		return true;
+#endif
 		for(unsigned i = 0; i < data.modules_count; i++)
 		{
 			if(data.modules_ids[i] == moduleId)

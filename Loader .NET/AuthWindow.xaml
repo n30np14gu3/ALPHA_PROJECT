@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="ALPHA PROJECT" Height="235.5" Width="386.667"
+        Title="ALPHA PROJECT" Height="286.167" Width="386.667"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         TextElement.FontWeight="Regular"
         TextElement.FontSize="13"
@@ -15,7 +15,7 @@
         FontFamily="{DynamicResource MaterialDesignFont}" WindowStartupLocation="CenterScreen"
         WindowStyle="None"
         AllowsTransparency="True"
-        ResizeMode="NoResize" Closing="Window_Closing" Initialized="Window_Initialized">
+        ResizeMode="NoResize" Closing="Window_Closing" Initialized="Window_Initialized" Activated="Window_Activated">
     <Border Margin="10">
         <Border.Effect>
             <DropShadowEffect Color="#FF263446"
@@ -31,22 +31,22 @@
                 </LinearGradientBrush>
             </Grid.Background>
             <Rectangle x:Name="DragHeader" HorizontalAlignment="Left" Height="26" VerticalAlignment="Top" Width="367" MouseLeftButtonDown="DragHeader_MouseLeftButtonDown" MouseLeftButtonUp="DragHeader_MouseLeftButtonUp" MouseMove="DragHeader_MouseMove" Fill="#FF15161B"/>
-            <Button x:Name="CloseBtn"  Margin="342,2,2,191"  Style="{DynamicResource MaterialDesignToolButton}" Content="{materialDesign:PackIcon Close}"
-                 ToolTip="Icon" Height="Auto" Width="Auto" FontSize="14" Background="#FF145291" BorderBrush="#FF124C85" Foreground="#FFEAEAEA" RenderTransformOrigin="0.585,0.818" Click="CloseBtn_Click"/>
-            <Button x:Name="MinBtn"  Margin="322,1,26,196"  Style="{DynamicResource MaterialDesignToolButton}" Content="{materialDesign:PackIcon Minus}"
+            <Button x:Name="CloseBtn"  Margin="342,2,2,0"  Style="{DynamicResource MaterialDesignToolButton}" Content="{materialDesign:PackIcon Close}"
+                 ToolTip="Icon" Height="24" Width="Auto" FontSize="14" Background="#FF145291" BorderBrush="#FF124C85" Foreground="#FFEAEAEA" RenderTransformOrigin="0.585,0.818" Click="CloseBtn_Click" VerticalAlignment="Top"/>
+            <Button x:Name="MinBtn"  Margin="322,1,26,0"  Style="{DynamicResource MaterialDesignToolButton}" Content="{materialDesign:PackIcon Minus}"
                 Padding="0,9,0,0"
-            ToolTip="Icon" Height="Auto" Width="Auto" FontSize="14" Background="#FF145291" BorderBrush="#FF124C85" Foreground="#FFEAEAEA" RenderTransformOrigin="-0.551,1.683" Click="MinBtn_Click" />
+            ToolTip="Icon" Height="20" Width="Auto" FontSize="14" Background="#FF145291" BorderBrush="#FF124C85" Foreground="#FFEAEAEA" RenderTransformOrigin="-0.551,1.683" Click="MinBtn_Click" VerticalAlignment="Top" />
             <Rectangle Fill="#FF191A21" HorizontalAlignment="Left" Height="45" Margin="0,26,0,0" VerticalAlignment="Top" Width="367"
                        Grid.Column="0" />
             <Label Grid.Column="0" Content="ALPHA PROJECT :: AUTH" HorizontalAlignment="Left" Margin="0,26,0,0" VerticalAlignment="Top" Foreground="#DDFFFFFF" FontSize="29" FontWeight="Light" Height="40"/>
             <TextBox
                 x:Name="TEmail"
-                materialDesign:HintAssist.Hint="Email" Margin="10,81,10,107" Foreground="White" CaretBrush="#FF4E6785" BorderBrush="#FF15161B" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"/>
+                materialDesign:HintAssist.Hint="Email" Margin="10,81,10,0" Foreground="White" CaretBrush="#FF4E6785" BorderBrush="#FF15161B" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Height="32" VerticalAlignment="Top"/>
             <PasswordBox x:Name="TPassword"
-                materialDesign:HintAssist.Hint="Пароль" Margin="10,118,10,75" Foreground="White" CaretBrush="#FF4E6785" BorderBrush="#FF15161B" />
-            <Button x:Name="AuthBtn" Content="АВТОРИЗАЦИЯ" HorizontalAlignment="Left" Margin="10,146,0,0" VerticalAlignment="Top" Width="347" FontWeight="Normal" Click="AuthBtn_Click"/>
-            <Label x:Name="RepassLink" Content="Забыли проль?" HorizontalAlignment="Left" Margin="10,183,0,0" VerticalAlignment="Top" Width="109"  Style="{DynamicResource linkStyle}" MouseLeftButtonUp="RepassLink_MouseLeftButtonUp"/>
-            <Label x:Name="RegLink" Content="Регистрация" HorizontalAlignment="Left" Margin="268,183,0,0" VerticalAlignment="Top" Width="89"  HorizontalContentAlignment="Right" Cursor="Hand" Style="{DynamicResource linkStyle}" MouseLeftButtonUp="RegLink_MouseLeftButtonUp"/>
+                materialDesign:HintAssist.Hint="Пароль" Margin="10,118,10,0" Foreground="White" CaretBrush="#FF4E6785" BorderBrush="#FF15161B" Height="30" VerticalAlignment="Top" />
+            <Button x:Name="AuthBtn" Content="АВТОРИЗАЦИЯ" HorizontalAlignment="Left" Margin="10,193,0,0" VerticalAlignment="Top" Width="347" FontWeight="Normal" Click="AuthBtn_Click"/>
+            <Label x:Name="RepassLink" Content="Забыли пароль?" HorizontalAlignment="Left" Margin="10,0,0,10" VerticalAlignment="Bottom" Width="109"  Style="{DynamicResource linkStyle}" MouseLeftButtonUp="RepassLink_MouseLeftButtonUp"/>
+            <Label x:Name="RegLink" Content="Регистрация" HorizontalAlignment="Left" Margin="268,230,0,0" VerticalAlignment="Top" Width="89"  HorizontalContentAlignment="Right" Cursor="Hand" Style="{DynamicResource linkStyle}" MouseLeftButtonUp="RegLink_MouseLeftButtonUp"/>
             <materialDesign:Snackbar
                 IsActive="False"
                 x:Name="SnackbarMessage" Background="#FF15161B">
@@ -55,6 +55,7 @@
                     Content=""
                     ActionContent="X" ActionClick="SnackbarMessage_OnActionClick" Foreground="White"/>
             </materialDesign:Snackbar>
+            <CheckBox x:Name="CBSave" Content="Запомнить меня" HorizontalAlignment="Left" Margin="10,160,0,0" VerticalAlignment="Top" Width="152" Height="26" IsChecked="False"/>
         </Grid>
     </Border>
 </Window>

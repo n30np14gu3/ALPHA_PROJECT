@@ -1,14 +1,17 @@
 #include <algorithm>
 #include "parser.hpp"
+#include "../../../source-sdk/valve parser/valve_parser.h"
 
 c_kit_parser kit_parser;
 
 std::vector<paint_kit> parser_skins;
 std::vector<paint_kit> parser_gloves;
+
 class CCStrike15ItemSchema;
 class CCStrike15ItemSystem;
-template <typename Key, typename Value>
 
+
+template <typename Key, typename Value>
 struct node_t {
 	int previous_id;
 	int next_id;
@@ -17,6 +20,8 @@ struct node_t {
 	Key key;
 	Value value;
 };
+
+
 template <typename key, typename value>
 struct head_t {
 	node_t<key, value>* memory;
@@ -52,34 +57,60 @@ void* get_export(const char* module_name, const char* export_name) {
 	return reinterpret_cast<void*>(GetProcAddress(mod, export_name));
 }
 
-void c_kit_parser::setup() noexcept {
-	const auto V_UCS2ToUTF8 = static_cast<int(*)(const wchar_t* ucs2, char* utf8, int len)>(get_export("vstdlib.dll", "V_UCS2ToUTF8"));
-	const auto sig_address = utilities::pattern_scan(GetModuleHandleA("client_panorama.dll"), "E8 ? ? ? ? FF 76 0C 8D 48 04 E8");
-	const auto item_system_offset = *reinterpret_cast<std::int32_t*>(sig_address + 1);
-	const auto item_system_fn = reinterpret_cast<CCStrike15ItemSystem * (*)()>(sig_address + 5 + item_system_offset);
-	const auto item_schema = reinterpret_cast<CCStrike15ItemSchema*>(std::uintptr_t(item_system_fn()) + sizeof(void*));
-	{
-		const auto get_paint_kit_definition_offset = *reinterpret_cast<std::int32_t*>(sig_address + 11 + 1);
-		const auto get_paint_kit_definition_fn = reinterpret_cast<paint_kit_t * (__thiscall*)(CCStrike15ItemSchema*, int)>(sig_address + 11 + 5 + get_paint_kit_definition_offset);
-		const auto start_element_offset = *reinterpret_cast<std::intptr_t*>(std::uintptr_t(get_paint_kit_definition_fn) + 8 + 2);
-		const auto head_offset = start_element_offset - 12;
-		const auto map_head = reinterpret_cast<head_t<int, paint_kit_t*>*>(std::uintptr_t(item_schema) + head_offset);
-		for (auto i = 0; i <= map_head->last_element; ++i) {
-			const auto paint_kit = map_head->memory[i].value;
-			if (paint_kit->id == 9001)
-				continue;
-			const auto wide_name = interfaces::localize->find(paint_kit->item_name.buffer + 1);
-			char name[256];
+void c_kit_parser::setup() noexcept 
+{
+	valve_parser::Document items_document;
+	bool item_document_loaded = items_document.Load((char*)".\\csgo\\scripts\\items\\items_game.txt", valve_parser::ENCODING::UTF8);
+	if (!item_document_loaded)
+		return;
 
-			V_UCS2ToUTF8(wide_name, name, sizeof(name));
-			if (paint_kit->id < 10000)
-				parser_skins.push_back({ paint_kit->id, name });
+	valve_parser::Document csgo_document;
+	bool csgo_document_loaded = csgo_document.Load((char*)".\\csgo\\resource\\csgo_english.txt", valve_parser::ENCODING::UTF16_LE);
+	if (!csgo_document_loaded)
+		return;
+
+	auto items = items_document.BreadthFirstSearch((wchar_t*)(L"items"));
+	if (!items || !items->ToObject())
+		return;
+
+	auto paint_kits = items_document.BreadthFirstSearch((wchar_t*)L"paint_kits");
+	if (!paint_kits || !paint_kits->ToObject())
+		return;
+
+	auto paint_kits_rarity = items_document.BreadthFirstSearch((wchar_t*)L"paint_kits_rarity");
+	if (!paint_kits_rarity || !paint_kits_rarity->ToObject())
+		return;
+
+	auto weapon_icons = items_document.BreadthFirstSearch((wchar_t*)L"weapon_icons");
+	if (!weapon_icons || !weapon_icons->ToObject())
+		return;
+
+	auto tokens = csgo_document.BreadthFirstSearch((wchar_t*)L"Tokens");
+	if (!tokens || !tokens->ToObject())
+		return;
+
+	for (auto child : paint_kits->children)
+	{
+		if (child->ToObject())
+		{
+			std::wstring paintKitId = child->ToObject()->name.toString();
+			int paint_kit_id = atoi(std::string(paintKitId.begin(), paintKitId.end()).c_str());
+			std::wstring paint_kit_name = child->ToObject()->GetKeyByName((wchar_t*)L"name")->ToKeyValue()->Value.toString();
+
+			if (paint_kit_id == 0 || paint_kit_id == 9001) continue;
+
+			std::wstring paint_kit_description_tag = child->ToObject()->GetKeyByName((wchar_t*)L"description_tag")->ToKeyValue()->Value.toString();
+
+			paint_kit_description_tag.erase(paint_kit_description_tag.begin());
+			std::transform(paint_kit_description_tag.begin(), paint_kit_description_tag.end(), paint_kit_description_tag.begin(), towlower);
+
+			if(paint_kit_id < 10000)
+				parser_skins.push_back({ paint_kit_id, std::string(paint_kit_name.begin(), paint_kit_name.end()) });
 			else
-				parser_gloves.push_back({ paint_kit->id, name });
+				parser_gloves.push_back({ paint_kit_id, std::string(paint_kit_name.begin(), paint_kit_name.end()) });
+
 		}
 		std::sort(parser_skins.begin(), parser_skins.end());
 		std::sort(parser_gloves.begin(), parser_gloves.end());
 	}
-
-	printf("Kit Parser initialized!\n");
 }

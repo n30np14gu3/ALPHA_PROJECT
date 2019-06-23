@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -69,6 +70,11 @@ namespace Loader.NET
             if (string.IsNullOrWhiteSpace(TEmail.Text) || string.IsNullOrWhiteSpace(TPassword.Password))
                 return;
 
+            auth();
+        }
+
+        private void auth()
+        {
             AuthBtn.IsEnabled = false;
             TEmail.IsEnabled = false;
             TPassword.IsEnabled = false;
@@ -112,6 +118,12 @@ namespace Loader.NET
                             ClientData.Data = response.data;
                             ClientData.ZipPassword = Crypto.Sha256(Encoding.UTF8.GetBytes(
                                 $"{Crypto.Sha256(Encoding.UTF8.GetBytes(TPassword.Password))}.{response.data.access_token}"));
+                            if (CBSave.IsChecked.HasValue && CBSave.IsChecked.Value)
+                            {
+                                Properties.Settings.Default.login = TEmail.Text;
+                                Properties.Settings.Default.password = TPassword.Password;
+                                Properties.Settings.Default.Save();
+                            }
                             Close();
                             break;
                         default:
@@ -139,12 +151,12 @@ namespace Loader.NET
 
         private void RepassLink_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            Process.Start("http://alpha-cheat.io/form/reset_password");
+            Process.Start("https://alphacheat.com/form/reset_password");
         }
 
         private void RegLink_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            Process.Start("http://alpha-cheat.io/form/register");
+            Process.Start("https://alphacheat.com/form/register");
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -181,6 +193,7 @@ namespace Loader.NET
                             }
                             break;
                     }
+
                 }
             }
             catch (Exception ex)
@@ -188,6 +201,21 @@ namespace Loader.NET
                 MessageBox.Show($"НЕ УДАЛОСЬ ПРОВЕРИТЬ ОБНОВЛЕНИЯ!\r\n{ex.Message}", "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
                 Environment.Exit(0);
             }
+        }
+
+        private void autoauth()
+        {
+            if(string.IsNullOrWhiteSpace(Properties.Settings.Default.login) || string.IsNullOrWhiteSpace(Properties.Settings.Default.password))
+                return;
+
+            TEmail.Text = Properties.Settings.Default.login;
+            TPassword.Password = Properties.Settings.Default.password;
+            auth();
+        }
+
+        private void Window_Activated(object sender, EventArgs e)
+        {
+            autoauth();
         }
     }
 }
