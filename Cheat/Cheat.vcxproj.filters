@@ -262,6 +262,9 @@
     <ClCompile Include="source-sdk\valve parser\valve_parser.cpp">
       <Filter>source-sdk\valve parser</Filter>
     </ClCompile>
+    <ClCompile Include="core\menu\config\json_config.cpp">
+      <Filter>core\menu\config</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SDK\license\license_manager.h">
@@ -666,6 +669,9 @@
     </ClInclude>
     <ClInclude Include="SDK\static\modules_ids.h">
       <Filter>SDK\static</Filter>
+    </ClInclude>
+    <ClInclude Include="core\menu\config\json_config.h">
+      <Filter>core\menu\config</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

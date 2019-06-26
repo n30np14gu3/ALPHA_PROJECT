@@ -11,6 +11,7 @@ namespace Loader.NET.SDK.Api.Structs
         public string reg_date;
         public int user_id;
         public string access_token;
+        public bool lifetime_subscription;
         public List<SubscriptionModule> subscription_modules;
     }
 }

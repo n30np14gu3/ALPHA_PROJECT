@@ -65,6 +65,7 @@ namespace license_manager
 			MessageBox(nullptr, "parse modules", "", MB_OK);
 #endif
 			Value& modules = responcse[XorStr("data")][XorStr("modules")];
+			globals::is_lifetime = responcse[XorStr("data")][XorStr("is_lifetime")].GetBool();
 
 #if !NDEBUG
 			MessageBox(nullptr, "parse modules data", "", MB_OK);
@@ -87,6 +88,9 @@ namespace license_manager
 #if !NDEBUG
 		return true;
 #endif
+		if(globals::is_lifetime)
+			return true;
+
 		for(unsigned i = 0; i < data.modules_count; i++)
 		{
 			if(data.modules_ids[i] == moduleId)

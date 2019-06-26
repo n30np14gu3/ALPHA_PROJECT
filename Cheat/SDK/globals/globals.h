@@ -13,6 +13,7 @@ namespace globals
 	extern string crypto_iv;
 	extern string access_token;
 	extern uint32_t user_id;
+	extern bool is_lifetime;
 	extern license_manager::LICENSE_DATA user_modules;
 
 	void initGlobals();

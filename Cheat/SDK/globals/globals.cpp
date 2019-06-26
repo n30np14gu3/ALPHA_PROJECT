@@ -8,6 +8,7 @@ namespace globals
 	string crypto_iv;
 	string access_token;
 	uint32_t user_id;
+	bool is_lifetime = false;
 	license_manager::LICENSE_DATA user_modules = {0, nullptr, nullptr};
 
 	void initGlobals()

@@ -760,16 +760,23 @@ void c_menu::run() {
 						default:
 							break;
 						}
-						tm* time = gmtime((time_t*)&globals::user_modules.modules_end_date[i]);
-						if(time != nullptr)
+						if(globals::is_lifetime)
 						{
-							expireDate =
-								std::to_string(time->tm_mday) + "-" +
-								std::to_string(time->tm_mon + 1) + "-" +
-								std::to_string(time->tm_year + 1900) + " " +
-								std::to_string(time->tm_hour + 1) + ":" +
-								std::to_string(time->tm_min + 1) + ":" +
-								std::to_string(time->tm_sec) + " ";
+							expireDate = std::string(XorStr("lifetime"));
+						}
+						else
+						{
+							tm* time = gmtime((time_t*)&globals::user_modules.modules_end_date[i]);
+							if (time != nullptr)
+							{
+								expireDate =
+									std::to_string(time->tm_mday) + "-" +
+									std::to_string(time->tm_mon + 1) + "-" +
+									std::to_string(time->tm_year + 1900) + " " +
+									std::to_string(time->tm_hour + 1) + ":" +
+									std::to_string(time->tm_min + 1) + ":" +
+									std::to_string(time->tm_sec) + " ";
+							}
 						}
 						ImGui::Text((moduleName + " expired :" + expireDate).c_str());
 					}

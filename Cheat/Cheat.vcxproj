@@ -165,6 +165,7 @@
     <ClCompile Include="core\features\visuals\visuals.cpp" />
     <ClCompile Include="core\hooks\hooks.cpp" />
     <ClCompile Include="core\menu\config\config.cpp" />
+    <ClCompile Include="core\menu\config\json_config.cpp" />
     <ClCompile Include="core\menu\imgui\dx9\imgui_impl_dx9.cpp" />
     <ClCompile Include="core\menu\imgui\imgui.cpp" />
     <ClCompile Include="core\menu\imgui\imgui_draw.cpp" />
@@ -214,6 +215,7 @@
     <ClInclude Include="core\hooks\hooks.hpp" />
     <ClInclude Include="core\menu\config\archivex.hpp" />
     <ClInclude Include="core\menu\config\config.hpp" />
+    <ClInclude Include="core\menu\config\json_config.h" />
     <ClInclude Include="core\menu\imgui\dx9\imgui_impl_dx9.h" />
     <ClInclude Include="core\menu\imgui\imconfig.h" />
     <ClInclude Include="core\menu\imgui\imgui.h" />

@@ -60,7 +60,7 @@ namespace Loader.NET
                 foreach (SubscriptionModule module in ClientData.Data.subscription_modules)
                 {
                     SubscriptionComponents.Items.Add(new TextBlock
-                        { Text = $"{module.name} [истекает: {module.end_date}]" });
+                        { Text = $"{module.name} [истекает: {(ClientData.Data.lifetime_subscription ? "Навсегда" : module.end_date)}]" });
                 }
             }
         }
