@@ -123,7 +123,7 @@ float __stdcall hooks::viewmodel_fov()
 		auto local_player = reinterpret_cast<player_t*>(interfaces::entity_list->get_client_entity(interfaces::engine->get_local_player()));
 
 		if (local_player && local_player->is_alive()) {
-			return 68.f + config_system.item.viewmodel_fov;
+			return 68.f + config_system.get_config().visuals.player.fov;
 		}
 		else {
 			return 68.f;
@@ -136,7 +136,7 @@ float __stdcall hooks::viewmodel_fov()
 bool __fastcall hooks::should_draw_fog(uintptr_t ecx, uintptr_t edx) {
 	if (license_manager::checkModuleActive(globals::user_modules, MODULE_WALLHACK))
 	{
-		return !config_system.item.remove_fog;
+		return !config_system.get_config().visuals.removals.fog;
 	}
 
 	return true;
@@ -173,8 +173,8 @@ bool __stdcall hooks::create_move(float frame_time, c_usercmd* user_cmd) {
 	if (!interfaces::entity_list->get_client_entity(interfaces::engine->get_local_player()))
 		return original_fn;
 
-	bool& send_packet = *reinterpret_cast<bool*>(*(static_cast<uintptr_t*>(_AddressOfReturnAddress()) - 1) - 0x1C);
-
+	bool* send_packet = reinterpret_cast<bool*>(*(static_cast<uintptr_t*>(_AddressOfReturnAddress()) - 1) - 0x1C);
+	interfaces::bSendPacket = send_packet;
 	if (interfaces::engine->is_connected() && interfaces::engine->is_in_game()) 
 	{		
 		aimbot.apply_player_weapon(user_cmd);
@@ -237,8 +237,8 @@ void __fastcall hooks::override_view(void* _this, void* _edx, c_viewsetup* setup
 	{
 		auto local_player = reinterpret_cast<player_t*>(interfaces::entity_list->get_client_entity(interfaces::engine->get_local_player()));
 
-		if (local_player && !local_player->is_scoped() && config_system.item.fov > 0 && config_system.item.visuals_enabled) {
-			setup->fov = 90 + config_system.item.fov;
+		if (local_player && !local_player->is_scoped() && config_system.get_config().visuals.player.fov > 0 && config_system.get_config().visuals.global_enabled) {
+			setup->fov = 90 + config_system.get_config().visuals.player.fov;
 		}
 	}
 
@@ -308,7 +308,7 @@ void __stdcall hooks::paint_traverse(unsigned int panel, bool force_repaint, boo
 		{
 			if (license_manager::checkModuleActive(globals::user_modules, MODULE_WALLHACK))
 			{
-				if (config_system.item.remove_scope)
+				if (config_system.get_config().visuals.removals.skope_overlay)
 					return;
 			}
 

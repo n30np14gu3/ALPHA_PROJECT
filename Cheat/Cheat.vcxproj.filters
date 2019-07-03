@@ -124,6 +124,12 @@
     <Filter Include="source-sdk\valve parser">
       <UniqueIdentifier>{7ae670c1-bb1a-4f9c-ae2b-0d9a91fc45e1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="SDK\jsonip">
+      <UniqueIdentifier>{5ef5e990-0b19-49ea-8e86-016ed45e3db4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SDK\jsonip\detail">
+      <UniqueIdentifier>{42115a2d-6a38-4a11-b03e-d807338068b5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DllMain.cpp" />
@@ -261,9 +267,6 @@
     </ClCompile>
     <ClCompile Include="source-sdk\valve parser\valve_parser.cpp">
       <Filter>source-sdk\valve parser</Filter>
-    </ClCompile>
-    <ClCompile Include="core\menu\config\json_config.cpp">
-      <Filter>core\menu\config</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -592,9 +595,6 @@
     <ClInclude Include="core\menu\imgui\stb_truetype.h">
       <Filter>core\menu\imgui</Filter>
     </ClInclude>
-    <ClInclude Include="core\menu\config\archivex.hpp">
-      <Filter>core\menu\config</Filter>
-    </ClInclude>
     <ClInclude Include="core\menu\config\config.hpp">
       <Filter>core\menu\config</Filter>
     </ClInclude>
@@ -670,8 +670,29 @@
     <ClInclude Include="SDK\static\modules_ids.h">
       <Filter>SDK\static</Filter>
     </ClInclude>
-    <ClInclude Include="core\menu\config\json_config.h">
-      <Filter>core\menu\config</Filter>
+    <ClInclude Include="SDK\jsonip\detail\parser.hpp">
+      <Filter>SDK\jsonip\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\jsonip\detail\parser_common.hpp">
+      <Filter>SDK\jsonip\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\jsonip\grammar.hpp">
+      <Filter>SDK\jsonip</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\jsonip\helper.hpp">
+      <Filter>SDK\jsonip</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\jsonip\holder.hpp">
+      <Filter>SDK\jsonip</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\jsonip\parse.hpp">
+      <Filter>SDK\jsonip</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\jsonip\value.hpp">
+      <Filter>SDK\jsonip</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\jsonip\writer.hpp">
+      <Filter>SDK\jsonip</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

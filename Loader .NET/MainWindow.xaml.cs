@@ -52,7 +52,6 @@ namespace Loader.NET
 
 
             UserInfo.Items.Add(new TextBlock {Text = $"Имя пользователя: {ClientData.Data?.nickname}"});
-            UserInfo.Items.Add(new TextBlock {Text = $"IP: {ClientData.Data?.ip}"});
             UserInfo.Items.Add(new TextBlock {Text = $"Дата регистрации: {ClientData.Data?.reg_date}"});
 
             if (ClientData.Data != null)

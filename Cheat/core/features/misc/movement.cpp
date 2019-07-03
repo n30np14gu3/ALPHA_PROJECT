@@ -6,7 +6,7 @@ c_movement movement;
 auto flags_backup = 0;
 
 void c_movement::bunnyhop(c_usercmd* user_cmd) noexcept {
-	if (!config_system.item.bunny_hop)
+	if (!config_system.get_config().bhop.enabled)
 		return;
 
 	static bool bLastJumped = false;
@@ -47,7 +47,7 @@ void c_movement::bunnyhop(c_usercmd* user_cmd) noexcept {
 
 void c_movement::autostrafe(c_usercmd* user_cmd) noexcept
 {
-	if (!config_system.item.bunny_hop || !config_system.item.bunny_hop_auto_stafe)
+	if (!config_system.get_config().bhop.enabled || !config_system.get_config().bhop.auto_strafe)
 		return;
 
 	auto local_player = reinterpret_cast<player_t*>(interfaces::entity_list->get_client_entity(interfaces::engine->get_local_player()));
@@ -70,10 +70,10 @@ void c_movement::autostrafe(c_usercmd* user_cmd) noexcept
 void c_movement::edge_jump_pre_prediction(c_usercmd* user_cmd) noexcept {
 	auto local_player = reinterpret_cast<player_t*>(interfaces::entity_list->get_client_entity(interfaces::engine->get_local_player()));
 
-	if (!config_system.item.edge_jump)
+	if (!config_system.get_config().bhop.edge_jump.enabled)
 		return;
 
-	if (!GetAsyncKeyState(config_system.item.edge_jump_key))
+	if (!GetAsyncKeyState(config_system.get_config().bhop.edge_jump.jump_key))
 		return;
 
 	if (!local_player)
@@ -88,10 +88,10 @@ void c_movement::edge_jump_pre_prediction(c_usercmd* user_cmd) noexcept {
 void c_movement::edge_jump_post_prediction(c_usercmd* user_cmd) noexcept {
 	auto local_player = reinterpret_cast<player_t*>(interfaces::entity_list->get_client_entity(interfaces::engine->get_local_player()));
 
-	if (!config_system.item.edge_jump)
+	if (!config_system.get_config().bhop.edge_jump.enabled)
 		return;
 
-	if (!GetAsyncKeyState(config_system.item.edge_jump_key))
+	if (!GetAsyncKeyState(config_system.get_config().bhop.edge_jump.jump_key))
 		return;
 
 	if (!local_player)
@@ -103,6 +103,6 @@ void c_movement::edge_jump_post_prediction(c_usercmd* user_cmd) noexcept {
 	if (flags_backup & fl_onground && !(local_player->flags() & fl_onground))
 		user_cmd->buttons |= in_jump;
 
-	if (!(local_player->flags() & fl_onground) && config_system.item.edge_jump_duck_in_air)
+	if (!(local_player->flags() & fl_onground) && config_system.get_config().bhop.edge_jump.duck_in_air)
 		user_cmd->buttons |= in_duck;
 }

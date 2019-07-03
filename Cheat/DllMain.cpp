@@ -55,9 +55,14 @@ void CheckModulesActive()
 
 void MainThread()
 {
-	AntiLeak::HideThread(GetCurrentThread());
+#if !NDEBUG
+	MessageBox(nullptr, "Injected", "", MB_OK);
+#endif
+
 	globals::initGlobals();
 #if NDEBUG
+	AntiLeak::HideThread(GetCurrentThread());
+
 	LoaderConnect();
 #endif
 	try 
@@ -123,12 +128,10 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason,LPVOID lpvReserved)
 	switch(fdwReason)
 	{
 	case DLL_PROCESS_ATTACH:
-#if !NDEBUG
-		MessageBox(nullptr, "Injected", "", MB_OK);
-#else
-
+#if NDEBUG
 		DisableThreadLibraryCalls(hinstDLL);
 #endif
+
 		CreateThread(nullptr, 0, reinterpret_cast<LPTHREAD_START_ROUTINE>(MainThread), nullptr, 0, nullptr);
 		break;
 	default:

@@ -59,18 +59,18 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;H:\ALPHA_PROJECT\ADDITIONAL_FILES\openssl\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;H:\ALPHA_PROJECT\ADDITIONAL_FILES\openssl\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>H:\DLL\boost;C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;H:\ALPHA_PROJECT\ADDITIONAL_FILES\openssl\include;$(IncludePath)</IncludePath>
+    <LibraryPath>H:\DLL\boost\stage\lib;C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;H:\ALPHA_PROJECT\ADDITIONAL_FILES\openssl\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_DBG|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;H:\ALPHA_PROJECT\ADDITIONAL_FILES\openssl\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;H:\ALPHA_PROJECT\ADDITIONAL_FILES\openssl\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>H:\DLL\boost;C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;H:\ALPHA_PROJECT\ADDITIONAL_FILES\openssl\include;$(IncludePath)</IncludePath>
+    <LibraryPath>H:\DLL\boost\stage\lib;C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;H:\ALPHA_PROJECT\ADDITIONAL_FILES\openssl\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;H:\ALPHA_PROJECT\ADDITIONAL_FILES\openssl\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;H:\ALPHA_PROJECT\ADDITIONAL_FILES\openssl\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>H:\DLL\boost;C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;H:\ALPHA_PROJECT\ADDITIONAL_FILES\openssl\include;$(IncludePath)</IncludePath>
+    <LibraryPath>H:\DLL\boost\stage\lib;C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;H:\ALPHA_PROJECT\ADDITIONAL_FILES\openssl\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -78,7 +78,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WIN32;NDEBUG;CHEAT_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_SILENCE_CXX17_STRSTREAM_DEPRECATION_WARNING;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_CRT_SECURE_NO_WARNINGS;WIN32;NDEBUG;CHEAT_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <LanguageStandard>
@@ -106,7 +106,7 @@
       <Optimization>Disabled</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>false</IntrinsicFunctions>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WIN32;CHEAT_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_SILENCE_CXX17_STRSTREAM_DEPRECATION_WARNING;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_CRT_SECURE_NO_WARNINGS;WIN32;CHEAT_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
       <WholeProgramOptimization>false</WholeProgramOptimization>
@@ -129,7 +129,7 @@
     <ClCompile>
       <WarningLevel>TurnOffAllWarnings</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WIN32;_DEBUG;CHEAT_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_SILENCE_CXX17_STRSTREAM_DEPRECATION_WARNING;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_CRT_SECURE_NO_WARNINGS;WIN32;_DEBUG;CHEAT_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>
       </LanguageStandard>
@@ -165,7 +165,6 @@
     <ClCompile Include="core\features\visuals\visuals.cpp" />
     <ClCompile Include="core\hooks\hooks.cpp" />
     <ClCompile Include="core\menu\config\config.cpp" />
-    <ClCompile Include="core\menu\config\json_config.cpp" />
     <ClCompile Include="core\menu\imgui\dx9\imgui_impl_dx9.cpp" />
     <ClCompile Include="core\menu\imgui\imgui.cpp" />
     <ClCompile Include="core\menu\imgui\imgui_draw.cpp" />
@@ -213,9 +212,7 @@
     <ClInclude Include="core\features\visuals\sound.hpp" />
     <ClInclude Include="core\features\visuals\visuals.hpp" />
     <ClInclude Include="core\hooks\hooks.hpp" />
-    <ClInclude Include="core\menu\config\archivex.hpp" />
     <ClInclude Include="core\menu\config\config.hpp" />
-    <ClInclude Include="core\menu\config\json_config.h" />
     <ClInclude Include="core\menu\imgui\dx9\imgui_impl_dx9.h" />
     <ClInclude Include="core\menu\imgui\imconfig.h" />
     <ClInclude Include="core\menu\imgui\imgui.h" />
@@ -266,6 +263,14 @@
     <ClInclude Include="SDK\crypto\hash\sha512.hpp" />
     <ClInclude Include="SDK\crypto\XorStr.h" />
     <ClInclude Include="SDK\globals\globals.h" />
+    <ClInclude Include="SDK\jsonip\detail\parser.hpp" />
+    <ClInclude Include="SDK\jsonip\detail\parser_common.hpp" />
+    <ClInclude Include="SDK\jsonip\grammar.hpp" />
+    <ClInclude Include="SDK\jsonip\helper.hpp" />
+    <ClInclude Include="SDK\jsonip\holder.hpp" />
+    <ClInclude Include="SDK\jsonip\parse.hpp" />
+    <ClInclude Include="SDK\jsonip\value.hpp" />
+    <ClInclude Include="SDK\jsonip\writer.hpp" />
     <ClInclude Include="SDK\license\license_manager.h" />
     <ClInclude Include="SDK\network\http\http_request.h" />
     <ClInclude Include="SDK\network\sokets\local_client.h" />

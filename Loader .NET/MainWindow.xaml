@@ -42,13 +42,13 @@
             <Label Grid.Column="0" Content="ALPHA PROJECT" HorizontalAlignment="Left" Margin="0,22" VerticalAlignment="Top" Foreground="#DDFFFFFF" FontSize="29" FontWeight="Light" Height="40"/>
             <ListBox x:Name="UserInfo"
                      IsEnabled="False"
-                 Margin="10,72,0,331" Foreground="#DDFFFFFF" HorizontalAlignment="Left" Width="286">
+                 Margin="10,72,0,379" Foreground="#DDFFFFFF" HorizontalAlignment="Left" Width="286">
 
             </ListBox>
             <materialDesign:Card
                 Background="{DynamicResource PrimaryHueDarkBrush}"
                 Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
-                Padding="8" Margin="10,0,0,89" Height="242" HorizontalAlignment="Left" Width="286" VerticalAlignment="Bottom">
+                Padding="8" Margin="10,0,0,89" Height="290" HorizontalAlignment="Left" Width="286" VerticalAlignment="Bottom">
                 <StackPanel>
                     <TextBlock
                         FontSize="16">

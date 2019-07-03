@@ -25,6 +25,7 @@
 #include "iv_render_beams.hpp"
 
 namespace interfaces {
+	extern bool* bSendPacket;
 	extern i_base_client_dll* client;
 	extern i_input* input;
 	extern i_client_entity_list* entity_list;

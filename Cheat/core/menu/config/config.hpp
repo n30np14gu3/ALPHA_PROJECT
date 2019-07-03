@@ -1,10 +1,312 @@
 #pragma once
-
+#include <vector>
 #include <filesystem>
 
-
-class c_config final {
+class alpha_config
+{
 public:
+	int current_wepon_id{ 0 };
+	std::string current_weapon_name;
+
+
+	struct color_t
+	{
+		float r;
+		float g;
+		float b;
+		float a;
+	};
+
+	struct legit_weapon_settings
+	{
+		bool enable{ false };
+		bool silent{ false };
+
+		bool nearest{ false };
+		int hitbox{ false };
+
+		float fov{ false };
+		float smooth{ false };
+
+		float rcs_x{ false };
+		float rcs_y{ false };
+
+	};
+
+	struct trigger_weapon_settings
+	{
+		bool enable{ false };
+		bool on_key{ false };
+		int key_id{ 0 };
+		bool rcs{ false };
+		bool hitbox_head{ false };
+		bool hitbox_body{ false };
+		bool hitbox_arms{ false };
+		bool hitbox_legs{ false };
+		int delay{ 0 };
+	};
+
+	struct backtrack_settings
+	{
+		bool enable{ false };
+		float backtrack_ms{ 0.f };
+	};
+
+	struct weapon_skin_info
+	{
+		int paint_kit{ 0 };
+		int paint_kit_vector{ 0 };
+		bool setted{ false };
+	};
+
+	struct skin_changer_settings
+	{
+		bool enable_skinchanger{ false };
+		bool enable_glovechanger{ false };
+
+		int knife_model{ 0 };
+		
+		int knife_skin{ 0 };
+		int knife_skin_vector{ 0 };
+		int knife_wear{ 0 };
+
+		int glove_model{ 0 };
+		int glove_skin{ 0 };
+		int glove_skin_vector{ 0 };
+		int glove_wear{ 0 };
+
+	};
+
+	struct visuals_player_flags
+	{
+		bool bombcarrier{ false };
+		bool is_flashed{ false };
+		bool is_scoped{ false };
+		bool is_defusing{ false };
+		bool position_callout{ false };
+		bool defuse_kit{ false };
+		bool armor{ false };
+		bool money{ false };
+	};
+
+	struct visuals_player_settings
+	{
+		bool name{ false };
+		bool box{ false };
+		bool health{ false };
+
+		bool weapon_name{ false };
+		bool weapon_icon{ false };
+
+		bool footsteps{ false };
+
+		bool skeleton{ false };
+
+		bool force_crosshair{ false };
+		int fov{ 0 };
+
+
+		visuals_player_flags flags;
+	};
+
+	struct visuals_removals
+	{
+		bool fog{ false };
+		bool smoke{ false };
+		bool flash{ false };
+		bool sleeves{ false };
+		bool hands{ false };
+		bool skope_overlay{ false };
+	};
+
+	struct visuals_world
+	{
+		bool planted_bomb{ false };
+
+		bool dropped_weapons_name{ false };
+		bool dropped_weapons_icon{ false };
+
+		bool projectiles{ false };
+		bool misc_entities{ false };
+		bool danger_zone{ false };
+	};
+
+	struct visuals_helpers
+	{
+		bool grenade_prediction{ false };
+		bool damage_indicator{ false };
+	};
+
+	struct visuals_glow
+	{
+		bool enabled{ false };
+		bool enemy{ false };
+		bool temmmate{ false };
+		bool planted_bomb{ false };
+		bool dropped_weapons{ false };
+		bool nades{ false };
+
+	};
+
+	struct visuals_chams
+	{
+		bool enabled{ false };
+		bool smoke_check{ false };
+		int material{ 0 };
+
+		bool enemy{ false };
+		bool enemy_xoz{ false };
+
+		bool temmmate{ false };
+		bool temmate_xoz{ false };
+
+		bool weapon{ false };
+		bool hands{ false };
+		bool sleeve{ false };
+		bool backtrack{ false };
+	};
+
+	struct visuals_settings
+	{
+		bool global_enabled{ false };
+		bool show_team{ false };
+		bool visible_only{ false };
+
+		visuals_player_settings player{};
+
+		bool ambient_light{ false };
+
+		bool night_mode{ false };
+		int brightness{ 0 };
+
+
+		visuals_removals removals{};
+
+		visuals_world world{};
+
+		visuals_helpers helpers{};
+
+		visuals_glow glow{};
+
+		visuals_chams chams{};
+	};
+
+	struct misc_logs
+	{
+		bool hurt{ false };
+		bool bouth{ false };
+	};
+
+	struct misc_hitmarker
+	{
+		bool enabled{ false };
+		int sound{ 0 };
+	};
+
+	struct bhop_edge_jump
+	{
+		bool enabled{ false };
+		bool duck_in_air{ false };
+		int jump_key{ 0 };
+	};
+
+	struct bhop_settings
+	{
+		bool enabled{ false };
+		bool auto_strafe{ false };
+		bhop_edge_jump edge_jump{};
+	};
+
+	struct misc_settings
+	{
+		bool global_active{ false };
+		bool clantag{ false };
+		bool radar{ false };
+		misc_logs logs{};
+		misc_hitmarker hitmarker{};
+		bool anti_screenshoot{ false };
+		bool spectators{ false };
+		bool disable_post_processing{ false };
+		bool recoil_crosshair{ false };
+		bool rank_reveal{ false };
+	};
+
+	struct weapon_settings
+	{
+		size_t weapon_id{ 0 };
+		legit_weapon_settings legit_settings{};
+		trigger_weapon_settings trigger_settings{};
+		weapon_skin_info skin_info{};
+		weapon_settings() = default;
+		weapon_settings(size_t id) : weapon_id(id) {}
+		bool operator () (const struct weapon_settings& m) const
+		{
+			return m.weapon_id == weapon_id;
+		}
+	};
+
+	struct colors_settings
+	{
+		color_t esp_box{};
+		color_t esp_name{};
+		color_t esp_weapon_icon{};
+		color_t esp_footsteps{};
+
+		color_t chams_enemy_visible{};
+		color_t chams_enemy_invisible{};
+		color_t chams_team_visible{};
+		color_t chams_team_ivisible{};
+		color_t chams_hand_weapon{};
+		color_t chams_hands{};
+		color_t chams_sleeve{};
+
+		color_t glow_enemy{};
+		color_t glow_team{};
+		color_t bomb{};
+		color_t weapons{};
+		color_t nades{};
+
+		color_t sky{};
+		color_t ambient{};
+
+		color_t damage_indicator{};
+	};
+
+	typedef std::vector<weapon_settings> weapon_info_vec;
+
+	struct rcs_standalone_settings
+	{
+		bool enabled{ false };
+		float rcs_x{ 0 };
+		float rcs_y{ 0 };
+	};
+	struct legit_bot_settings
+	{
+		bool smoke_check{ false };
+		bool scope_aim{ false };
+		bool distance_based_fov{ false };
+		bool team_check{ false };
+		int kill_delay{ 0 };
+		bool auto_pistol{ false };
+		backtrack_settings backtrack{};
+		rcs_standalone_settings rcs_standalone{};
+		
+	};
+
+	struct config_base
+	{
+		colors_settings colors;
+		legit_bot_settings legit;
+		skin_changer_settings skin_changer;
+		visuals_settings visuals;
+		misc_settings misc;
+		bhop_settings bhop;
+		weapon_info_vec weapons;
+	};
+
+	weapon_settings& get_active_weapon(size_t weapon_id);
+	config_base& get_config();
+
 	void run(const char*) noexcept;
 	void load(size_t) noexcept;
 	void save(size_t) const noexcept;
@@ -12,194 +314,13 @@ public:
 	void remove(size_t) noexcept;
 	void rename(size_t, const char*) noexcept;
 	void reset() noexcept;
-
 	constexpr auto& get_configs() noexcept {
 		return configs;
 	}
-
-	struct {
-		bool backtrack{ false };
-		bool backtrack_visualize{ false };
-		bool scope_aim{ false };
-		bool smoke_check{ false };
-		bool aim_distance_based_fov{ false };
-		bool aim_team_check{ false };
-
-		bool bomb_planted{ false };
-		bool dropped_weapons{ false };
-		bool backtrack_skeleton{ false };
-		bool nade_pred{ false };
-		bool visuals_preview{ false };
-		bool sound_footstep{ false };
-		bool skeleton{ false };
-		bool danger_zone_dropped{ false };
-		bool visuals_enabled{ false };
-		bool anti_screenshot{ false };
-		bool remove_smoke{ false };
-		bool remove_fog{ false };
-		bool visuals_glow{ false };
-		bool visuals_glow_enemy{ false };
-		bool visuals_glow_team{ false };
-		bool visuals_glow_planted{ false };
-		bool visuals_glow_weapons{ false };
-		bool visuals_glow_nades{ false };
-		bool player_name{ false };
-		bool player_dormant{ false };
-		bool player_ammo{ false };
-		bool player_flags{ false };
-		bool player_flags_armor{ false };
-		bool player_flags_money{ false };
-		bool player_flags_scoped{ false };
-		bool player_flags_c4{ false };
-		bool player_flags_kit = false;
-		bool player_flags_defuse = false;
-		bool player_flags_pos = false;
-		bool player_flags_flashed{ false };
-		bool player_box{ false };
-		bool player_health{ false };
-		bool player_weapon{ false };
-		bool player_weapon_icon{ false };
-		bool player_armor{ false };
-		float clr_chams_vis[4]{ 1.0f,1.0f,1.0f,255.0f };
-		float clr_chams_invis[4]{ 1.0f,1.0f,1.0f,255.0f };
-		float clr_glow[4]{ 1.0f,1.0f,1.0f,255.0f };
-		float clr_glow_team[4]{ 1.0f,1.0f,1.0f,255.0f };
-		float clr_glow_planted[4]{ 1.0f,1.0f,1.0f,255.0f };
-		float clr_glow_dropped[4]{ 1.0f,1.0f,1.0f,255.0f };
-		float clr_glow_dropped_nade[4]{ 1.0f,1.0f,1.0f,255.0f };
-		float clr_sky[4]{ 1.0f,1.0f,1.0f,255.0f };
-		float clr_ambient[4]{ 1.0f,1.0f,1.0f,255.0f };
-		float clr_box[4]{ 1.0f,1.0f,1.0f,255.0f };
-		float clr_name[4]{ 1.0f,1.0f,1.0f,255.0f };
-		float clr_weapon[4]{ 1.0f,1.0f,1.0f,255.0f };
-		float clr_weapon_icon[4]{ 1.0f,1.0f,1.0f,255.0f };
-		float clr_footstep[4]{ 1.0f,1.0f,1.0f,255.0f };
-		bool chams{ false };
-		bool remove_scope{ false };
-		int vis_chams_type{ 0 };
-		int viewmodel_fov{ 0 };
-		int viewmodel_x{ 0 };
-		int viewmodel_y{ 0 };
-		int viewmodel_z{ 0 };
-		int knife_wear{ 0 };
-		int glove_wear{ 0 };
-		int fov{ 0 };
-		int nightmode_brightness{ 100 };
-		bool reduce_flash{ false };
-		bool remove_sleeves{ false };
-		bool remove_hands{ false };
-		bool entity_esp{ false };
-		bool projectiles{ false };
-		float flash_alpha{ 255.f };
-		bool force_crosshair{ false };
-		bool visuals_team_check{ false };
-		bool vis_chams_vis{ false };
-		bool vis_chams_invis{ false };
-		bool nightmode{ false };
-		bool ambient{ false };
-		bool spectators_list{ false };
-		bool watermark{ false };
-		bool misc_enabled{ false };
-		bool misc_save_config{ false };
-		bool misc_load_config{ false };
-		bool bunny_hop_auto_stafe{ false };
-		bool bunny_hop{ false };
-		bool clan_tag{ false };
-		bool radar{ false };
-		bool hitmarker{ false };
-		bool viewmodel_offset{ false };
-		bool logs_player_hurt{ false };
-		bool logs_player_bought{ false };
-		bool skinchanger_enable{ false };
-		bool glovechanger_enable{ false };
-		int hitmarker_sound{ 0 };
-		int knife_model{ 0 };
-		int knife_skin{ 0 };
-		int glove_model{ 0 };
-		int glove_skin{ 0 };
-		int config_selection{ 0 };
-		int keybinds_selection{ 0 };
-		bool edge_jump{ false };
-		bool edge_jump_duck_in_air{ false };
-		int edge_jump_key{ 0 };
-
-		int paint_kit_vector_index_knife{ 0 };
-		int paint_kit_index_knife{ 0 };
-		int paint_kit_vector_index_glove{ 0 };
-		int paint_kit_index_glove{ 0 };
-		float backtrack_ms{ 0.0f };
-
-		int aim_key{ 0 };
-		bool vis_chams_smoke_check{ false };
-		bool disable_post_processing{ false };
-		bool recoil_crosshair{ false };
-		bool rank_reveal{ false };
-		bool vis_chams_vis_teammate{ false };
-		bool vis_chams_invis_teammate{ false };
-		float clr_chams_vis_teammate[4]{ 1.0f,1.0f,1.0f,255.0f };
-		float clr_chams_invis_teammate[4]{ 1.0f,1.0f,1.0f,255.0f };
-		int aimbot_delay_after_kill{ 0 };
-		bool aimbot_auto_pistol{ false };
-		float rcs_standalone_x{ 0.0f };
-		float rcs_standalone_y{ 0.0f };
-		bool rcs_standalone{ false };
-		bool weapon_chams{ false };
-		bool hand_chams{ false };
-		bool sleeve_chams{ false };
-		float clr_weapon_chams[4]{ 1.0f,1.0f,1.0f,255.0f };
-		float clr_hand_chams[4]{ 1.0f,1.0f,1.0f,255.0f };
-		float clr_sleeve_chams[4]{ 1.0f,1.0f,1.0f,255.0f };
-		bool visuals_visible_only{ false };
-		bool visuals_on_key{ false };
-		int visuals_key{ 0 };
-		bool damage_indicator{ false };
-		float clr_damage_indicator[4] = { 1.0f,1.0f,1.0f,255.0f };
-		bool dropped_weapons_icon{ false };
-
-		struct
-		{
-			int paint_kit;
-			int paint_kit_vecotor;
-			bool setted;
-		}weapon_skin_info[530]{};
-
-		struct
-		{
-			bool enable;
-			bool silent;
-
-			bool nearest;
-			int hitbox;
-
-			float fov;
-			float smooth;
-
-			float rcs_x;
-			float rcs_y;
-		}aim_bot_settings[530]{};
-
-
-		struct
-		{
-			bool enable;
-			bool on_key;
-			int key_id;
-			bool rcs;
-			bool hitbox_head;
-			bool hitbox_body;
-			bool hitbox_arms;
-			bool hitbox_legs;
-			int delay;
-		}trigger_bot[530]{};
-
-	} item;
-
-	int active_weapon = 0;
-	std::string weapon_name = "";
-
 private:
 	std::filesystem::path path;
+	config_base item{};
 	std::vector<std::string> configs;
 };
 
-extern c_config config_system;
+extern alpha_config config_system;

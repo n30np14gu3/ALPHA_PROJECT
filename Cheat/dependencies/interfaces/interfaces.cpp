@@ -28,6 +28,7 @@ player_game_movement *interfaces::game_movement = nullptr;
 player_prediction *interfaces::prediction = nullptr;
 player_move_helper *interfaces::move_helper = nullptr;
 i_view_render_beams *interfaces::render_beams = nullptr;
+bool* interfaces::bSendPacket = nullptr;
 
 void interfaces::initialize() {
 	client = reinterpret_cast<i_base_client_dll*>(utilities::game::capture_interface("client_panorama.dll", "VClient018"));

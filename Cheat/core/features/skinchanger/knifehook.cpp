@@ -63,7 +63,7 @@ void hooked_recvproxy_viewmodel(c_recv_proxy_data*p_data, void *p_struct, void *
 
 	auto local_player = reinterpret_cast<player_t*>(interfaces::entity_list->get_client_entity(interfaces::engine->get_local_player()));
 
-	if ((config_system.item.skinchanger_enable) && local_player){
+	if ((config_system.get_config().skin_changer.enable_skinchanger) && local_player){
 
 		if (local_player->is_alive() && (
 			p_data->value.m_int == index_bayonet ||
@@ -83,37 +83,37 @@ void hooked_recvproxy_viewmodel(c_recv_proxy_data*p_data, void *p_struct, void *
 			p_data->value.m_int == index_default_t ||
 			p_data->value.m_int == index_default_ct))
 		{
-			if (config_system.item.knife_model == 0)
+			if (config_system.get_config().skin_changer.knife_model == 0)
 				p_data->value.m_int = index_default_t;
-			else if (config_system.item.knife_model == 0)
+			else if (config_system.get_config().skin_changer.knife_model == 0)
 				p_data->value.m_int = index_default_ct;
-			else if (config_system.item.knife_model == 1)
+			else if (config_system.get_config().skin_changer.knife_model == 1)
 				p_data->value.m_int = index_bayonet;
-			else if (config_system.item.knife_model == 2)
+			else if (config_system.get_config().skin_changer.knife_model == 2)
 				p_data->value.m_int = index_m9;
-			else if (config_system.item.knife_model ==	3)
+			else if (config_system.get_config().skin_changer.knife_model ==	3)
 				p_data->value.m_int = index_karambit;
-			else if (config_system.item.knife_model == 4)
+			else if (config_system.get_config().skin_changer.knife_model == 4)
 				p_data->value.m_int = index_bowie;
-			else if (config_system.item.knife_model == 5)
+			else if (config_system.get_config().skin_changer.knife_model == 5)
 				p_data->value.m_int = index_butterfly;
-			else if (config_system.item.knife_model == 6)
+			else if (config_system.get_config().skin_changer.knife_model == 6)
 				p_data->value.m_int = index_falchion;
-			else if (config_system.item.knife_model ==	7)
+			else if (config_system.get_config().skin_changer.knife_model ==	7)
 				p_data->value.m_int = index_flip;
-			else if (config_system.item.knife_model == 8)
+			else if (config_system.get_config().skin_changer.knife_model == 8)
 				p_data->value.m_int = index_gut;
-			else if (config_system.item.knife_model == 9)
+			else if (config_system.get_config().skin_changer.knife_model == 9)
 				p_data->value.m_int = index_huntsman;
-			else if (config_system.item.knife_model == 10)
+			else if (config_system.get_config().skin_changer.knife_model == 10)
 				p_data->value.m_int = index_shadow_daggers;
-			else if (config_system.item.knife_model == 11)
+			else if (config_system.get_config().skin_changer.knife_model == 11)
 				p_data->value.m_int = index_navaja;
-			else if (config_system.item.knife_model == 12)
+			else if (config_system.get_config().skin_changer.knife_model == 12)
 				p_data->value.m_int = index_stiletto;
-			else if (config_system.item.knife_model == 13)
+			else if (config_system.get_config().skin_changer.knife_model == 13)
 				p_data->value.m_int = index_talon;
-			else if (config_system.item.knife_model == 14)
+			else if (config_system.get_config().skin_changer.knife_model == 14)
 				p_data->value.m_int = index_ursus;
 		}
 	}

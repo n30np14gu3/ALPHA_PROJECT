@@ -6,16 +6,16 @@ static convar* old_sky_name;
 bool executed = false;
 
 void c_nightmode::run() noexcept {
-	if (!config_system.item.visuals_enabled)
+	if (!config_system.get_config().visuals.global_enabled)
 		return;
 
-	config_system.item.nightmode ? night_mode.apply() : night_mode.remove();
+	config_system.get_config().visuals.night_mode ? night_mode.apply() : night_mode.remove();
 
 	static auto r_drawspecificstaticprop = interfaces::console->get_convar("r_DrawSpecificStaticProp");
-	r_drawspecificstaticprop->set_value(config_system.item.nightmode ? 0 : 1);
+	r_drawspecificstaticprop->set_value(config_system.get_config().visuals.night_mode ? 0 : 1);
 
 	static auto r_3dsky = interfaces::console->get_convar("r_3dsky");
-	r_3dsky->set_value(config_system.item.nightmode ? 0 : 1);
+	r_3dsky->set_value(config_system.get_config().visuals.night_mode ? 0 : 1);
 }
 
 void c_nightmode::apply() noexcept {
@@ -28,7 +28,7 @@ void c_nightmode::apply() noexcept {
 		return;
 
 	old_sky_name = interfaces::console->get_convar("sv_skyname");
-	float brightness = config_system.item.nightmode_brightness / 100.f;
+	float brightness = config_system.get_config().visuals.brightness / 100.f;
 
 	for (MaterialHandle_t i = interfaces::material_system->first_material(); i != interfaces::material_system->invalid_material_handle(); i = interfaces::material_system->next_material(i)) {
 		auto material = interfaces::material_system->get_material(i);
@@ -43,7 +43,7 @@ void c_nightmode::apply() noexcept {
 			material->color_modulate(brightness + 0.25f, brightness + 0.25f, brightness + 0.25f);
 		}
 		if (strstr(material->GetTextureGroupName(), ("SkyBox"))) {
-			material->color_modulate(config_system.item.clr_sky[0], config_system.item.clr_sky[1], config_system.item.clr_sky[2]);
+			material->color_modulate(config_system.get_config().colors.sky.r, config_system.get_config().colors.sky.g, config_system.get_config().colors.sky.b);
 		}
 	}
 
@@ -85,14 +85,14 @@ void c_nightmode::remove() noexcept {
 
 void c_nightmode::ambient_light() noexcept
 {
-	if (!config_system.item.ambient)
+	if (!config_system.get_config().visuals.ambient_light)
 		return;
 
 	static auto red = interfaces::console->get_convar("mat_ambient_light_r");
 	static auto green = interfaces::console->get_convar("mat_ambient_light_g");
 	static auto blue = interfaces::console->get_convar("mat_ambient_light_b");
 
-	red->set_value(config_system.item.clr_ambient[0]);
-	green->set_value(config_system.item.clr_ambient[1]);
-	blue->set_value(config_system.item.clr_ambient[2]);
+	red->set_value(config_system.get_config().colors.ambient.r);
+	green->set_value(config_system.get_config().colors.ambient.g);
+	blue->set_value(config_system.get_config().colors.ambient.b);
 }

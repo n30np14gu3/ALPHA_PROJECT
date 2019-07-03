@@ -115,9 +115,9 @@ void c_menu::run() {
 			ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 45);
 			//ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 222);
 
-			if (config_system.item.visuals_preview) {
-				run_visuals_preview();
-			}
+			//if (config_system.get_config().visuals_preview) {
+			//	run_visuals_preview();
+			//}
 
 			static int test = 0;
 			switch (page) 
@@ -133,12 +133,12 @@ void c_menu::run() {
 					{
 						ImGui::Spacing();
 						ImGui::Spacing();
-						ImGui::Checkbox("dynamic fov", &config_system.item.aim_distance_based_fov);
-						ImGui::Checkbox("aim in scope only", &config_system.item.scope_aim);
-						ImGui::Checkbox("smoke check", &config_system.item.smoke_check);
-						ImGui::Checkbox("friendly fire", &config_system.item.aim_team_check);
-						ImGui::Checkbox("auto pistol", &config_system.item.aimbot_auto_pistol);
-						ImGui::SliderInt("kill delay", &config_system.item.aimbot_delay_after_kill, 0, 350);
+						ImGui::Checkbox("dynamic fov", &config_system.get_config().legit.distance_based_fov);
+						ImGui::Checkbox("aim in scope only", &config_system.get_config().legit.scope_aim);
+						ImGui::Checkbox("smoke check", &config_system.get_config().legit.smoke_check);
+						ImGui::Checkbox("friendly fire", &config_system.get_config().legit.team_check);
+						ImGui::Checkbox("auto pistol", &config_system.get_config().legit.auto_pistol);
+						ImGui::SliderInt("kill delay", &config_system.get_config().legit.kill_delay, 0, 350);
 					}
 					else
 					{
@@ -156,19 +156,19 @@ void c_menu::run() {
 					if (license_manager::checkModuleActive(globals::user_modules, MODULE_AIM_BOT))
 					{
 						ImGui::Spacing();
-						ImGui::Checkbox("backtrack", &config_system.item.backtrack);
-						ImGui::PushStyleColor(ImGuiCol_Text, config_system.item.backtrack ? ImVec4(1.f, 1.f, 1.f, 1) : ImVec4(.6f, .6f, .6f, 1));
-						if (config_system.item.backtrack)
+						ImGui::Checkbox("backtrack", &config_system.get_config().legit.backtrack.enable);
+						ImGui::PushStyleColor(ImGuiCol_Text, config_system.get_config().legit.backtrack.enable ? ImVec4(1.f, 1.f, 1.f, 1) : ImVec4(.6f, .6f, .6f, 1));
+						if (config_system.get_config().legit.backtrack.enable)
 						{
-							ImGui::SliderFloat("records (ms)", &config_system.item.backtrack_ms, 1.0f, 200.0f, "%.2f");
+							ImGui::SliderFloat("records (ms)", &config_system.get_config().legit.backtrack.backtrack_ms, 1.0f, 200.0f, "%.2f");
 						}
 						ImGui::PopStyleColor();
-						ImGui::Checkbox("standalone rcs", &config_system.item.rcs_standalone);
-						if (config_system.item.rcs_standalone) {
+						ImGui::Checkbox("standalone rcs", &config_system.get_config().legit.rcs_standalone.enabled);
+						if (config_system.get_config().legit.rcs_standalone.enabled) {
 							ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10);
-							ImGui::SliderFloat("rcs amount x", &config_system.item.rcs_standalone_x, 0.0f, 1.0f, "%.2f");
+							ImGui::SliderFloat("rcs amount x", &config_system.get_config().legit.rcs_standalone.rcs_x, 0.0f, 1.0f, "%.2f");
 							ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10);
-							ImGui::SliderFloat("rcs amount y", &config_system.item.rcs_standalone_y, 0.0f, 1.0f, "%.2f");
+							ImGui::SliderFloat("rcs amount y", &config_system.get_config().legit.rcs_standalone.rcs_y, 0.0f, 1.0f, "%.2f");
 							ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10);
 						}
 					}
@@ -177,7 +177,7 @@ void c_menu::run() {
 
 				ImGui::NextColumn();
 
-				ImGui::BeginChild(("settings [" + std::string(config_system.weapon_name) + "]").c_str(), ImVec2(339, 670), true); {
+				ImGui::BeginChild(("settings [" + std::string(config_system.current_weapon_name) + "]").c_str(), ImVec2(339, 670), true); {
 
 					if (license_manager::checkModuleActive(globals::user_modules, MODULE_AIM_BOT))
 					{
@@ -185,23 +185,23 @@ void c_menu::run() {
 
 						ImGui::Spacing();
 						ImGui::Spacing();
-						ImGui::Checkbox("aimbot enable", &config_system.item.aim_bot_settings[config_system.active_weapon].enable);
-						if(config_system.item.aim_bot_settings[config_system.active_weapon].enable)
+						ImGui::Checkbox("aimbot enable", &config_system.get_active_weapon(config_system.current_wepon_id).legit_settings.enable);
+						if(config_system.get_active_weapon(config_system.current_wepon_id).legit_settings.enable)
 						{
-							ImGui::PushStyleColor(ImGuiCol_Text, config_system.item.aim_bot_settings[config_system.active_weapon].enable ? ImVec4(1.f, 1.f, 1.f, 1) : ImVec4(.6f, .6f, .6f, 1));
+							ImGui::PushStyleColor(ImGuiCol_Text, config_system.get_active_weapon(config_system.current_wepon_id).legit_settings.enable ? ImVec4(1.f, 1.f, 1.f, 1) : ImVec4(.6f, .6f, .6f, 1));
 
-							ImGui::Checkbox("silent", &config_system.item.aim_bot_settings[config_system.active_weapon].silent);
-							ImGui::Checkbox("nearest", &config_system.item.aim_bot_settings[config_system.active_weapon].nearest);
+							ImGui::Checkbox("silent", &config_system.get_active_weapon(config_system.current_wepon_id).legit_settings.silent);
+							ImGui::Checkbox("nearest", &config_system.get_active_weapon(config_system.current_wepon_id).legit_settings.nearest);
 
 
-							if (!config_system.item.aim_bot_settings[config_system.active_weapon].nearest)
+							if (!config_system.get_active_weapon(config_system.current_wepon_id).legit_settings.nearest)
 							{
-								ImGui::Combo(XorStr("hitbox"), &config_system.item.aim_bot_settings[config_system.active_weapon].hitbox, XorStr("head\0neck\0chest\0stomach\0pelvis\0"));
+								ImGui::Combo(XorStr("hitbox"), &config_system.get_active_weapon(config_system.current_wepon_id).legit_settings.hitbox, XorStr("head\0neck\0chest\0stomach\0pelvis\0"));
 							}
-							ImGui::SliderFloat(XorStr("fov"), &config_system.item.aim_bot_settings[config_system.active_weapon].fov, 0.0f, 180.0f, XorStr("%.2f"));
-							ImGui::SliderFloat(XorStr("smooth"), &config_system.item.aim_bot_settings[config_system.active_weapon].smooth, 1.f, 10.f, XorStr("%.2f"));
-							ImGui::SliderFloat(XorStr("rcs x"), &config_system.item.aim_bot_settings[config_system.active_weapon].rcs_x, 0.0f, 1.0f, XorStr("%.2f"));
-							ImGui::SliderFloat(XorStr("rcs y"), &config_system.item.aim_bot_settings[config_system.active_weapon].rcs_y, 0.0f, 1.0f, XorStr("%.2f"));
+							ImGui::SliderFloat(XorStr("fov"), &config_system.get_active_weapon(config_system.current_wepon_id).legit_settings.fov, 0.0f, 180.0f, XorStr("%.2f"));
+							ImGui::SliderFloat(XorStr("smooth"), &config_system.get_active_weapon(config_system.current_wepon_id).legit_settings.smooth, 1.f, 10.f, XorStr("%.2f"));
+							ImGui::SliderFloat(XorStr("rcs x"), &config_system.get_active_weapon(config_system.current_wepon_id).legit_settings.rcs_x, 0.0f, 1.0f, XorStr("%.2f"));
+							ImGui::SliderFloat(XorStr("rcs y"), &config_system.get_active_weapon(config_system.current_wepon_id).legit_settings.rcs_y, 0.0f, 1.0f, XorStr("%.2f"));
 
 							ImGui::PopStyleColor();
 						}
@@ -211,32 +211,32 @@ void c_menu::run() {
 
 						if (license_manager::checkModuleActive(globals::user_modules, MODULE_TRIGGER_BOT))
 						{
-							ImGui::Checkbox("triggerbot enable", &config_system.item.trigger_bot[config_system.active_weapon].enable);
-							if(config_system.item.trigger_bot[config_system.active_weapon].enable)
+							ImGui::Checkbox("triggerbot enable", &config_system.get_active_weapon(config_system.current_wepon_id).trigger_settings.enable);
+							if(config_system.get_active_weapon(config_system.current_wepon_id).trigger_settings.enable)
 							{
-								ImGui::Checkbox("on key", &config_system.item.trigger_bot[config_system.active_weapon].on_key);
-								if(config_system.item.trigger_bot[config_system.active_weapon].on_key)
+								ImGui::Checkbox("on key", &config_system.get_active_weapon(config_system.current_wepon_id).trigger_settings.on_key);
+								if(config_system.get_active_weapon(config_system.current_wepon_id).trigger_settings.on_key)
 								{
-									ImGui::Hotkey("##triger key", &config_system.item.trigger_bot[config_system.active_weapon].key_id, ImVec2(130, 30));
+									ImGui::Hotkey("##triger key", &config_system.get_active_weapon(config_system.current_wepon_id).trigger_settings.key_id, ImVec2(130, 30));
 								}
 								ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10);
 								if (ImGui::BeginCombo("hitboxes", "...", ImVec2(0, 105))) {
 									ImGui::SetCursorPosY(ImGui::GetCursorPosY() - 8);
 									ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 4);
-									ImGui::Selectable(("head"), &config_system.item.trigger_bot[config_system.active_weapon].hitbox_head, ImGuiSelectableFlags_::ImGuiSelectableFlags_DontClosePopups);
+									ImGui::Selectable(("head"), &config_system.get_active_weapon(config_system.current_wepon_id).trigger_settings.hitbox_head, ImGuiSelectableFlags_::ImGuiSelectableFlags_DontClosePopups);
 									ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 4);
-									ImGui::Selectable(("body"), &config_system.item.trigger_bot[config_system.active_weapon].hitbox_body, ImGuiSelectableFlags_::ImGuiSelectableFlags_DontClosePopups);
+									ImGui::Selectable(("body"), &config_system.get_active_weapon(config_system.current_wepon_id).trigger_settings.hitbox_body, ImGuiSelectableFlags_::ImGuiSelectableFlags_DontClosePopups);
 									ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 4);
-									ImGui::Selectable(("arms"), &config_system.item.trigger_bot[config_system.active_weapon].hitbox_arms, ImGuiSelectableFlags_::ImGuiSelectableFlags_DontClosePopups);
+									ImGui::Selectable(("arms"), &config_system.get_active_weapon(config_system.current_wepon_id).trigger_settings.hitbox_arms, ImGuiSelectableFlags_::ImGuiSelectableFlags_DontClosePopups);
 									ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 4);
-									ImGui::Selectable(("legs"), &config_system.item.trigger_bot[config_system.active_weapon].hitbox_legs, ImGuiSelectableFlags_::ImGuiSelectableFlags_DontClosePopups);
+									ImGui::Selectable(("legs"), &config_system.get_active_weapon(config_system.current_wepon_id).trigger_settings.hitbox_legs, ImGuiSelectableFlags_::ImGuiSelectableFlags_DontClosePopups);
 									ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10);
 									ImGui::EndCombo();
 									ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10);
 								}
-								ImGui::SliderInt("trigger delay", &config_system.item.trigger_bot[config_system.active_weapon].delay, 1, 50);
+								ImGui::SliderInt("trigger delay", &config_system.get_active_weapon(config_system.current_wepon_id).trigger_settings.delay, 1, 50);
 								ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10);
-								ImGui::Checkbox("trigger recoil", &config_system.item.trigger_bot[config_system.active_weapon].rcs);
+								ImGui::Checkbox("trigger recoil", &config_system.get_active_weapon(config_system.current_wepon_id).trigger_settings.rcs);
 								ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10);
 							}
 
@@ -264,50 +264,50 @@ void c_menu::run() {
 					ImGui::Spacing();
 					if (license_manager::checkModuleActive(globals::user_modules, MODULE_WALLHACK))
 					{
-						ImGui::Checkbox("global active", &config_system.item.visuals_enabled);
-						if (config_system.item.visuals_enabled) {
+						ImGui::Checkbox("global active", &config_system.get_config().visuals.global_enabled);
+						if (config_system.get_config().visuals.global_enabled) {
 							ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 7);
-							ImGui::Checkbox("teammate", &config_system.item.visuals_team_check);
+							ImGui::Checkbox("teammate", &config_system.get_config().visuals.show_team);
 							ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 7);
-							ImGui::Checkbox("visible only", &config_system.item.visuals_visible_only);
+							ImGui::Checkbox("visible only", &config_system.get_config().visuals.visible_only);
 						}
-						ImGui::Checkbox("name", &config_system.item.player_name);
-						ImGui::ColorEdit4("name color", config_system.item.clr_name, ImGuiColorEditFlags_NoInputs);
-						ImGui::Checkbox("box", &config_system.item.player_box);
-						ImGui::ColorEdit4("box color", config_system.item.clr_box, ImGuiColorEditFlags_NoInputs);
-						ImGui::Checkbox("health", &config_system.item.player_health);
-						ImGui::Checkbox("weapon name", &config_system.item.player_weapon);
-						ImGui::ColorEdit4("weapon color", config_system.item.clr_weapon, ImGuiColorEditFlags_NoInputs);
-						ImGui::Checkbox("weapon icon", &config_system.item.player_weapon_icon);
-						ImGui::ColorEdit4("weapon icon color", config_system.item.clr_weapon_icon, ImGuiColorEditFlags_NoInputs);
+						ImGui::Checkbox("name", &config_system.get_config().visuals.player.name);
+						ImGui::ColorEdit4("name color", reinterpret_cast<float*>(&config_system.get_config().colors.esp_name), ImGuiColorEditFlags_NoInputs);
+						ImGui::Checkbox("box", &config_system.get_config().visuals.player.box);
+						ImGui::ColorEdit4("box color", reinterpret_cast<float*>(&config_system.get_config().colors.esp_box), ImGuiColorEditFlags_NoInputs);
+						ImGui::Checkbox("health", &config_system.get_config().visuals.player.health);
+						ImGui::Checkbox("weapon name", &config_system.get_config().visuals.player.weapon_name);
+						ImGui::ColorEdit4("weapon color", reinterpret_cast<float*>(&config_system.get_config().colors.weapons), ImGuiColorEditFlags_NoInputs);
+						ImGui::Checkbox("weapon icon", &config_system.get_config().visuals.player.weapon_icon);
+						ImGui::ColorEdit4("weapon icon color", reinterpret_cast<float*>(&config_system.get_config().colors.esp_weapon_icon), ImGuiColorEditFlags_NoInputs);
 
-						ImGui::PushStyleColor(ImGuiCol_Text, config_system.item.visuals_enabled ? ImVec4(1.f, 1.f, 1.f, 1) : ImVec4(.6f, .6f, .6f, 1));
+						ImGui::PushStyleColor(ImGuiCol_Text, config_system.get_config().visuals.global_enabled ? ImVec4(1.f, 1.f, 1.f, 1) : ImVec4(.6f, .6f, .6f, 1));
 						if (ImGui::BeginCombo("flags", "...", ImVec2(0, 105))) {
 							ImGui::SetCursorPosY(ImGui::GetCursorPosY() - 8);
 							ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 4);
-							ImGui::Selectable(("bombcarrier"), &config_system.item.player_flags_c4, ImGuiSelectableFlags_::ImGuiSelectableFlags_DontClosePopups);
+							ImGui::Selectable(("bombcarrier"), &config_system.get_config().visuals.player.flags.bombcarrier, ImGuiSelectableFlags_::ImGuiSelectableFlags_DontClosePopups);
 							ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 4);
-							ImGui::Selectable(("is flashed"), &config_system.item.player_flags_flashed, ImGuiSelectableFlags_::ImGuiSelectableFlags_DontClosePopups);
+							ImGui::Selectable(("is flashed"), &config_system.get_config().visuals.player.flags.is_flashed, ImGuiSelectableFlags_::ImGuiSelectableFlags_DontClosePopups);
 							ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 4);
-							ImGui::Selectable(("is scoped"), &config_system.item.player_flags_scoped, ImGuiSelectableFlags_::ImGuiSelectableFlags_DontClosePopups);
+							ImGui::Selectable(("is scoped"), &config_system.get_config().visuals.player.flags.is_scoped, ImGuiSelectableFlags_::ImGuiSelectableFlags_DontClosePopups);
 							ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 4);
-							ImGui::Selectable(("is defusing"), &config_system.item.player_flags_defuse, ImGuiSelectableFlags_::ImGuiSelectableFlags_DontClosePopups);
+							ImGui::Selectable(("is defusing"), &config_system.get_config().visuals.player.flags.is_defusing, ImGuiSelectableFlags_::ImGuiSelectableFlags_DontClosePopups);
 							ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 4);
-							ImGui::Selectable(("position callout"), &config_system.item.player_flags_pos, ImGuiSelectableFlags_::ImGuiSelectableFlags_DontClosePopups);
+							ImGui::Selectable(("position callout"), &config_system.get_config().visuals.player.flags.position_callout, ImGuiSelectableFlags_::ImGuiSelectableFlags_DontClosePopups);
 							ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 4);
-							ImGui::Selectable(("defusekit"), &config_system.item.player_flags_kit, ImGuiSelectableFlags_::ImGuiSelectableFlags_DontClosePopups);
+							ImGui::Selectable(("defusekit"), &config_system.get_config().visuals.player.flags.defuse_kit, ImGuiSelectableFlags_::ImGuiSelectableFlags_DontClosePopups);
 							ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 4);
-							ImGui::Selectable(("armor"), &config_system.item.player_flags_armor, ImGuiSelectableFlags_::ImGuiSelectableFlags_DontClosePopups);
+							ImGui::Selectable(("armor"), &config_system.get_config().visuals.player.flags.armor, ImGuiSelectableFlags_::ImGuiSelectableFlags_DontClosePopups);
 							ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 4);
-							ImGui::Selectable(("money $$"), &config_system.item.player_flags_money, ImGuiSelectableFlags_::ImGuiSelectableFlags_DontClosePopups);
+							ImGui::Selectable(("money $$"), &config_system.get_config().visuals.player.flags.money, ImGuiSelectableFlags_::ImGuiSelectableFlags_DontClosePopups);
 
 							ImGui::EndCombo();
 						}
 						ImGui::PopStyleColor();
-						ImGui::Checkbox("footstep", &config_system.item.sound_footstep);
-						ImGui::ColorEdit4("footstep color", config_system.item.clr_footstep, ImGuiColorEditFlags_NoInputs);
-						ImGui::Checkbox("skeleton", &config_system.item.skeleton);
-						ImGui::Checkbox("backtrack skeleton", &config_system.item.backtrack_skeleton);
+						ImGui::Checkbox("footstep", &config_system.get_config().visuals.player.footsteps);
+						ImGui::ColorEdit4("footstep color", reinterpret_cast<float*>(&config_system.get_config().colors.esp_footsteps), ImGuiColorEditFlags_NoInputs);
+						ImGui::Checkbox("skeleton", &config_system.get_config().visuals.player.skeleton);
+						//ImGui::Checkbox("backtrack skeleton", &config_system.get_config().backtrack_skeleton);
 					}
 					else
 					{
@@ -325,49 +325,49 @@ void c_menu::run() {
 					ImGui::BeginChild("effects", ImVec2(339, 330), true); {
 						ImGui::Spacing();
 						ImGui::Spacing();
-						ImGui::Checkbox("force crosshair", &config_system.item.force_crosshair);
-						ImGui::PushStyleColor(ImGuiCol_Text, config_system.item.visuals_enabled ? ImVec4(1.f, 1.f, 1.f, 1) : ImVec4(.6f, .6f, .6f, 1));
-						ImGui::SliderInt("viewmodel field of view", &config_system.item.viewmodel_fov, 0, 135);
-						ImGui::SliderInt("field of view", &config_system.item.fov, 0, 60);
-						ImGui::Checkbox("ambient light", &config_system.item.ambient);
-						ImGui::ColorEdit4("ambient light color", config_system.item.clr_ambient, ImGuiColorEditFlags_NoInputs);
-						ImGui::Checkbox("night mode", &config_system.item.nightmode);
-						ImGui::ColorEdit4("sky color", config_system.item.clr_sky, ImGuiColorEditFlags_NoInputs);
-						if (config_system.item.nightmode) {
-							ImGui::SliderInt("brightness", &config_system.item.nightmode_brightness, 0, 100);
+						ImGui::Checkbox("force crosshair", &config_system.get_config().visuals.player.force_crosshair);
+						ImGui::PushStyleColor(ImGuiCol_Text, config_system.get_config().visuals.global_enabled ? ImVec4(1.f, 1.f, 1.f, 1) : ImVec4(.6f, .6f, .6f, 1));
+						//ImGui::SliderInt("viewmodel field of view", &config_system.get_config().viewmodel_fov, 0, 135);
+						ImGui::SliderInt("field of view", &config_system.get_config().visuals.player.fov, 0, 60);
+						ImGui::Checkbox("ambient light", &config_system.get_config().visuals.ambient_light);
+						ImGui::ColorEdit4("ambient light color", reinterpret_cast<float*>(&config_system.get_config().colors.ambient), ImGuiColorEditFlags_NoInputs);
+						ImGui::Checkbox("night mode", &config_system.get_config().visuals.night_mode);
+						ImGui::ColorEdit4("sky color", reinterpret_cast<float*>(&config_system.get_config().colors.sky), ImGuiColorEditFlags_NoInputs);
+						if (config_system.get_config().visuals.night_mode) {
+							ImGui::SliderInt("brightness", &config_system.get_config().visuals.brightness, 0, 100);
 						}
 
 						if (ImGui::BeginCombo("removals", "...", ImVec2(0, 105))) {
 							ImGui::SetCursorPosY(ImGui::GetCursorPosY() - 8);
 							ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 4);
-							ImGui::Selectable(("fog"), &config_system.item.remove_fog, ImGuiSelectableFlags_::ImGuiSelectableFlags_DontClosePopups);
+							ImGui::Selectable(("fog"), &config_system.get_config().visuals.removals.fog, ImGuiSelectableFlags_::ImGuiSelectableFlags_DontClosePopups);
 							ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 4);
-							ImGui::Selectable(("smoke"), &config_system.item.remove_smoke, ImGuiSelectableFlags_::ImGuiSelectableFlags_DontClosePopups);
+							ImGui::Selectable(("smoke"), &config_system.get_config().visuals.removals.smoke, ImGuiSelectableFlags_::ImGuiSelectableFlags_DontClosePopups);
 							ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 4);
-							ImGui::Selectable(("flash"), &config_system.item.reduce_flash, ImGuiSelectableFlags_::ImGuiSelectableFlags_DontClosePopups);
+							ImGui::Selectable(("flash"), &config_system.get_config().visuals.removals.flash, ImGuiSelectableFlags_::ImGuiSelectableFlags_DontClosePopups);
 							ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 4);
-							ImGui::Selectable(("sleeves"), &config_system.item.remove_sleeves, ImGuiSelectableFlags_::ImGuiSelectableFlags_DontClosePopups);
+							ImGui::Selectable(("sleeves"), &config_system.get_config().visuals.removals.sleeves, ImGuiSelectableFlags_::ImGuiSelectableFlags_DontClosePopups);
 							ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 4);
-							ImGui::Selectable(("hands"), &config_system.item.remove_hands, ImGuiSelectableFlags_::ImGuiSelectableFlags_DontClosePopups);
+							ImGui::Selectable(("hands"), &config_system.get_config().visuals.removals.hands, ImGuiSelectableFlags_::ImGuiSelectableFlags_DontClosePopups);
 							ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 4);
-							ImGui::Selectable(("scope overlay"), &config_system.item.remove_scope, ImGuiSelectableFlags_::ImGuiSelectableFlags_DontClosePopups);
+							ImGui::Selectable(("scope overlay"), &config_system.get_config().visuals.removals.skope_overlay, ImGuiSelectableFlags_::ImGuiSelectableFlags_DontClosePopups);
 							ImGui::EndCombo();
 						}
 
 						if (ImGui::BeginCombo("world", "...", ImVec2(0, 105))) {
 							ImGui::SetCursorPosY(ImGui::GetCursorPosY() - 8);
 							ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 4);
-							ImGui::Selectable(("planted bomb"), &config_system.item.bomb_planted, ImGuiSelectableFlags_::ImGuiSelectableFlags_DontClosePopups);
+							ImGui::Selectable(("planted bomb"), &config_system.get_config().visuals.world.planted_bomb, ImGuiSelectableFlags_::ImGuiSelectableFlags_DontClosePopups);
 							ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 4);
-							ImGui::Selectable(("dropped weapons name"), &config_system.item.dropped_weapons, ImGuiSelectableFlags_::ImGuiSelectableFlags_DontClosePopups);
+							ImGui::Selectable(("dropped weapons name"), &config_system.get_config().visuals.world.dropped_weapons_name, ImGuiSelectableFlags_::ImGuiSelectableFlags_DontClosePopups);
 							ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 4);
-							ImGui::Selectable(("dropped weapons icon"), &config_system.item.dropped_weapons_icon, ImGuiSelectableFlags_::ImGuiSelectableFlags_DontClosePopups);
+							ImGui::Selectable(("dropped weapons icon"), &config_system.get_config().visuals.world.dropped_weapons_icon, ImGuiSelectableFlags_::ImGuiSelectableFlags_DontClosePopups);
 							ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 4);
-							ImGui::Selectable(("projectiles"), &config_system.item.projectiles, ImGuiSelectableFlags_::ImGuiSelectableFlags_DontClosePopups);
+							ImGui::Selectable(("projectiles"), &config_system.get_config().visuals.world.projectiles, ImGuiSelectableFlags_::ImGuiSelectableFlags_DontClosePopups);
 							ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 4);
-							ImGui::Selectable(("misc entities"), &config_system.item.entity_esp, ImGuiSelectableFlags_::ImGuiSelectableFlags_DontClosePopups);
+							ImGui::Selectable(("misc entities"), &config_system.get_config().visuals.world.misc_entities, ImGuiSelectableFlags_::ImGuiSelectableFlags_DontClosePopups);
 							ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 4);
-							ImGui::Selectable(("danger zone"), &config_system.item.danger_zone_dropped, ImGuiSelectableFlags_::ImGuiSelectableFlags_DontClosePopups);
+							ImGui::Selectable(("danger zone"), &config_system.get_config().visuals.world.danger_zone, ImGuiSelectableFlags_::ImGuiSelectableFlags_DontClosePopups);
 							ImGui::EndCombo();
 						}
 						ImGui::PopStyleColor();
@@ -379,10 +379,10 @@ void c_menu::run() {
 					ImGui::BeginChild("helpers", ImVec2(339, 110), true); {
 						ImGui::Spacing();
 						ImGui::Spacing();
-						ImGui::Checkbox("grenade predition", &config_system.item.nade_pred);
+						ImGui::Checkbox("grenade predition", &config_system.get_config().visuals.helpers.grenade_prediction);
 
-						ImGui::Checkbox("damage indicator", &config_system.item.damage_indicator);
-						ImGui::ColorEdit4("damage indicator color ", config_system.item.clr_damage_indicator, ImGuiColorEditFlags_NoInputs);
+						ImGui::Checkbox("damage indicator", &config_system.get_config().visuals.helpers.damage_indicator);
+						ImGui::ColorEdit4("damage indicator color ", reinterpret_cast<float*>(&config_system.get_config().colors.damage_indicator), ImGuiColorEditFlags_NoInputs);
 					}
 					ImGui::EndChild(true);
 
@@ -390,17 +390,17 @@ void c_menu::run() {
 						ImGui::Spacing();
 						ImGui::Spacing();
 
-						ImGui::Checkbox("active", &config_system.item.visuals_glow);
-						ImGui::Checkbox("enemy", &config_system.item.visuals_glow_enemy);
-						ImGui::ColorEdit4("glow color", config_system.item.clr_glow, ImGuiColorEditFlags_NoInputs);
-						ImGui::Checkbox("teammate", &config_system.item.visuals_glow_team);
-						ImGui::ColorEdit4("glow color team", config_system.item.clr_glow_team, ImGuiColorEditFlags_NoInputs);
-						ImGui::Checkbox("planted bomb", &config_system.item.visuals_glow_planted);
-						ImGui::ColorEdit4("glow color planted", config_system.item.clr_glow_planted, ImGuiColorEditFlags_NoInputs);
-						ImGui::Checkbox("dropped weapons", &config_system.item.visuals_glow_weapons);
-						ImGui::ColorEdit4("glow color weapons", config_system.item.clr_glow_dropped, ImGuiColorEditFlags_NoInputs);
-						ImGui::Checkbox("dropped nades", &config_system.item.visuals_glow_nades);
-						ImGui::ColorEdit4("glow color nades", config_system.item.clr_glow_dropped_nade, ImGuiColorEditFlags_NoInputs);
+						ImGui::Checkbox("active", &config_system.get_config().visuals.glow.enabled);
+						ImGui::Checkbox("enemy", &config_system.get_config().visuals.glow.enemy);
+						ImGui::ColorEdit4("glow color", reinterpret_cast<float*>(&config_system.get_config().colors.glow_enemy), ImGuiColorEditFlags_NoInputs);
+						ImGui::Checkbox("teammate", &config_system.get_config().visuals.glow.temmmate);
+						ImGui::ColorEdit4("glow color team", reinterpret_cast<float*>(&config_system.get_config().colors.glow_team), ImGuiColorEditFlags_NoInputs);
+						ImGui::Checkbox("planted bomb", &config_system.get_config().visuals.glow.planted_bomb);
+						ImGui::ColorEdit4("glow color planted", reinterpret_cast<float*>(&config_system.get_config().colors.nades), ImGuiColorEditFlags_NoInputs);
+						ImGui::Checkbox("dropped weapons", &config_system.get_config().visuals.glow.dropped_weapons);
+						//ImGui::ColorEdit4("glow color weapons", reinterpret_cast<float*>(&config_system.get_config().colors.nades), ImGuiColorEditFlags_NoInputs);
+						ImGui::Checkbox("dropped nades", &config_system.get_config().visuals.glow.nades);
+						//ImGui::ColorEdit4("glow color nades", reinterpret_cast<float*>(&config_system.get_config().colors.nades), ImGuiColorEditFlags_NoInputs);
 
 					}
 					ImGui::EndChild(true);
@@ -413,30 +413,30 @@ void c_menu::run() {
 						ImGui::Spacing();
 						ImGui::Spacing();
 
-						ImGui::PushStyleColor(ImGuiCol_Text, config_system.item.visuals_enabled ? ImVec4(1.f, 1.f, 1.f, 1) : ImVec4(.6f, .6f, .6f, 1));
-						ImGui::Combo("material", &config_system.item.vis_chams_type, "textured\0flat\0metallic\0pulsating");
+						ImGui::PushStyleColor(ImGuiCol_Text, config_system.get_config().visuals.global_enabled ? ImVec4(1.f, 1.f, 1.f, 1) : ImVec4(.6f, .6f, .6f, 1));
+						ImGui::Combo("material", &config_system.get_config().visuals.chams.material, "textured\0flat\0metallic\0pulsating\0");
 						ImGui::PopStyleColor();
 						ImGui::Spacing();
-						ImGui::Checkbox("smoke check", &config_system.item.vis_chams_smoke_check);
+						ImGui::Checkbox("smoke check", &config_system.get_config().visuals.chams.smoke_check);
 						ImGui::Spacing();
-						ImGui::Checkbox("enemy", &config_system.item.vis_chams_vis);
-						ImGui::ColorEdit4("enemy color", config_system.item.clr_chams_vis, ImGuiColorEditFlags_NoInputs);
-						ImGui::Checkbox("enemy (behind wall)", &config_system.item.vis_chams_invis);
-						ImGui::ColorEdit4("enemy (behind wall) color", config_system.item.clr_chams_invis, ImGuiColorEditFlags_NoInputs);
+						ImGui::Checkbox("enemy", &config_system.get_config().visuals.chams.enemy);
+						ImGui::ColorEdit4("enemy color", reinterpret_cast<float*>(&config_system.get_config().colors.chams_enemy_visible), ImGuiColorEditFlags_NoInputs);
+						ImGui::Checkbox("enemy (behind wall)", &config_system.get_config().visuals.chams.enemy_xoz);
+						ImGui::ColorEdit4("enemy (behind wall) color", reinterpret_cast<float*>(&config_system.get_config().colors.chams_enemy_invisible), ImGuiColorEditFlags_NoInputs);
 
-						ImGui::Checkbox("teammate", &config_system.item.vis_chams_vis_teammate);
-						ImGui::ColorEdit4("teammate color", config_system.item.clr_chams_vis_teammate, ImGuiColorEditFlags_NoInputs);
-						ImGui::Checkbox("teammate (behind wall)", &config_system.item.vis_chams_invis_teammate);
-						ImGui::ColorEdit4("teammate (behind wall) color", config_system.item.clr_chams_invis_teammate, ImGuiColorEditFlags_NoInputs);
+						ImGui::Checkbox("teammate", &config_system.get_config().visuals.chams.temmmate);
+						ImGui::ColorEdit4("teammate color", reinterpret_cast<float*>(&config_system.get_config().colors.chams_team_visible), ImGuiColorEditFlags_NoInputs);
+						ImGui::Checkbox("teammate (behind wall)", &config_system.get_config().visuals.chams.temmate_xoz);
+						ImGui::ColorEdit4("teammate (behind wall) color", reinterpret_cast<float*>(&config_system.get_config().colors.chams_enemy_visible), ImGuiColorEditFlags_NoInputs);
 
-						ImGui::Checkbox("weapon chams", &config_system.item.weapon_chams);
-						ImGui::ColorEdit4("weapon chams color", config_system.item.clr_weapon_chams, ImGuiColorEditFlags_NoInputs);
-						ImGui::Checkbox("hand chams", &config_system.item.hand_chams);
-						ImGui::ColorEdit4("hand chams color", config_system.item.clr_hand_chams, ImGuiColorEditFlags_NoInputs);
-						ImGui::Checkbox("sleeve chams", &config_system.item.sleeve_chams);
-						ImGui::ColorEdit4("sleeve chams color", config_system.item.clr_sleeve_chams, ImGuiColorEditFlags_NoInputs);
+						ImGui::Checkbox("weapon chams", &config_system.get_config().visuals.chams.weapon);
+						ImGui::ColorEdit4("weapon chams color", reinterpret_cast<float*>(&config_system.get_config().colors.chams_hand_weapon), ImGuiColorEditFlags_NoInputs);
+						ImGui::Checkbox("hand chams", &config_system.get_config().visuals.chams.hands);
+						ImGui::ColorEdit4("hand chams color", reinterpret_cast<float*>(&config_system.get_config().colors.chams_hands), ImGuiColorEditFlags_NoInputs);
+						ImGui::Checkbox("sleeve chams", &config_system.get_config().visuals.chams.sleeve);
+						ImGui::ColorEdit4("sleeve chams color", reinterpret_cast<float*>(&config_system.get_config().colors.chams_sleeve), ImGuiColorEditFlags_NoInputs);
 						ImGui::Spacing();
-						ImGui::Checkbox("backtrack player", &config_system.item.backtrack_visualize);
+						ImGui::Checkbox("backtrack player", &config_system.get_config().visuals.chams.backtrack);
 
 					}
 					ImGui::EndChild(true);
@@ -459,41 +459,41 @@ void c_menu::run() {
 					{
 						ImGui::Spacing();
 						ImGui::Spacing();
-						ImGui::Checkbox("active", &config_system.item.misc_enabled);
-						ImGui::Checkbox("clantag", &config_system.item.clan_tag);
-						ImGui::Checkbox("radar", &config_system.item.radar);
+						ImGui::Checkbox("active", &config_system.get_config().misc.global_active);
+						ImGui::Checkbox("clantag", &config_system.get_config().misc.clantag);
+						ImGui::Checkbox("radar", &config_system.get_config().misc.radar);
 
-						ImGui::PushStyleColor(ImGuiCol_Text, config_system.item.misc_enabled ? ImVec4(1.f, 1.f, 1.f, 1) : ImVec4(.6f, .6f, .6f, 1));
+						ImGui::PushStyleColor(ImGuiCol_Text, config_system.get_config().misc.global_active ? ImVec4(1.f, 1.f, 1.f, 1) : ImVec4(.6f, .6f, .6f, 1));
 						if (ImGui::BeginCombo("logs", "...", ImVec2(0, 65))) {
 							ImGui::SetCursorPosY(ImGui::GetCursorPosY() - 8);
 							ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 4);
-							ImGui::Selectable(("player hurt"), &config_system.item.logs_player_hurt, ImGuiSelectableFlags_::ImGuiSelectableFlags_DontClosePopups);
+							ImGui::Selectable(("player hurt"), &config_system.get_config().misc.logs.hurt, ImGuiSelectableFlags_::ImGuiSelectableFlags_DontClosePopups);
 							ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 4);
-							ImGui::Selectable(("player bought"), &config_system.item.logs_player_bought, ImGuiSelectableFlags_::ImGuiSelectableFlags_DontClosePopups);
+							ImGui::Selectable(("player bought"), &config_system.get_config().misc.logs.bouth, ImGuiSelectableFlags_::ImGuiSelectableFlags_DontClosePopups);
 							ImGui::EndCombo();
 						}
 						ImGui::PopStyleColor();
 
-						ImGui::Checkbox("hitmarker", &config_system.item.hitmarker);
-						if (config_system.item.hitmarker) {
-							ImGui::Combo("hitmarker sound", &config_system.item.hitmarker_sound, "none\0one\0two\0three\0");
+						ImGui::Checkbox("hitmarker", &config_system.get_config().misc.hitmarker.enabled);
+						if (config_system.get_config().misc.hitmarker.enabled) {
+							ImGui::Combo("hitmarker sound", &config_system.get_config().misc.hitmarker.sound, "none\0one\0two\0three\0");
 						}
-						ImGui::Checkbox("anti screenshot", &config_system.item.anti_screenshot);
-						ImGui::Checkbox("spectators", &config_system.item.spectators_list);
-						//ImGui::Checkbox("watermark", &config_system.item.watermark);
-						ImGui::Checkbox("disable post processing", &config_system.item.disable_post_processing);
-						ImGui::Checkbox("recoil crosshair", &config_system.item.recoil_crosshair);
-						ImGui::Checkbox("rank reveal", &config_system.item.rank_reveal);
+						ImGui::Checkbox("anti screenshot", &config_system.get_config().misc.anti_screenshoot);
+						ImGui::Checkbox("spectators", &config_system.get_config().misc.spectators);
+						//ImGui::Checkbox("watermark", &config_system.get_config().watermark);
+						ImGui::Checkbox("disable post processing", &config_system.get_config().misc.disable_post_processing);
+						ImGui::Checkbox("recoil crosshair", &config_system.get_config().misc.recoil_crosshair);
+						ImGui::Checkbox("rank reveal", &config_system.get_config().misc.radar);
 
-						//ImGui::Checkbox("viewmodel offset", &config_system.item.viewmodel_offset);
-						//if (config_system.item.viewmodel_offset) {
-						//	ImGui::SliderInt("viewmodel x", &config_system.item.viewmodel_x, -10, 10);
-						//	ImGui::SliderInt("viewmodel y", &config_system.item.viewmodel_y, -10, 10);
-						//	ImGui::SliderInt("viewmodel z", &config_system.item.viewmodel_z, -10, 10);
+						//ImGui::Checkbox("viewmodel offset", &config_system.get_config().viewmodel_offset);
+						//if (config_system.get_config().viewmodel_offset) {
+						//	ImGui::SliderInt("viewmodel x", &config_system.get_config().viewmodel_x, -10, 10);
+						//	ImGui::SliderInt("viewmodel y", &config_system.get_config().viewmodel_y, -10, 10);
+						//	ImGui::SliderInt("viewmodel z", &config_system.get_config().viewmodel_z, -10, 10);
 
 						//}
 
-						//ImGui::PushStyleColor(ImGuiCol_Text, config_system.item.misc_enabled ? ImVec4(1.f, 1.f, 1.f, 1) : ImVec4(.6f, .6f, .6f, 1));
+						//ImGui::PushStyleColor(ImGuiCol_Text, config_system.get_config().misc_enabled ? ImVec4(1.f, 1.f, 1.f, 1) : ImVec4(.6f, .6f, .6f, 1));
 						//ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 18);
 						//if (ImGui::Button("dump steam id")) {
 						//	utilities::dump_steam_id();
@@ -511,18 +511,18 @@ void c_menu::run() {
 					ImGui::Spacing();
 					if (license_manager::checkModuleActive(globals::user_modules, MODULE_BUNNY_HOP))
 					{
-						ImGui::Checkbox("bunny hop", &config_system.item.bunny_hop);
-						if (config_system.item.bunny_hop) {
-							ImGui::Checkbox("auto strafe", &config_system.item.bunny_hop_auto_stafe);
-							//ImGui::SliderInt("hitchance", &config_system.item.bunny_hop_hitchance, 0, 100);
-							//ImGui::SliderInt("minimum hops", &config_system.item.bunny_hop_minimum_value, 0, 20);
-							//ImGui::SliderInt("maximum hops", &config_system.item.bunny_hop_maximum_value, 0, 20);
+						ImGui::Checkbox("bunny hop", &config_system.get_config().bhop.enabled);
+						if (config_system.get_config().bhop.enabled) {
+							ImGui::Checkbox("auto strafe", &config_system.get_config().bhop.auto_strafe);
+							//ImGui::SliderInt("hitchance", &config_system.get_config().bunny_hop_hitchance, 0, 100);
+							//ImGui::SliderInt("minimum hops", &config_system.get_config().bunny_hop_minimum_value, 0, 20);
+							//ImGui::SliderInt("maximum hops", &config_system.get_config().bunny_hop_maximum_value, 0, 20);
 						}
 
 
-						ImGui::Checkbox("edge jump", &config_system.item.edge_jump);
-						if (config_system.item.edge_jump) {
-							ImGui::Checkbox("duck in air", &config_system.item.edge_jump_duck_in_air);
+						ImGui::Checkbox("edge jump", &config_system.get_config().bhop.edge_jump.enabled);
+						if (config_system.get_config().bhop.edge_jump.enabled) {
+							ImGui::Checkbox("duck in air", &config_system.get_config().bhop.edge_jump.duck_in_air);
 						}
 					}
 					else
@@ -548,18 +548,18 @@ void c_menu::run() {
 					ImGui::Spacing();
 					if (license_manager::checkModuleActive(globals::user_modules, MODULE_SKIN_CHANGER))
 					{
-						ImGui::Checkbox("enable", &config_system.item.skinchanger_enable);
+						ImGui::Checkbox("enable", &config_system.get_config().skin_changer.enable_skinchanger);
 						ImGui::Spacing();
 						ImGui::Spacing();
-						ImGui::PushStyleColor(ImGuiCol_Text, config_system.item.skinchanger_enable ? ImVec4(1.f, 1.f, 1.f, 1) : ImVec4(.6f, .6f, .6f, 1));
-						ImGui::Combo("model", &config_system.item.knife_model, "default\0bayonet\0m9\0karambit\0bowie\0butterfly\0falchion\0flip\0gut\0huntsman\0shaddow daggers\0navaja\0stiletto\0talon\0ursus\0");
-						ImGui::Combo(("skin"), &config_system.item.paint_kit_vector_index_knife, [](void* data, int idx, const char** out_text) {
+						ImGui::PushStyleColor(ImGuiCol_Text, config_system.get_config().skin_changer.enable_skinchanger ? ImVec4(1.f, 1.f, 1.f, 1) : ImVec4(.6f, .6f, .6f, 1));
+						ImGui::Combo("model", &config_system.get_config().skin_changer.knife_model, "default\0bayonet\0m9\0karambit\0bowie\0butterfly\0falchion\0flip\0gut\0huntsman\0shaddow daggers\0navaja\0stiletto\0talon\0ursus\0");
+						ImGui::Combo(("skin"), &config_system.get_config().skin_changer.knife_skin_vector, [](void* data, int idx, const char** out_text) {
 							*out_text = parser_skins[idx].name.c_str();
 							return true;
 						}, nullptr, parser_skins.size(), 10);
-						config_system.item.paint_kit_index_knife = parser_skins[config_system.item.paint_kit_vector_index_knife].id;
+						config_system.get_config().skin_changer.knife_skin = parser_skins[config_system.get_config().skin_changer.knife_skin_vector].id;
 						ImGui::Spacing();
-						ImGui::Combo("condition", &config_system.item.knife_wear, "factory new\0minimal wear\0field-tested\0well-worn\0battle-scarred\0");
+						ImGui::Combo("condition", &config_system.get_config().skin_changer.knife_wear, "factory new\0minimal wear\0field-tested\0well-worn\0battle-scarred\0");
 						ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 18);
 						ImGui::Spacing();
 						ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 18);
@@ -587,18 +587,18 @@ void c_menu::run() {
 					ImGui::BeginChild("gloves", ImVec2(339, 333), true); {
 						ImGui::Spacing();
 						ImGui::Spacing();
-						ImGui::Checkbox("enable", &config_system.item.glovechanger_enable);
+						ImGui::Checkbox("enable", &config_system.get_config().skin_changer.enable_glovechanger);
 						ImGui::Spacing();
 						ImGui::Spacing();
-						ImGui::PushStyleColor(ImGuiCol_Text, config_system.item.glovechanger_enable ? ImVec4(1.f, 1.f, 1.f, 1) : ImVec4(.6f, .6f, .6f, 1));
-						ImGui::Combo("collection", &config_system.item.glove_model, "default\0blood\0sport\0slick\0leather\0moto\0specin\0hydra\0");
-						ImGui::Combo(("skin"), &config_system.item.paint_kit_vector_index_glove, [](void* data, int idx, const char** out_text) {
+						ImGui::PushStyleColor(ImGuiCol_Text, config_system.get_config().skin_changer.enable_glovechanger ? ImVec4(1.f, 1.f, 1.f, 1) : ImVec4(.6f, .6f, .6f, 1));
+						ImGui::Combo("collection", &config_system.get_config().skin_changer.glove_model, "default\0blood\0sport\0slick\0leather\0moto\0specin\0hydra\0");
+						ImGui::Combo(("skin"), &config_system.get_config().skin_changer.glove_skin_vector, [](void* data, int idx, const char** out_text) {
 							*out_text = parser_gloves[idx].name.c_str();
 							return true;
 						}, nullptr, parser_gloves.size(), 10);
-						config_system.item.paint_kit_index_glove = parser_gloves[config_system.item.paint_kit_vector_index_glove].id;
+						config_system.get_config().skin_changer.glove_skin = parser_gloves[config_system.get_config().skin_changer.glove_skin_vector].id;
 						ImGui::Spacing();
-						ImGui::Combo("condition", &config_system.item.glove_wear, "factory new\0minimal wear\0field-tested\0well-worn\0battle-scarred\0");
+						ImGui::Combo("condition", &config_system.get_config().skin_changer.glove_wear, "factory new\0minimal wear\0field-tested\0well-worn\0battle-scarred\0");
 						ImGui::Spacing();
 						ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 18);
 						if (ImGui::Button("force update")) {
@@ -610,20 +610,20 @@ void c_menu::run() {
 
 					ImGui::NextColumn();
 
-					ImGui::BeginChild((config_system.weapon_name + " settings").c_str(), ImVec2(339, 670), true); {
+					ImGui::BeginChild((config_system.current_weapon_name + " settings").c_str(), ImVec2(339, 670), true); {
 						ImGui::Spacing();
 						ImGui::Spacing();
-						ImGui::PushStyleColor(ImGuiCol_Text, config_system.item.skinchanger_enable ? ImVec4(1.f, 1.f, 1.f, 1) : ImVec4(.6f, .6f, .6f, 1));
+						ImGui::PushStyleColor(ImGuiCol_Text, config_system.get_config().skin_changer.enable_skinchanger ? ImVec4(1.f, 1.f, 1.f, 1) : ImVec4(.6f, .6f, .6f, 1));
 
-						ImGui::Combo((config_system.weapon_name + " skin").c_str(), &config_system.item.weapon_skin_info[config_system.active_weapon].paint_kit_vecotor, [](void* data, int idx, const char** out_text) {
+						ImGui::Combo((config_system.current_weapon_name + " skin").c_str(), &config_system.get_active_weapon(config_system.current_wepon_id).skin_info.paint_kit_vector, [](void* data, int idx, const char** out_text) {
 							*out_text = parser_skins[idx].name.c_str();
 							return true;
 						}, nullptr, parser_skins.size(), 10);
 
 						if(ImGui::Button("apply skin"))
 						{
-							config_system.item.weapon_skin_info[config_system.active_weapon].paint_kit = parser_skins[config_system.item.weapon_skin_info[config_system.active_weapon].paint_kit_vecotor].id;
-							config_system.item.weapon_skin_info[config_system.active_weapon].setted = true;
+							config_system.get_active_weapon(config_system.current_wepon_id).skin_info.paint_kit = parser_skins[config_system.get_active_weapon(config_system.current_wepon_id).skin_info.paint_kit_vector].id;
+							config_system.get_active_weapon(config_system.current_wepon_id).skin_info.setted = true;
 							utilities::force_update();
 						}
 						ImGui::PopStyleColor();
@@ -714,19 +714,7 @@ void c_menu::run() {
 				ImGui::BeginChild(XorStr("settings"), ImVec2(339, 332), true); {
 					ImGui::Spacing();
 					ImGui::Spacing();
-					ImGui::Combo(XorStr("keybinds"), &config_system.item.keybinds_selection, XorStr("edge jump\0aimbot key\0visuals key\0"));
-
-					if (config_system.item.keybinds_selection == 0) {
-						ImGui::Hotkey(XorStr("##edge jump key"), &config_system.item.edge_jump_key, ImVec2(140, 30));
-					}
-
-					else if (config_system.item.keybinds_selection == 1) {
-						ImGui::Hotkey(XorStr("##aimbot key"), &config_system.item.aim_key, ImVec2(140, 30));
-					}
-
-					else if (config_system.item.keybinds_selection == 2) {
-						ImGui::Hotkey(XorStr("##visuals key"), &config_system.item.visuals_key, ImVec2(140, 30));
-					}
+					ImGui::Hotkey(XorStr("edge jump key"), &config_system.get_config().bhop.edge_jump.jump_key, ImVec2(140, 30));
 				}
 				ImGui::EndChild(true);
 
@@ -862,21 +850,21 @@ void c_menu::run_visuals_preview() {
 		ImGui::Text(XorStr("visuals preview"));
 
 
-		if (config_system.item.player_box) {
-			cur_window->DrawList->AddRect(ImVec2(w_pos.x + 40, w_pos.y + 60), ImVec2(w_pos.x + 200, w_pos.y + 360), ImGui::GetColorU32(ImGuiCol_Text));
-		}
+		//if (config_system.get_config().player_box) {
+		//	cur_window->DrawList->AddRect(ImVec2(w_pos.x + 40, w_pos.y + 60), ImVec2(w_pos.x + 200, w_pos.y + 360), ImGui::GetColorU32(ImGuiCol_Text));
+		//}
 
-		if (config_system.item.player_health)
-			cur_window->DrawList->AddRectFilled(ImVec2(w_pos.x + 34, w_pos.y + 60), ImVec2(w_pos.x + 36, w_pos.y + 360), ImGui::GetColorU32(ImVec4(83 / 255.f, 200 / 255.f, 84 / 255.f, 255 / 255.f)));
+		//if (config_system.get_config().player_health)
+		//	cur_window->DrawList->AddRectFilled(ImVec2(w_pos.x + 34, w_pos.y + 60), ImVec2(w_pos.x + 36, w_pos.y + 360), ImGui::GetColorU32(ImVec4(83 / 255.f, 200 / 255.f, 84 / 255.f, 255 / 255.f)));
 
-		if (config_system.item.player_name)
-			info.emplace_back(esp_info_s(XorStr("name"), color(255, 255, 255, 255), CENTER_UP));
+		//if (config_system.get_config().player_name)
+		//	info.emplace_back(esp_info_s(XorStr("name"), color(255, 255, 255, 255), CENTER_UP));
 
-		if (config_system.item.player_weapon)
-			info.emplace_back(esp_info_s(XorStr("awp"), color(255, 255, 255, 255), CENTER_DOWN));
+		//if (config_system.get_config().player_weapon)
+		//	info.emplace_back(esp_info_s(XorStr("awp"), color(255, 255, 255, 255), CENTER_DOWN));
 
-		if (config_system.item.player_flags_armor)
-			info.emplace_back(esp_info_s(XorStr("hk"), color(255, 255, 255, 255), RIGHT));
+		//if (config_system.get_config().player_flags_armor)
+		//	info.emplace_back(esp_info_s(XorStr("hk"), color(255, 255, 255, 255), RIGHT));
 
 
 		for (auto render : info) {

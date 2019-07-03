@@ -33,7 +33,7 @@ void c_event_logs::run() noexcept {
 }
 
 void c_event_logs::event_item_purchase(i_game_event* event) noexcept {
-	if (!config_system.item.logs_player_bought)
+	if (!config_system.get_config().misc.logs.hurt)
 		return;
 
 	auto userid = event->get_int("userid");
@@ -70,7 +70,7 @@ void c_event_logs::event_item_purchase(i_game_event* event) noexcept {
 }
 
 void c_event_logs::event_player_hurt(i_game_event* event) noexcept {
-	if (!config_system.item.logs_player_hurt && !config_system.item.damage_indicator)
+	if (!config_system.get_config().misc.logs.hurt && !config_system.get_config().misc.logs.bouth)
 		return;
 	
 	if (!event)
@@ -111,7 +111,7 @@ void c_event_logs::event_player_hurt(i_game_event* event) noexcept {
 
 		auto hitgroup = utilities::hitgroup_name(hitbox);
 		
-		if (config_system.item.logs_player_hurt) {
+		if (config_system.get_config().misc.logs.hurt) {
 			std::string player_name = info.name;
 			std::transform(player_name.begin(), player_name.end(), player_name.begin(), ::tolower);
 
@@ -128,7 +128,7 @@ void c_event_logs::event_player_hurt(i_game_event* event) noexcept {
 			interfaces::console->console_printf("in air: %s", entity->is_in_air() ? "yes, " : "no, ");
 			interfaces::console->console_printf("flashed: %s", entity->is_flashed() ? "yes \n" : "no \n");
 		}
-		if (config_system.item.damage_indicator) {
+		if (config_system.get_config().misc.logs.hurt) {
 			c_damageindicator_t damage_in;
 			damage_in.di_damage = damage;
 			damage_in.di_damage_group = hitgroup;

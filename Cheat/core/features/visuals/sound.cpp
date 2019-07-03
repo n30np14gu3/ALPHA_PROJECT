@@ -34,7 +34,7 @@ void c_sound_esp::draw_circle(color colors, vec3_t position) noexcept {
 }
 
 void c_sound_esp::event_player_footstep(i_game_event * event) noexcept {
-	if (!config_system.item.sound_footstep)
+	if (!config_system.get_config().visuals.player.footsteps)
 		return;
 
 	if (!interfaces::engine->is_connected() && !interfaces::engine->is_in_game())
@@ -72,7 +72,7 @@ void c_sound_esp::event_player_footstep(i_game_event * event) noexcept {
 }
 
 void c_sound_esp::event_player_hurt(i_game_event * event) noexcept {
-	if (!config_system.item.sound_footstep)
+	if (!config_system.get_config().visuals.player.footsteps)
 		return;
 
 	if (!interfaces::engine->is_connected() && !interfaces::engine->is_in_game())
@@ -111,16 +111,16 @@ void c_sound_esp::event_player_hurt(i_game_event * event) noexcept {
 }
 
 void c_sound_esp::draw() noexcept {
-	if (!config_system.item.sound_footstep)
+	if (!config_system.get_config().visuals.player.footsteps)
 		return;
 
 	if (!interfaces::engine->is_connected() && !interfaces::engine->is_in_game())
 		return;
 
-	auto red = config_system.item.clr_footstep[0] * 255;
-	auto green = config_system.item.clr_footstep[1] * 255;
-	auto blue = config_system.item.clr_footstep[2] * 255;
-	auto alpha = config_system.item.clr_footstep[3] * 255;
+	auto red = config_system.get_config().colors.esp_footsteps.r * 255;
+	auto green = config_system.get_config().colors.esp_footsteps.g * 255;
+	auto blue = config_system.get_config().colors.esp_footsteps.b * 255;
+	auto alpha = config_system.get_config().colors.esp_footsteps.a * 255;
 
 	for (unsigned int i = 0; i < sound_logs.size(); i++) {
 		draw_circle(color(red, green, blue, alpha), sound_logs[i].position);

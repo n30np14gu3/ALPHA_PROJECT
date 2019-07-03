@@ -153,7 +153,7 @@ void c_nade_prediction::trace(c_usercmd * user_cmd) noexcept {
 	
 	auto local_player = reinterpret_cast<player_t*>(interfaces::entity_list->get_client_entity(interfaces::engine->get_local_player()));
 
-	if (!config_system.item.nade_pred) {
+	if (!config_system.get_config().visuals.helpers.grenade_prediction) {
 		return;
 	}
 
@@ -193,7 +193,7 @@ void c_nade_prediction::draw() noexcept {
 	if (!local_player) {
 		return;
 	}
-	if (!config_system.item.nade_pred) {
+	if (!config_system.get_config().visuals.helpers.grenade_prediction) {
 		return;
 	}
 

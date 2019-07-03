@@ -4,7 +4,7 @@
 c_damageindicator damage_indicator;
 
 void c_damageindicator::draw() noexcept {
-	if (!config_system.item.damage_indicator)
+	if (!config_system.get_config().visuals.helpers.damage_indicator)
 		return;
 	
 	if (!interfaces::engine->is_connected() && !interfaces::engine->is_in_game())
@@ -33,10 +33,10 @@ void c_damageindicator::draw() noexcept {
 		}
 
 		vec3_t screen_pos;
-		auto red = config_system.item.clr_damage_indicator[0] * 255;
-		auto green = config_system.item.clr_damage_indicator[1] * 255;
-		auto blue = config_system.item.clr_damage_indicator[2] * 255;
-		auto alpha = config_system.item.clr_damage_indicator[3] * 255;
+		auto red = reinterpret_cast<float*>(&config_system.get_config().colors.damage_indicator)[0] * 255;
+		auto green = reinterpret_cast<float*>(&config_system.get_config().colors.damage_indicator)[1] * 255;
+		auto blue = reinterpret_cast<float*>(&config_system.get_config().colors.damage_indicator)[2] * 255;
+		auto alpha = reinterpret_cast<float*>(&config_system.get_config().colors.damage_indicator)[3] * 255;
 
 		if (!math.world_to_screen(data[i].di_position, screen_pos))
 			return;

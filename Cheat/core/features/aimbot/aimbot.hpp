@@ -20,7 +20,7 @@ public:
 	void event_player_death(i_game_event* event) noexcept;
 	void auto_pistol(c_usercmd* user_cmd);
 	void rcs_standalone(c_usercmd* user_cmd) noexcept;
-
+	void do_psilent(vec3_t angle, player_t* pLocal, c_usercmd* cmd) noexcept;
 	bool is_pistol(void* weapon) {
 		if (!weapon)
 			return false;

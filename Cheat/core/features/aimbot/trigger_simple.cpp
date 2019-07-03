@@ -19,10 +19,10 @@ void c_trigger::trigger(c_usercmd* user_cmd) {
 	if (!interfaces::engine->is_connected() && !interfaces::engine->is_in_game())
 		return;
 
-	if (!config_system.item.trigger_bot[config_system.active_weapon].enable)
+	if (!config_system.get_active_weapon(config_system.current_wepon_id).trigger_settings.enable)
 		return;
 
-	if(config_system.item.trigger_bot[config_system.active_weapon].on_key && !GetAsyncKeyState(config_system.item.trigger_bot[config_system.active_weapon].key_id))
+	if(config_system.get_active_weapon(config_system.current_wepon_id).trigger_settings.on_key && !GetAsyncKeyState(config_system.get_active_weapon(config_system.current_wepon_id).trigger_settings.key_id))
 		return;
 
 	auto local_player = reinterpret_cast<player_t*>(interfaces::entity_list->get_client_entity(interfaces::engine->get_local_player()));
@@ -52,7 +52,7 @@ void c_trigger::trigger(c_usercmd* user_cmd) {
 
 	interfaces::trace_ray->trace_ray(ray, MASK_SHOT, &filter, &tr);
 
-	if (config_system.item.trigger_bot[config_system.active_weapon].rcs)
+	if (config_system.get_active_weapon(config_system.current_wepon_id).trigger_settings.rcs)
 		user_cmd->viewangles += local_player->aim_punch_angle() * 2.0f;
 
 	math.angle_vectors(user_cmd->viewangles, crosshair_forward);
@@ -67,24 +67,24 @@ void c_trigger::trigger(c_usercmd* user_cmd) {
 	int hitgroup = tr.hitGroup;
 	bool didhit = false;
 
-	if (config_system.item.trigger_bot[config_system.active_weapon].hitbox_head)
+	if (config_system.get_active_weapon(config_system.current_wepon_id).trigger_settings.hitbox_head)
 	{
 		if (hitgroup == HITGROUP_HEAD) didhit = true;
 	}
-	if (config_system.item.trigger_bot[config_system.active_weapon].hitbox_body)
+	if (config_system.get_active_weapon(config_system.current_wepon_id).trigger_settings.hitbox_body)
 	{
 		if (hitgroup == HITGROUP_CHEST || hitgroup == HITGROUP_STOMACH) didhit = true;
 	}
-	if (config_system.item.trigger_bot[config_system.active_weapon].hitbox_arms)
+	if (config_system.get_active_weapon(config_system.current_wepon_id).trigger_settings.hitbox_arms)
 	{
 		if (hitgroup == HITGROUP_LEFTARM || hitgroup == HITGROUP_RIGHTARM) didhit = true;
 	}
-	if (config_system.item.trigger_bot[config_system.active_weapon].hitbox_legs)
+	if (config_system.get_active_weapon(config_system.current_wepon_id).trigger_settings.hitbox_legs)
 	{
 		if (hitgroup == HITGROUP_LEFTLEG || hitgroup == HITGROUP_RIGHTLEG) didhit = true;
 	}
 
-	if (trigger_delay >= 2 + config_system.item.trigger_bot[config_system.active_weapon].delay && didhit)
+	if (trigger_delay >= 2 + config_system.get_active_weapon(config_system.current_wepon_id).trigger_settings.delay && didhit)
 	{
 		trigger_delay = 0;
 		user_cmd->buttons |= in_attack;

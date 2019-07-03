@@ -6,7 +6,7 @@ namespace Loader.NET
 {
     internal class ClientData
     {
-        public static readonly DateTime LastUpdate = new DateTime(2019, 6, 26, 19, 0, 0);
+        public static readonly DateTime LastUpdate = new DateTime(2019, 7, 3, 23, 20, 0);
         public const int GameId = 1;
         public static UserData Data = null;
         public static bool Logged = false;

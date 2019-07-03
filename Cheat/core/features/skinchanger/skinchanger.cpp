@@ -43,12 +43,12 @@ void c_skinchanger::run() noexcept {
 	if (!local_player)
 		return;
 
-	if (!config_system.item.skinchanger_enable) {
+	if (!config_system.get_config().skin_changer.enable_skinchanger) {
 		return;
 	}
 
 	// skinchanger
-	if (config_system.item.skinchanger_enable) {
+	if (config_system.get_config().skin_changer.enable_skinchanger) {
 			
 		auto model_bayonet = "models/weapons/v_knife_bayonet.mdl";
 		auto model_m9 = "models/weapons/v_knife_m9_bay.mdl";
@@ -93,7 +93,7 @@ void c_skinchanger::run() noexcept {
 
 			//knife conditions
 			float wear = 0.f;
-			switch (config_system.item.knife_wear) {
+			switch (config_system.get_config().skin_changer.knife_wear) {
 			case 0:
 				wear = 0.0000001f;
 				break;
@@ -113,7 +113,7 @@ void c_skinchanger::run() noexcept {
 
 			//apply knife model
 			if (active_weapon->client_class()->class_id == class_ids::cknife) {
-				switch (config_system.item.knife_model) {
+				switch (config_system.get_config().skin_changer.knife_model) {
 				case 0:
 					break;
 				case 1:
@@ -163,58 +163,58 @@ void c_skinchanger::run() noexcept {
 
 			//apply knife skins
 			if (weapon->client_class()->class_id == class_ids::cknife) {
-				switch (config_system.item.knife_model) {
+				switch (config_system.get_config().skin_changer.knife_model) {
 				case 0:
 					break;
 				case 1:
-					apply_knife_skin(weapon, WEAPON_BAYONET, config_system.item.paint_kit_index_knife, index_bayonet, 3, wear);
+					apply_knife_skin(weapon, WEAPON_BAYONET, config_system.get_config().skin_changer.knife_skin, index_bayonet, 3, wear);
 					break;
 				case 2:
-					apply_knife_skin(weapon, WEAPON_KNIFE_M9_BAYONET, config_system.item.paint_kit_index_knife, index_m9, 3, wear);
+					apply_knife_skin(weapon, WEAPON_KNIFE_M9_BAYONET, config_system.get_config().skin_changer.knife_skin, index_m9, 3, wear);
 					break;
 				case 3:
-					apply_knife_skin(weapon, WEAPON_KNIFE_KARAMBIT, config_system.item.paint_kit_index_knife, index_karambit, 3, wear);
+					apply_knife_skin(weapon, WEAPON_KNIFE_KARAMBIT, config_system.get_config().skin_changer.knife_skin, index_karambit, 3, wear);
 					break;
 				case 4:
-					apply_knife_skin(weapon, WEAPON_KNIFE_SURVIVAL_BOWIE, config_system.item.paint_kit_index_knife, index_bowie, 3, wear);
+					apply_knife_skin(weapon, WEAPON_KNIFE_SURVIVAL_BOWIE, config_system.get_config().skin_changer.knife_skin, index_bowie, 3, wear);
 					break;
 				case 5:
-					apply_knife_skin(weapon, WEAPON_KNIFE_BUTTERFLY, config_system.item.paint_kit_index_knife, index_butterfly, 3, wear);
+					apply_knife_skin(weapon, WEAPON_KNIFE_BUTTERFLY, config_system.get_config().skin_changer.knife_skin, index_butterfly, 3, wear);
 					break;
 				case 6:
-					apply_knife_skin(weapon, WEAPON_KNIFE_FALCHION, config_system.item.paint_kit_index_knife, index_falchion, 3, wear);
+					apply_knife_skin(weapon, WEAPON_KNIFE_FALCHION, config_system.get_config().skin_changer.knife_skin, index_falchion, 3, wear);
 					break;
 				case 7:
-					apply_knife_skin(weapon, WEAPON_KNIFE_FLIP, config_system.item.paint_kit_index_knife, index_flip, 3, wear);
+					apply_knife_skin(weapon, WEAPON_KNIFE_FLIP, config_system.get_config().skin_changer.knife_skin, index_flip, 3, wear);
 					break;
 				case 8:
-					apply_knife_skin(weapon, WEAPON_KNIFE_GUT, config_system.item.paint_kit_index_knife, index_gut, 3, wear);
+					apply_knife_skin(weapon, WEAPON_KNIFE_GUT, config_system.get_config().skin_changer.knife_skin, index_gut, 3, wear);
 					break;
 				case 9:
-					apply_knife_skin(weapon, WEAPON_KNIFE_TACTICAL, config_system.item.paint_kit_index_knife, index_huntsman, 3, wear);
+					apply_knife_skin(weapon, WEAPON_KNIFE_TACTICAL, config_system.get_config().skin_changer.knife_skin, index_huntsman, 3, wear);
 					break;
 				case 10:
-					apply_knife_skin(weapon, WEAPON_KNIFE_PUSH, config_system.item.paint_kit_index_knife, index_shadow_daggers, 3, wear);
+					apply_knife_skin(weapon, WEAPON_KNIFE_PUSH, config_system.get_config().skin_changer.knife_skin, index_shadow_daggers, 3, wear);
 					break;
 				case 11:
-					apply_knife_skin(weapon, WEAPON_KNIFE_GYPSY_JACKKNIFE, config_system.item.paint_kit_index_knife, index_navaja, 3, wear);
+					apply_knife_skin(weapon, WEAPON_KNIFE_GYPSY_JACKKNIFE, config_system.get_config().skin_changer.knife_skin, index_navaja, 3, wear);
 					break;
 				case 12:
-					apply_knife_skin(weapon, WEAPON_KNIFE_STILETTO, config_system.item.paint_kit_index_knife, index_stiletto, 3, wear);
+					apply_knife_skin(weapon, WEAPON_KNIFE_STILETTO, config_system.get_config().skin_changer.knife_skin, index_stiletto, 3, wear);
 					break;
 				case 13:
-					apply_knife_skin(weapon, WEAPON_KNIFE_WIDOWMAKER, config_system.item.paint_kit_index_knife, index_talon, 3, wear);
+					apply_knife_skin(weapon, WEAPON_KNIFE_WIDOWMAKER, config_system.get_config().skin_changer.knife_skin, index_talon, 3, wear);
 					break;
 				case 14:
-					apply_knife_skin(weapon, WEAPON_KNIFE_URSUS, config_system.item.paint_kit_index_knife, index_ursus, 3, wear);
+					apply_knife_skin(weapon, WEAPON_KNIFE_URSUS, config_system.get_config().skin_changer.knife_skin, index_ursus, 3, wear);
 					break;
 				}
 			}
 			else
 			{
-				if(config_system.item.weapon_skin_info[weapon->item_definition_index()].setted)
+				if(config_system.get_active_weapon(weapon->item_definition_index()).skin_info.setted)
 				{
-					weapon->fallback_paint_kit() = config_system.item.weapon_skin_info[weapon->item_definition_index()].paint_kit, weapon->fallback_wear() = wear;
+					weapon->fallback_paint_kit() = config_system.get_active_weapon(weapon->item_definition_index()).skin_info.paint_kit, weapon->fallback_wear() = wear;
 				}
 			}
 

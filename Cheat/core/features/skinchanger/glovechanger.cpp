@@ -55,11 +55,11 @@ void c_glovechanger::run() noexcept {
 	if (!local_player)
 		return;
 
-	if (!config_system.item.glovechanger_enable) 
+	if (!config_system.get_config().skin_changer.enable_glovechanger) 
 		return;
 		
 	// gloveschanger
-	if (config_system.item.glovechanger_enable) {
+	if (!config_system.get_config().skin_changer.enable_glovechanger) {
 		
 		auto	model_blood = "models/weapons/v_models/arms/glove_bloodhound/v_glove_bloodhound.mdl";
 		auto	model_sport = "models/weapons/v_models/arms/glove_sporty/v_glove_sporty.mdl";
@@ -120,7 +120,7 @@ void c_glovechanger::run() noexcept {
 		{
 			//glove conditions
 			float g_wear = 0.f;
-			switch (config_system.item.glove_wear) {
+			switch (config_system.get_config().skin_changer.glove_wear) {
 			case 0:
 				g_wear = 0.0000001f;
 				break;
@@ -139,7 +139,7 @@ void c_glovechanger::run() noexcept {
 			}
 			
 			//apply glove model
-			switch (config_system.item.glove_model) {
+			switch (config_system.get_config().skin_changer.glove_model) {
 			case 0:
 				break;
 			case 1:
@@ -166,29 +166,29 @@ void c_glovechanger::run() noexcept {
 			}
 			
 			//apply glove skins
-			switch (config_system.item.glove_model) {
+			switch (config_system.get_config().skin_changer.glove_model) {
 			case 0:
 				break;
 			case 1:
-				apply_glove_skin(glove, GLOVE_STUDDED_BLOODHOUND, config_system.item.paint_kit_index_glove, index_blood, 3, g_wear);
+				apply_glove_skin(glove, GLOVE_STUDDED_BLOODHOUND, config_system.get_config().skin_changer.glove_skin, index_blood, 3, g_wear);
 				break;
 			case 2:
-				apply_glove_skin(glove, GLOVE_SPORTY, config_system.item.paint_kit_index_glove, index_sport, 3, g_wear);
+				apply_glove_skin(glove, GLOVE_SPORTY, config_system.get_config().skin_changer.glove_skin, index_sport, 3, g_wear);
 				break;
 			case 3:
-				apply_glove_skin(glove, GLOVE_SLICK, config_system.item.paint_kit_index_glove, index_slick, 3, g_wear);
+				apply_glove_skin(glove, GLOVE_SLICK, config_system.get_config().skin_changer.glove_skin, index_slick, 3, g_wear);
 				break;
 			case 4:
-				apply_glove_skin(glove, GLOVE_LEATHER_WRAP, config_system.item.paint_kit_index_glove, index_leath, 3, g_wear);
+				apply_glove_skin(glove, GLOVE_LEATHER_WRAP, config_system.get_config().skin_changer.glove_skin, index_leath, 3, g_wear);
 				break;
 			case 5:
-				apply_glove_skin(glove, GLOVE_MOTORCYCLE, config_system.item.paint_kit_index_glove, index_moto, 3, g_wear);
+				apply_glove_skin(glove, GLOVE_MOTORCYCLE, config_system.get_config().skin_changer.glove_skin, index_moto, 3, g_wear);
 				break;
 			case 6:
-				apply_glove_skin(glove, GLOVE_SPECIALIST, config_system.item.paint_kit_index_glove, index_speci, 3, g_wear);
+				apply_glove_skin(glove, GLOVE_SPECIALIST, config_system.get_config().skin_changer.glove_skin, index_speci, 3, g_wear);
 				break;
 			case 7:
-				apply_glove_skin(glove, GLOVE_HYDRA, config_system.item.paint_kit_index_glove, index_hydra, 3, g_wear);
+				apply_glove_skin(glove, GLOVE_HYDRA, config_system.get_config().skin_changer.glove_skin, index_hydra, 3, g_wear);
 				break;
 			}
 						
