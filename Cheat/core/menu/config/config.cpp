@@ -6,7 +6,8 @@
 #include "../../../SDK/jsonip/writer.hpp"
 #include "../../../SDK/jsonip/parse.hpp"
 
-alpha_config config_system;
+alpha_config::weapon_settings buff = {};
+alpha_config config_system(buff);
 
 alpha_config::weapon_settings& alpha_config::get_active_weapon(size_t weapon_id)
 {
@@ -25,6 +26,16 @@ alpha_config::config_base& alpha_config::get_config()
 
 void alpha_config::reset() noexcept {
 	item = { };
+	current_wepon_id = 0;
+	current_weapon_name = "";
+}
+
+alpha_config::alpha_config(weapon_settings& blank_settings): current_weapon(blank_settings)
+{
+
+	current_weapon = get_active_weapon(0);
+	current_wepon_id = 0;
+	current_weapon_name = "";
 }
 
 void alpha_config::run(const char* name) noexcept {
@@ -257,8 +268,14 @@ BOOST_FUSION_ADAPT_STRUCT(
 	(bool, temmate_xoz)
 
 	(bool, weapon)
+	(bool, weapon_wireframe)
+
 	(bool, hands)
+	(bool, hands_wireframe)
+
 	(bool, sleeve)
+	(bool, sleeve_wireframe)
+
 	(bool, backtrack)
 )
 

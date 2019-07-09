@@ -5,10 +5,6 @@
 class alpha_config
 {
 public:
-	int current_wepon_id{ 0 };
-	std::string current_weapon_name;
-
-
 	struct color_t
 	{
 		float r;
@@ -161,8 +157,13 @@ public:
 		bool temmate_xoz{ false };
 
 		bool weapon{ false };
+		bool weapon_wireframe{ false };
+
 		bool hands{ false };
+		bool hands_wireframe{ false };
+
 		bool sleeve{ false };
+		bool sleeve_wireframe{ false };
 		bool backtrack{ false };
 	};
 
@@ -307,6 +308,7 @@ public:
 	weapon_settings& get_active_weapon(size_t weapon_id);
 	config_base& get_config();
 
+	alpha_config(weapon_settings& blank_settings);
 	void run(const char*) noexcept;
 	void load(size_t) noexcept;
 	void save(size_t) const noexcept;
@@ -317,6 +319,11 @@ public:
 	constexpr auto& get_configs() noexcept {
 		return configs;
 	}
+
+	weapon_settings& current_weapon;
+	int current_wepon_id{ 0 };
+	std::string current_weapon_name;
+
 private:
 	std::filesystem::path path;
 	config_base item{};

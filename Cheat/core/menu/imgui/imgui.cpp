@@ -8165,7 +8165,7 @@ bool ImGui::Hotkey(const char* label, int* k, const ImVec2& size_arg) {
 			}
 		}
 		if (!value_changed) {
-			for (auto i = VK_BACK; i <= VK_RMENU; i++) {
+			for (auto i = VK_BACK; i <= VK_ZOOM; i++) {
 				if (io.KeysDown[i]) {
 					key = i;
 					value_changed = true;

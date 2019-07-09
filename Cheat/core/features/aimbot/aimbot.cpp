@@ -52,11 +52,11 @@ void c_aimbot::weapon_settings(weapon_t* weapon) noexcept {
 	if (!weapon)
 		return;
 	
-	hitbox_id = config_system.get_active_weapon(config_system.current_wepon_id).legit_settings.hitbox;
-	aim_smooth = config_system.get_active_weapon(config_system.current_wepon_id).legit_settings.smooth;
-	aim_fov = config_system.get_active_weapon(config_system.current_wepon_id).legit_settings.fov;
-	rcs_x = config_system.get_active_weapon(config_system.current_wepon_id).legit_settings.rcs_x;
-	rcs_y = config_system.get_active_weapon(config_system.current_wepon_id).legit_settings.rcs_y;
+	hitbox_id = config_system.current_weapon.legit_settings.hitbox;
+	aim_smooth = config_system.current_weapon.legit_settings.smooth;
+	aim_fov = config_system.current_weapon.legit_settings.fov;
+	rcs_x = config_system.current_weapon.legit_settings.rcs_x;
+	rcs_y = config_system.current_weapon.legit_settings.rcs_y;
 }
 
 int c_aimbot::find_target(c_usercmd* user_cmd) noexcept {
@@ -197,6 +197,7 @@ void c_aimbot::apply_player_weapon(c_usercmd*) noexcept
 		config_system.current_wepon_id = 0;
 		config_system.current_weapon_name = "UNKNOWN";
 	}
+	config_system.current_weapon = config_system.get_active_weapon(config_system.current_wepon_id);
 }
 
 void c_aimbot::run(c_usercmd* user_cmd) noexcept 
@@ -214,7 +215,7 @@ void c_aimbot::run(c_usercmd* user_cmd) noexcept
 	auto_pistol(user_cmd);
 	rcs_standalone(user_cmd);
 	
-	if (config_system.get_active_weapon(config_system.current_wepon_id).legit_settings.enable && user_cmd->buttons & in_attack) {
+	if (config_system.current_weapon.legit_settings.enable && user_cmd->buttons & in_attack) {
 		if (auto target = find_target(user_cmd)) {
 			auto entity = reinterpret_cast<player_t*>(interfaces::entity_list->get_client_entity(target));
 
@@ -241,7 +242,7 @@ void c_aimbot::run(c_usercmd* user_cmd) noexcept
 			aim_punch.x *= rcs_x;
 			aim_punch.y *= rcs_y;
 
-			switch (config_system.get_active_weapon(config_system.current_wepon_id).legit_settings.nearest) {
+			switch (config_system.current_weapon.legit_settings.nearest) {
 			case 0:
 				angle = math.calculate_angle(local_player->get_eye_pos(), entity->get_hitbox_position(entity, hitbox_id), user_cmd->viewangles + aim_punch);
 				break;
@@ -250,7 +251,7 @@ void c_aimbot::run(c_usercmd* user_cmd) noexcept
 				break;
 			}
 
-			if (!config_system.get_active_weapon(config_system.current_wepon_id).legit_settings.silent) {
+			if (!config_system.current_weapon.legit_settings.silent) {
 				angle /= aim_smooth;
 				user_cmd->viewangles += angle;
 				interfaces::engine->set_view_angles(user_cmd->viewangles);

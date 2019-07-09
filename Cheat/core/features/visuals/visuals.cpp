@@ -1,6 +1,7 @@
 #include "visuals.hpp"
 #include "../../../dependencies/common_includes.hpp"
 #include "../backtrack/backtrack.hpp"
+
 #define TIME_TO_TICKS(dt) ((int)( 0.5f + (float)(dt) / interfaces::globals->interval_per_tick))
 
 c_visuals visuals;
@@ -699,8 +700,8 @@ void c_visuals::chams() noexcept {
 		bool is_enemy = entity->team() != local_player->team();
 	
 		static i_material* mat = nullptr;
-		auto textured = interfaces::material_system->find_material("aristois_material", TEXTURE_GROUP_MODEL, true, nullptr);
-		auto metalic = interfaces::material_system->find_material("aristois_reflective", TEXTURE_GROUP_MODEL, true, nullptr);
+		auto textured = interfaces::material_system->find_material("alpha_project_material", TEXTURE_GROUP_MODEL, true, nullptr);
+		auto metalic = interfaces::material_system->find_material("alpha_project_reflective", TEXTURE_GROUP_MODEL, true, nullptr);
 		auto flat = interfaces::material_system->find_material("debug/debugdrawflat", TEXTURE_GROUP_MODEL, true, nullptr);
 		auto dogtag = interfaces::material_system->find_material("models/inventory_items/dogtags/dogtags_outline", TEXTURE_GROUP_MODEL, true, nullptr);
 		textured->increment_reference_count();
@@ -722,7 +723,7 @@ void c_visuals::chams() noexcept {
 			mat = dogtag;
 			break;
 		}
-
+		mat->set_material_var_flag(MATERIAL_VAR_WIREFRAME, false);
 		if (is_enemy) {
 			if (config_system.get_config().visuals.chams.enemy_xoz) {
 				if (utilities::is_behind_smoke(local_player->get_eye_pos(), entity->get_hitbox_position(entity, hitbox_head)) && config_system.get_config().visuals.chams.smoke_check)
@@ -799,13 +800,16 @@ void c_visuals::chams_misc(const model_render_info_t& info) noexcept {
 		mat = dogtag;
 		break;
 	}
-	
+	mat->set_material_var_flag(MATERIAL_VAR_WIREFRAME, false);
 	if (config_system.get_config().visuals.chams.weapon && strstr(model_name, "models/weapons/v_") 
 		&& !strstr(model_name, "arms") && !strstr(model_name, "sleeve")) {
 
 		interfaces::render_view->set_blend(config_system.get_config().colors.chams_hand_weapon.a);
 		interfaces::render_view->modulate_color(reinterpret_cast<float*>(&config_system.get_config().colors.chams_hand_weapon));
 		mat->set_material_var_flag(MATERIAL_VAR_IGNOREZ, false);
+		if (config_system.get_config().visuals.chams.weapon_wireframe)
+			mat->set_material_var_flag(MATERIAL_VAR_WIREFRAME, true);
+
 		interfaces::model_render->override_material(mat);
 
 	}
@@ -815,6 +819,8 @@ void c_visuals::chams_misc(const model_render_info_t& info) noexcept {
 		interfaces::render_view->set_blend(config_system.get_config().colors.chams_hands.a);
 		interfaces::render_view->modulate_color(reinterpret_cast<float*>(&config_system.get_config().colors.chams_hands));
 		mat->set_material_var_flag(MATERIAL_VAR_IGNOREZ, false);
+		if (config_system.get_config().visuals.chams.hands_wireframe)
+			mat->set_material_var_flag(MATERIAL_VAR_WIREFRAME, true);
 		interfaces::model_render->override_material(mat);
 
 	}
@@ -823,6 +829,8 @@ void c_visuals::chams_misc(const model_render_info_t& info) noexcept {
 		interfaces::render_view->set_blend(config_system.get_config().colors.chams_sleeve.a);
 		interfaces::render_view->modulate_color(reinterpret_cast<float*>(&config_system.get_config().colors.chams_sleeve));
 		mat->set_material_var_flag(MATERIAL_VAR_IGNOREZ, false);
+		if (config_system.get_config().visuals.chams.sleeve_wireframe)
+			mat->set_material_var_flag(MATERIAL_VAR_WIREFRAME, true);
 		interfaces::model_render->override_material(mat);
 	}
 }

@@ -67,10 +67,10 @@ void MainThread()
 #endif
 	try 
 	{
+		config_system.run(XorStr("alpha project"));
 		interfaces::initialize();
 		hooks::initialize();
 		utilities::material_setup();
-		config_system.run(XorStr("alpha project"));
 		knife_hook.knife_animation();
 		Beep(600, 600);
 

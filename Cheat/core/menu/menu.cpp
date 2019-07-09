@@ -185,23 +185,23 @@ void c_menu::run() {
 
 						ImGui::Spacing();
 						ImGui::Spacing();
-						ImGui::Checkbox("aimbot enable", &config_system.get_active_weapon(config_system.current_wepon_id).legit_settings.enable);
-						if(config_system.get_active_weapon(config_system.current_wepon_id).legit_settings.enable)
+						ImGui::Checkbox("aimbot enable", &config_system.current_weapon.legit_settings.enable);
+						if(config_system.current_weapon.legit_settings.enable)
 						{
-							ImGui::PushStyleColor(ImGuiCol_Text, config_system.get_active_weapon(config_system.current_wepon_id).legit_settings.enable ? ImVec4(1.f, 1.f, 1.f, 1) : ImVec4(.6f, .6f, .6f, 1));
+							ImGui::PushStyleColor(ImGuiCol_Text, config_system.current_weapon.legit_settings.enable ? ImVec4(1.f, 1.f, 1.f, 1) : ImVec4(.6f, .6f, .6f, 1));
 
-							ImGui::Checkbox("silent", &config_system.get_active_weapon(config_system.current_wepon_id).legit_settings.silent);
-							ImGui::Checkbox("nearest", &config_system.get_active_weapon(config_system.current_wepon_id).legit_settings.nearest);
+							ImGui::Checkbox("silent", &config_system.current_weapon.legit_settings.silent);
+							ImGui::Checkbox("nearest", &config_system.current_weapon.legit_settings.nearest);
 
 
-							if (!config_system.get_active_weapon(config_system.current_wepon_id).legit_settings.nearest)
+							if (!config_system.current_weapon.legit_settings.nearest)
 							{
-								ImGui::Combo(XorStr("hitbox"), &config_system.get_active_weapon(config_system.current_wepon_id).legit_settings.hitbox, XorStr("head\0neck\0chest\0stomach\0pelvis\0"));
+								ImGui::Combo(XorStr("hitbox"), &config_system.current_weapon.legit_settings.hitbox, XorStr("head\0neck\0chest\0stomach\0pelvis\0"));
 							}
-							ImGui::SliderFloat(XorStr("fov"), &config_system.get_active_weapon(config_system.current_wepon_id).legit_settings.fov, 0.0f, 180.0f, XorStr("%.2f"));
-							ImGui::SliderFloat(XorStr("smooth"), &config_system.get_active_weapon(config_system.current_wepon_id).legit_settings.smooth, 1.f, 10.f, XorStr("%.2f"));
-							ImGui::SliderFloat(XorStr("rcs x"), &config_system.get_active_weapon(config_system.current_wepon_id).legit_settings.rcs_x, 0.0f, 1.0f, XorStr("%.2f"));
-							ImGui::SliderFloat(XorStr("rcs y"), &config_system.get_active_weapon(config_system.current_wepon_id).legit_settings.rcs_y, 0.0f, 1.0f, XorStr("%.2f"));
+							ImGui::SliderFloat(XorStr("fov"), &config_system.current_weapon.legit_settings.fov, 0.0f, 10.0f, XorStr("%.3f"));
+							ImGui::SliderFloat(XorStr("smooth"), &config_system.current_weapon.legit_settings.smooth, 1.f, 10.f, XorStr("%.2f"));
+							ImGui::SliderFloat(XorStr("rcs x"), &config_system.current_weapon.legit_settings.rcs_x, 0.0f, 1.0f, XorStr("%.2f"));
+							ImGui::SliderFloat(XorStr("rcs y"), &config_system.current_weapon.legit_settings.rcs_y, 0.0f, 1.0f, XorStr("%.2f"));
 
 							ImGui::PopStyleColor();
 						}
@@ -211,32 +211,32 @@ void c_menu::run() {
 
 						if (license_manager::checkModuleActive(globals::user_modules, MODULE_TRIGGER_BOT))
 						{
-							ImGui::Checkbox("triggerbot enable", &config_system.get_active_weapon(config_system.current_wepon_id).trigger_settings.enable);
-							if(config_system.get_active_weapon(config_system.current_wepon_id).trigger_settings.enable)
+							ImGui::Checkbox("triggerbot enable", &config_system.current_weapon.trigger_settings.enable);
+							if(config_system.current_weapon.trigger_settings.enable)
 							{
-								ImGui::Checkbox("on key", &config_system.get_active_weapon(config_system.current_wepon_id).trigger_settings.on_key);
-								if(config_system.get_active_weapon(config_system.current_wepon_id).trigger_settings.on_key)
+								ImGui::Checkbox("on key", &config_system.current_weapon.trigger_settings.on_key);
+								if(config_system.current_weapon.trigger_settings.on_key)
 								{
-									ImGui::Hotkey("##triger key", &config_system.get_active_weapon(config_system.current_wepon_id).trigger_settings.key_id, ImVec2(130, 30));
+									ImGui::Hotkey("##triger key", &config_system.current_weapon.trigger_settings.key_id, ImVec2(130, 30));
 								}
 								ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10);
 								if (ImGui::BeginCombo("hitboxes", "...", ImVec2(0, 105))) {
 									ImGui::SetCursorPosY(ImGui::GetCursorPosY() - 8);
 									ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 4);
-									ImGui::Selectable(("head"), &config_system.get_active_weapon(config_system.current_wepon_id).trigger_settings.hitbox_head, ImGuiSelectableFlags_::ImGuiSelectableFlags_DontClosePopups);
+									ImGui::Selectable(("head"), &config_system.current_weapon.trigger_settings.hitbox_head, ImGuiSelectableFlags_::ImGuiSelectableFlags_DontClosePopups);
 									ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 4);
-									ImGui::Selectable(("body"), &config_system.get_active_weapon(config_system.current_wepon_id).trigger_settings.hitbox_body, ImGuiSelectableFlags_::ImGuiSelectableFlags_DontClosePopups);
+									ImGui::Selectable(("body"), &config_system.current_weapon.trigger_settings.hitbox_body, ImGuiSelectableFlags_::ImGuiSelectableFlags_DontClosePopups);
 									ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 4);
-									ImGui::Selectable(("arms"), &config_system.get_active_weapon(config_system.current_wepon_id).trigger_settings.hitbox_arms, ImGuiSelectableFlags_::ImGuiSelectableFlags_DontClosePopups);
+									ImGui::Selectable(("arms"), &config_system.current_weapon.trigger_settings.hitbox_arms, ImGuiSelectableFlags_::ImGuiSelectableFlags_DontClosePopups);
 									ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 4);
-									ImGui::Selectable(("legs"), &config_system.get_active_weapon(config_system.current_wepon_id).trigger_settings.hitbox_legs, ImGuiSelectableFlags_::ImGuiSelectableFlags_DontClosePopups);
+									ImGui::Selectable(("legs"), &config_system.current_weapon.trigger_settings.hitbox_legs, ImGuiSelectableFlags_::ImGuiSelectableFlags_DontClosePopups);
 									ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10);
 									ImGui::EndCombo();
 									ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10);
 								}
-								ImGui::SliderInt("trigger delay", &config_system.get_active_weapon(config_system.current_wepon_id).trigger_settings.delay, 1, 50);
+								ImGui::SliderInt("trigger delay", &config_system.current_weapon.trigger_settings.delay, 1, 50);
 								ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10);
-								ImGui::Checkbox("trigger recoil", &config_system.get_active_weapon(config_system.current_wepon_id).trigger_settings.rcs);
+								ImGui::Checkbox("trigger recoil", &config_system.current_weapon.trigger_settings.rcs);
 								ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10);
 							}
 
@@ -431,10 +431,19 @@ void c_menu::run() {
 
 						ImGui::Checkbox("weapon chams", &config_system.get_config().visuals.chams.weapon);
 						ImGui::ColorEdit4("weapon chams color", reinterpret_cast<float*>(&config_system.get_config().colors.chams_hand_weapon), ImGuiColorEditFlags_NoInputs);
+						if (config_system.get_config().visuals.chams.weapon)
+							ImGui::Checkbox("weapons wireframe", &config_system.get_config().visuals.chams.weapon_wireframe);
+
 						ImGui::Checkbox("hand chams", &config_system.get_config().visuals.chams.hands);
 						ImGui::ColorEdit4("hand chams color", reinterpret_cast<float*>(&config_system.get_config().colors.chams_hands), ImGuiColorEditFlags_NoInputs);
+						if (config_system.get_config().visuals.chams.hands)
+							ImGui::Checkbox("hands wireframe", &config_system.get_config().visuals.chams.hands_wireframe);
+						
 						ImGui::Checkbox("sleeve chams", &config_system.get_config().visuals.chams.sleeve);
 						ImGui::ColorEdit4("sleeve chams color", reinterpret_cast<float*>(&config_system.get_config().colors.chams_sleeve), ImGuiColorEditFlags_NoInputs);
+						if (config_system.get_config().visuals.chams.sleeve)
+							ImGui::Checkbox("sleeve wireframe", &config_system.get_config().visuals.chams.sleeve_wireframe);
+						
 						ImGui::Spacing();
 						ImGui::Checkbox("backtrack player", &config_system.get_config().visuals.chams.backtrack);
 
@@ -615,15 +624,15 @@ void c_menu::run() {
 						ImGui::Spacing();
 						ImGui::PushStyleColor(ImGuiCol_Text, config_system.get_config().skin_changer.enable_skinchanger ? ImVec4(1.f, 1.f, 1.f, 1) : ImVec4(.6f, .6f, .6f, 1));
 
-						ImGui::Combo((config_system.current_weapon_name + " skin").c_str(), &config_system.get_active_weapon(config_system.current_wepon_id).skin_info.paint_kit_vector, [](void* data, int idx, const char** out_text) {
+						ImGui::Combo((config_system.current_weapon_name + " skin").c_str(), &config_system.current_weapon.skin_info.paint_kit_vector, [](void* data, int idx, const char** out_text) {
 							*out_text = parser_skins[idx].name.c_str();
 							return true;
 						}, nullptr, parser_skins.size(), 10);
 
 						if(ImGui::Button("apply skin"))
 						{
-							config_system.get_active_weapon(config_system.current_wepon_id).skin_info.paint_kit = parser_skins[config_system.get_active_weapon(config_system.current_wepon_id).skin_info.paint_kit_vector].id;
-							config_system.get_active_weapon(config_system.current_wepon_id).skin_info.setted = true;
+							config_system.current_weapon.skin_info.paint_kit = parser_skins[config_system.current_weapon.skin_info.paint_kit_vector].id;
+							config_system.current_weapon.skin_info.setted = true;
 							utilities::force_update();
 						}
 						ImGui::PopStyleColor();
