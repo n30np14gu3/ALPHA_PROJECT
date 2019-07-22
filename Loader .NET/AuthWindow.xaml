@@ -32,10 +32,9 @@
             </Grid.Background>
             <Rectangle x:Name="DragHeader" HorizontalAlignment="Left" Height="26" VerticalAlignment="Top" Width="367" MouseLeftButtonDown="DragHeader_MouseLeftButtonDown" MouseLeftButtonUp="DragHeader_MouseLeftButtonUp" MouseMove="DragHeader_MouseMove" Fill="#FF15161B"/>
             <Button x:Name="CloseBtn"  Margin="342,2,2,0"  Style="{DynamicResource MaterialDesignToolButton}" Content="{materialDesign:PackIcon Close}"
-                 ToolTip="Icon" Height="24" Width="Auto" FontSize="14" Background="#FF145291" BorderBrush="#FF124C85" Foreground="#FFEAEAEA" RenderTransformOrigin="0.585,0.818" Click="CloseBtn_Click" VerticalAlignment="Top"/>
+                 Height="24" Width="Auto" FontSize="14" Background="#FF145291" BorderBrush="#FF124C85" Foreground="#FFEAEAEA" RenderTransformOrigin="0.585,0.818" Click="CloseBtn_Click" VerticalAlignment="Top"/>
             <Button x:Name="MinBtn"  Margin="322,1,26,0"  Style="{DynamicResource MaterialDesignToolButton}" Content="{materialDesign:PackIcon Minus}"
-                Padding="0,9,0,0"
-            ToolTip="Icon" Height="20" Width="Auto" FontSize="14" Background="#FF145291" BorderBrush="#FF124C85" Foreground="#FFEAEAEA" RenderTransformOrigin="-0.551,1.683" Click="MinBtn_Click" VerticalAlignment="Top" />
+                Padding="0,9,0,0" Height="20" Width="Auto" FontSize="14" Background="#FF145291" BorderBrush="#FF124C85" Foreground="#FFEAEAEA" RenderTransformOrigin="-0.551,1.683" Click="MinBtn_Click" VerticalAlignment="Top" />
             <Rectangle Fill="#FF191A21" HorizontalAlignment="Left" Height="45" Margin="0,26,0,0" VerticalAlignment="Top" Width="367"
                        Grid.Column="0" />
             <Label Grid.Column="0" Content="ALPHA PROJECT :: AUTH" HorizontalAlignment="Left" Margin="0,26,0,0" VerticalAlignment="Top" Foreground="#DDFFFFFF" FontSize="29" FontWeight="Light" Height="40"/>

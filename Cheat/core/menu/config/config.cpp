@@ -6,8 +6,7 @@
 #include "../../../SDK/jsonip/writer.hpp"
 #include "../../../SDK/jsonip/parse.hpp"
 
-alpha_config::weapon_settings buff = {};
-alpha_config config_system(buff);
+alpha_config config_system;
 
 alpha_config::weapon_settings& alpha_config::get_active_weapon(size_t weapon_id)
 {
@@ -30,10 +29,9 @@ void alpha_config::reset() noexcept {
 	current_weapon_name = "";
 }
 
-alpha_config::alpha_config(weapon_settings& blank_settings): current_weapon(blank_settings)
+alpha_config::alpha_config()
 {
-
-	current_weapon = get_active_weapon(0);
+	current_weapon = &get_active_weapon(0);
 	current_wepon_id = 0;
 	current_weapon_name = "";
 }

@@ -9,36 +9,22 @@
 
 void LoaderConnect()
 {
-#if !NDEBUG
-	MessageBox(nullptr, "DEBUG BUILD!", "", MB_OK);
-#endif
 	Sleep(1000);
 
-#if !NDEBUG
-	MessageBox(nullptr, "Connection...", "", MB_OK);
-#endif
 	local_client client(XorStr("127.0.0.1"), 4980);
 	if (!client.NoError)
-	{
 		TerminateProcess(GetCurrentProcess(), 0);
-	}
 
-#if !NDEBUG
-	MessageBox(nullptr, "Data Exchange...", "", MB_OK);
-#endif
-	if (!client.data_exchange())
-	{
+	if(!client.verification())
 		TerminateProcess(GetCurrentProcess(), 0);
-	}
+
 	Sleep(500);
 
 	if (!license_manager::getModulesInfo())
 	{
 		TerminateProcess(GetCurrentProcess(), 0);
 	}
-#if !NDEBUG
-	MessageBox(nullptr, (std::string("Get modules info...") + std::to_string(globals::user_modules.modules_count)).c_str(), "", MB_OK);
-#endif
+
 	Sleep(500);
 }
 
@@ -62,7 +48,6 @@ void MainThread()
 	globals::initGlobals();
 #if NDEBUG
 	AntiLeak::HideThread(GetCurrentThread());
-
 	LoaderConnect();
 #endif
 	try 
@@ -75,7 +60,6 @@ void MainThread()
 		Beep(600, 600);
 
 #if NDEBUG
-		//CreateThread(nullptr, 0, reinterpret_cast<LPTHREAD_START_ROUTINE>(ProtectionThread), nullptr, 0, nullptr);
 		CreateThread(nullptr, 0, reinterpret_cast<LPTHREAD_START_ROUTINE>(CheckModulesActive), nullptr, 0, nullptr);
 #endif
 	

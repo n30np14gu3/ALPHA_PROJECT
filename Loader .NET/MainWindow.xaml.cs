@@ -1,33 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Net;
-using System.Net.Sockets;
-using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Loader.NET.SDK.Api;
 using Loader.NET.SDK.Api.Structs;
 using Loader.NET.SDK.Cryptography;
 using Loader.NET.SDK.Win32;
-using MaterialDesignThemes.Wpf;
 using Newtonsoft.Json;
-using Org.BouncyCastle.Crypto;
-using Org.BouncyCastle.Crypto.Encodings;
-using Org.BouncyCastle.Crypto.Engines;
-using Org.BouncyCastle.OpenSsl;
 using xNet;
 
 
@@ -40,8 +24,7 @@ namespace Loader.NET
     {
         private bool _isDrag;
         private List<byte[]> _dlls = new List<byte[]>();
-        private int _csgoPid = 0;
-
+        private int _csgoPid;
         public MainWindow()
         {
             InitializeComponent();
@@ -102,72 +85,57 @@ namespace Loader.NET
         private async void LaunchBtn_Click(object sender, RoutedEventArgs e)
         {
             LaunchBtn.IsEnabled = false;
-            await Task.Run(() => runCsGo());
-            await Task.Run(() => downloadLibs());
-            await Task.Run(() => injectLibs());
-            await Task.Run(() => cheatSign());
-
-            MessageBox.Show("Запуск произошел успешно");
+            try
+            {
+                showMessage("Подождите, происходит запуск...");
+                await Task.Run(runCsGo);
+                await Task.Run(downloadLibs);
+                await Task.Run(injectLibs);
+                await Task.Run(cheatSign);
+                showMessage("Запуск произошел успешно!");
+            }
+            catch (Exception ex)
+            {
+                showMessage($"Произошла ошибка: {ex.Message}");
+            }
         }
 
         void downloadLibs()
         {
-            try
+            using (HttpRequest request = new HttpRequest { IgnoreProtocolErrors = true })
             {
-                using (HttpRequest request = new HttpRequest {IgnoreProtocolErrors = true})
-                {
-                    RequestParams data = new RequestParams();
-                    data["access_token"] = ClientData.Data.access_token;
-                    data["game_id"] = ClientData.GameId;
+                RequestParams data = new RequestParams();
+                data["access_token"] = ClientData.Data.access_token;
+                data["game_id"] = ClientData.GameId;
 
-                    string rsp = request.Post($"{ClientData.AppDomain}/api/request_dll", data).ToString();
-                    rsp = Aes.DecryptResponse(Convert.FromBase64String(rsp));
-                    List<string> libs = JsonConvert.DeserializeObject<List<string>>(rsp);
-                    _dlls.Clear();
-                    foreach (string lib in libs)
-                    {
-                        _dlls.Add(Convert.FromBase64String(Encoding.UTF8.GetString(Crypto.FromHex(lib))));
-                    }
-
-                    _dlls = _dlls.OrderBy(x => x.Length).ToList();
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"ОШИБКА!\n{ex.Message}", "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+                string rsp = request.Post($"{ClientData.AppDomain}/api/request_dll", data).ToString();
+                rsp = Aes.DecryptResponse(Convert.FromBase64String(rsp));
+                List<string> libs = JsonConvert.DeserializeObject<List<string>>(rsp);
                 _dlls.Clear();
+                foreach (string lib in libs)
+                {
+                    _dlls.Add(Convert.FromBase64String(Encoding.UTF8.GetString(Crypto.FromHex(lib))));
+                }
+
+                _dlls = _dlls.OrderBy(x => x.Length).ToList();
             }
         }
 
         private void cheatSign()
         {
-            IPAddress localAddr = IPAddress.Parse("127.0.0.1");
-            int port = 4980;
-            TcpListener server = new TcpListener(localAddr, port);
-            server.Start();
+            using (LocalProto proto = new LocalProto(4034))
+            {
+                CheatSendInfo csi = new CheatSendInfo {access_token = ClientData.Data.access_token, user_id = ClientData.Data.user_id};
+                if (!proto.SendJson(csi))
+                {
+                    throw new Exception("Не удалось произвести подпись чита.");
+                }
 
-            Socket socket = server.AcceptSocket();
-
-            IntPtr pBuf;
-
-            byte[] enc = new byte[72];
-            SERVER_RESPONSE response = new SERVER_RESPONSE();
-            response.access_token = Encoding.ASCII.GetBytes(ClientData.Data.access_token + "\0");
-            response.user_id = ClientData.Data.user_id;
-            pBuf = Marshal.AllocHGlobal(72);
-            Marshal.StructureToPtr(response, pBuf, true);
-            Marshal.Copy(pBuf, enc, 0, 72);
-            Marshal.FreeHGlobal(pBuf);
-
-            for (int i = 0; i < enc.Length; i++)
-                enc[i] ^= 0x9C;
-
-            socket.Send(BitConverter.GetBytes(enc.Length));
-            socket.Send(enc);
-            Thread.Sleep(2000);
-            socket.Close();
-            server.Stop();
+                if(!proto.AwaitExit())
+                    throw new Exception("Не удалось подтвердить запуск чита.");
+            }
         }
+
         void injectLibs()
         {
             try
@@ -178,10 +146,6 @@ namespace Loader.NET
                         throw new Exception("Не удалось запустить чит!");
                 }
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
             finally
             {
                 _dlls.Clear();
@@ -190,36 +154,59 @@ namespace Loader.NET
 
         void runCsGo()
         {
-            if (Process.GetProcessesByName("csgo").Length == 0)
+            repeat:
+            try
             {
-                Process.Start("steam://rungameid/730");
-                while (Process.GetProcessesByName("csgo").Length == 0) { }
-            }
+                if (Process.GetProcessesByName("csgo").Length == 0)
+                {
+                    Process.Start("steam://rungameid/730");
+                    while (Process.GetProcessesByName("csgo").Length == 0)
+                    {
+                    }
+                }
 
-            kek:
-            int loadedModules = 0;
-            foreach (ProcessModule module in Process.GetProcessesByName("csgo")[0].Modules)
+                kek:
+                int loadedModules = 0;
+                foreach (ProcessModule module in Process.GetProcessesByName("csgo")[0].Modules)
+                {
+                    if (module.ModuleName == "client_panorama.dll")
+                        loadedModules++;
+
+                    if (module.ModuleName == "engine.dll")
+                        loadedModules++;
+
+                    if (module.ModuleName == "server.dll")
+                        loadedModules++;
+                }
+
+                if (loadedModules != 3)
+                    goto kek;
+            }
+            catch
             {
-                if (module.ModuleName == "client_panorama.dll")
-                    loadedModules++;
-
-                if (module.ModuleName == "engine.dll")
-                    loadedModules++;
-
-                if (module.ModuleName == "server.dll")
-                    loadedModules++;
+                goto repeat;
             }
-            if (loadedModules != 3)
-                goto kek;
-
-
             _csgoPid = Process.GetProcessesByName("csgo")[0].Id;
+        }
+
+        private void showMessage(string messageText)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                InfoMessage_Text.Content = messageText;
+                InfoMessage.IsActive = true;
+            });
         }
 
         private void LLogout_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             Properties.Settings.Default.Reset();
             Environment.Exit(0);
+        }
+
+        private void InfoMessage_Text_ActionClick(object sender, RoutedEventArgs e)
+        {
+            InfoMessage.IsActive = false;
         }
     }
 }

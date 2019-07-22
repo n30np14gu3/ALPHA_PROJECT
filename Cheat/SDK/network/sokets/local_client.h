@@ -1,7 +1,6 @@
 #pragma once
 #include <Windows.h>
 #include <string>
-#include <openssl/rsa.h>
 
 class local_client
 {
@@ -10,32 +9,15 @@ public:
 
 	local_client(const char* ip, u_short port);
 	~local_client();
-
-	bool data_exchange();
-	byte* recivepacket(DWORD len, DWORD* lpRecived);
-	bool sendpacket(byte* data, DWORD data_size);
+	bool verification();
 private:
 
-	//bool generate_key(int bits);
-	struct PROTO_HEADER
-	{
-		unsigned char hash[65];
-		unsigned int key_length;
-	};
-
-	struct SERVER_RESPONSE
-	{
-		DWORD user_id;
-		byte access_token[65];
-	};
-
-	std::string m_sSessionKey;
-
-	PROTO_HEADER m_pHeader{};
+	bool sendPacket(byte* packet, int packetSize, bool crypt = false);
+	byte* recivePacket(int& packetSize, bool crypt = false);
 
 	WSADATA m_wsaData{};
 	SOCKET m_sClient;
 	sockaddr_in m_sockAddr{};
 	int m_iErrorCode;
-
+	byte* pKey{};
 };

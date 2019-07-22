@@ -38,6 +38,8 @@ hooks::reset_fn original_reset;
 HWND hooks::window;
 WNDPROC hooks::wndproc_original = NULL;
 
+extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
 void hooks::initialize() {
 	client_hook = std::make_unique<vmt_hook>();
 	clientmode_hook = std::make_unique<vmt_hook>();
@@ -353,8 +355,6 @@ void __stdcall hooks::scene_end()
 	original_fn(interfaces::render_view);
 }
 
-extern LRESULT ImGui_ImplDX9_WndProcHandler(HWND hwnd, UINT message, WPARAM wparam, LPARAM lparam);
-
 LRESULT __stdcall hooks::wndproc(HWND hwnd, UINT message, WPARAM wparam, LPARAM lparam) {
 	static bool pressed = false;
 
@@ -375,7 +375,7 @@ LRESULT __stdcall hooks::wndproc(HWND hwnd, UINT message, WPARAM wparam, LPARAM 
 		interfaces::inputsystem->enable_input(true);
 	}
 
-	if (menu.opened && ImGui_ImplDX9_WndProcHandler(hwnd, message, wparam, lparam))
+	if (menu.opened && ImGui_ImplWin32_WndProcHandler(hwnd, message, wparam, lparam))
 		return true;
 
 	return CallWindowProcA(wndproc_original, hwnd, message, wparam, lparam);
@@ -393,6 +393,7 @@ void __stdcall hooks::lock_cursor() {
 }
 
 static bool initialized = false;
+
 long __stdcall hooks::present(IDirect3DDevice9* device, RECT* source_rect, RECT* dest_rect, HWND dest_window_override, RGNDATA* dirty_region) {
 	if (!initialized) {
 		menu.apply_fonts();
@@ -421,4 +422,3 @@ long __stdcall hooks::reset(IDirect3DDevice9* device, D3DPRESENT_PARAMETERS* pre
 
 	return hr;
 }
-

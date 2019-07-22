@@ -7,9 +7,6 @@
     <Filter Include="SDK\license">
       <UniqueIdentifier>{40603b62-70a4-455f-8f17-196628cd707b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="SDK\openssl extensions">
-      <UniqueIdentifier>{49c0368e-e43e-4c50-81a2-697c2bf137a6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="SDK\network">
       <UniqueIdentifier>{f2fce8ca-6371-4fb8-934d-e5c0277aa55f}</UniqueIdentifier>
     </Filter>
@@ -109,18 +106,6 @@
     <Filter Include="SDK\static\fonts">
       <UniqueIdentifier>{e0c1019b-e66e-43e4-89cf-76af0e8f7212}</UniqueIdentifier>
     </Filter>
-    <Filter Include="SDK\protection\rapidjson">
-      <UniqueIdentifier>{a8287d2c-bf94-4a95-a3c8-eadd504a34d8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="SDK\protection\rapidjson\error">
-      <UniqueIdentifier>{09fd0525-8e35-49d5-8da8-8049f2d67161}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="SDK\protection\rapidjson\internal">
-      <UniqueIdentifier>{369961dc-9155-437b-b4a8-e042b7b43e76}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="SDK\protection\rapidjson\msinttypes">
-      <UniqueIdentifier>{cfbd876d-97c2-450d-b801-18db841506a1}</UniqueIdentifier>
-    </Filter>
     <Filter Include="source-sdk\valve parser">
       <UniqueIdentifier>{7ae670c1-bb1a-4f9c-ae2b-0d9a91fc45e1}</UniqueIdentifier>
     </Filter>
@@ -130,14 +115,17 @@
     <Filter Include="SDK\jsonip\detail">
       <UniqueIdentifier>{42115a2d-6a38-4a11-b03e-d807338068b5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="core\menu\imgui\win32">
+      <UniqueIdentifier>{7f98e044-56c9-4e33-accb-de5dc2224601}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SDK\network\sokets\json_ex">
+      <UniqueIdentifier>{1c4c26c7-1892-4ed7-a72e-5c5f870383f1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DllMain.cpp" />
     <ClCompile Include="SDK\license\license_manager.cpp">
       <Filter>SDK\license</Filter>
-    </ClCompile>
-    <ClCompile Include="SDK\openssl extensions\openssl_extensions.cpp">
-      <Filter>SDK\openssl extensions</Filter>
     </ClCompile>
     <ClCompile Include="SDK\network\http\http_request.cpp">
       <Filter>SDK\network\http</Filter>
@@ -268,13 +256,19 @@
     <ClCompile Include="source-sdk\valve parser\valve_parser.cpp">
       <Filter>source-sdk\valve parser</Filter>
     </ClCompile>
+    <ClCompile Include="core\menu\imgui\imgui_widgets.cpp">
+      <Filter>core\menu\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="core\menu\imgui\win32\imgui_impl_win32.cpp">
+      <Filter>core\menu\imgui\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="SDK\network\sokets\json_ex\json_ex.cpp">
+      <Filter>SDK\network\sokets\json_ex</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SDK\license\license_manager.h">
       <Filter>SDK\license</Filter>
-    </ClInclude>
-    <ClInclude Include="SDK\openssl extensions\openssl_extensions.h">
-      <Filter>SDK\openssl extensions</Filter>
     </ClInclude>
     <ClInclude Include="SDK\network\http\http_request.h">
       <Filter>SDK\network\http</Filter>
@@ -296,111 +290,6 @@
     </ClInclude>
     <ClInclude Include="SDK\globals\globals.h">
       <Filter>SDK\globals</Filter>
-    </ClInclude>
-    <ClInclude Include="SDK\rapidjson\allocators.h">
-      <Filter>SDK\protection\rapidjson</Filter>
-    </ClInclude>
-    <ClInclude Include="SDK\rapidjson\document.h">
-      <Filter>SDK\protection\rapidjson</Filter>
-    </ClInclude>
-    <ClInclude Include="SDK\rapidjson\encodedstream.h">
-      <Filter>SDK\protection\rapidjson</Filter>
-    </ClInclude>
-    <ClInclude Include="SDK\rapidjson\encodings.h">
-      <Filter>SDK\protection\rapidjson</Filter>
-    </ClInclude>
-    <ClInclude Include="SDK\rapidjson\filereadstream.h">
-      <Filter>SDK\protection\rapidjson</Filter>
-    </ClInclude>
-    <ClInclude Include="SDK\rapidjson\filewritestream.h">
-      <Filter>SDK\protection\rapidjson</Filter>
-    </ClInclude>
-    <ClInclude Include="SDK\rapidjson\fwd.h">
-      <Filter>SDK\protection\rapidjson</Filter>
-    </ClInclude>
-    <ClInclude Include="SDK\rapidjson\istreamwrapper.h">
-      <Filter>SDK\protection\rapidjson</Filter>
-    </ClInclude>
-    <ClInclude Include="SDK\rapidjson\memorybuffer.h">
-      <Filter>SDK\protection\rapidjson</Filter>
-    </ClInclude>
-    <ClInclude Include="SDK\rapidjson\memorystream.h">
-      <Filter>SDK\protection\rapidjson</Filter>
-    </ClInclude>
-    <ClInclude Include="SDK\rapidjson\ostreamwrapper.h">
-      <Filter>SDK\protection\rapidjson</Filter>
-    </ClInclude>
-    <ClInclude Include="SDK\rapidjson\pointer.h">
-      <Filter>SDK\protection\rapidjson</Filter>
-    </ClInclude>
-    <ClInclude Include="SDK\rapidjson\prettywriter.h">
-      <Filter>SDK\protection\rapidjson</Filter>
-    </ClInclude>
-    <ClInclude Include="SDK\rapidjson\rapidjson.h">
-      <Filter>SDK\protection\rapidjson</Filter>
-    </ClInclude>
-    <ClInclude Include="SDK\rapidjson\reader.h">
-      <Filter>SDK\protection\rapidjson</Filter>
-    </ClInclude>
-    <ClInclude Include="SDK\rapidjson\schema.h">
-      <Filter>SDK\protection\rapidjson</Filter>
-    </ClInclude>
-    <ClInclude Include="SDK\rapidjson\stream.h">
-      <Filter>SDK\protection\rapidjson</Filter>
-    </ClInclude>
-    <ClInclude Include="SDK\rapidjson\stringbuffer.h">
-      <Filter>SDK\protection\rapidjson</Filter>
-    </ClInclude>
-    <ClInclude Include="SDK\rapidjson\writer.h">
-      <Filter>SDK\protection\rapidjson</Filter>
-    </ClInclude>
-    <ClInclude Include="SDK\rapidjson\error\en.h">
-      <Filter>SDK\protection\rapidjson\error</Filter>
-    </ClInclude>
-    <ClInclude Include="SDK\rapidjson\error\error.h">
-      <Filter>SDK\protection\rapidjson\error</Filter>
-    </ClInclude>
-    <ClInclude Include="SDK\rapidjson\internal\biginteger.h">
-      <Filter>SDK\protection\rapidjson\internal</Filter>
-    </ClInclude>
-    <ClInclude Include="SDK\rapidjson\internal\diyfp.h">
-      <Filter>SDK\protection\rapidjson\internal</Filter>
-    </ClInclude>
-    <ClInclude Include="SDK\rapidjson\internal\dtoa.h">
-      <Filter>SDK\protection\rapidjson\internal</Filter>
-    </ClInclude>
-    <ClInclude Include="SDK\rapidjson\internal\ieee754.h">
-      <Filter>SDK\protection\rapidjson\internal</Filter>
-    </ClInclude>
-    <ClInclude Include="SDK\rapidjson\internal\itoa.h">
-      <Filter>SDK\protection\rapidjson\internal</Filter>
-    </ClInclude>
-    <ClInclude Include="SDK\rapidjson\internal\meta.h">
-      <Filter>SDK\protection\rapidjson\internal</Filter>
-    </ClInclude>
-    <ClInclude Include="SDK\rapidjson\internal\pow10.h">
-      <Filter>SDK\protection\rapidjson\internal</Filter>
-    </ClInclude>
-    <ClInclude Include="SDK\rapidjson\internal\regex.h">
-      <Filter>SDK\protection\rapidjson\internal</Filter>
-    </ClInclude>
-    <ClInclude Include="SDK\rapidjson\internal\stack.h">
-      <Filter>SDK\protection\rapidjson\internal</Filter>
-    </ClInclude>
-    <ClInclude Include="SDK\rapidjson\internal\strfunc.h">
-      <Filter>SDK\protection\rapidjson\internal</Filter>
-    </ClInclude>
-    <ClInclude Include="SDK\rapidjson\internal\strtod.h">
-      <Filter>SDK\protection\rapidjson\internal</Filter>
-    </ClInclude>
-    <ClInclude Include="SDK\rapidjson\internal\swap.h">
-      <Filter>SDK\protection\rapidjson\internal</Filter>
-    </ClInclude>
-    <ClInclude Include="SDK\rapidjson\msinttypes\inttypes.h">
-      <Filter>SDK\protection\rapidjson\msinttypes</Filter>
-    </ClInclude>
-    <ClInclude Include="SDK\rapidjson\msinttypes\stdint.h">
-      <Filter>SDK\protection\rapidjson\msinttypes</Filter>
     </ClInclude>
     <ClInclude Include="SDK\protection\AntiLeak.h">
       <Filter>SDK\protection</Filter>
@@ -693,6 +582,21 @@
     </ClInclude>
     <ClInclude Include="SDK\jsonip\writer.hpp">
       <Filter>SDK\jsonip</Filter>
+    </ClInclude>
+    <ClInclude Include="core\menu\imgui\imstb_rectpack.h">
+      <Filter>core\menu\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="core\menu\imgui\imstb_textedit.h">
+      <Filter>core\menu\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="core\menu\imgui\imstb_truetype.h">
+      <Filter>core\menu\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="core\menu\imgui\win32\imgui_impl_win32.h">
+      <Filter>core\menu\imgui\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\network\sokets\json_ex\json_ex.h">
+      <Filter>SDK\network\sokets\json_ex</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

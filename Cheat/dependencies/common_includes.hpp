@@ -1,6 +1,6 @@
 #pragma once
 
-#include <windows.h>
+#include <Windows.h>
 #include <iostream>
 #include <cstdint>
 #include <memory>
@@ -19,6 +19,7 @@
 #pragma comment(lib, "d3dx9.lib")
 #include "../core/menu/imgui/imgui.h"
 #include "../core/menu/imgui/dx9/imgui_impl_dx9.h"
+#include "../core/menu/imgui/win32/imgui_impl_win32.h"
 #include "utilities/singleton.hpp"
 #include "utilities/fnv.hpp"
 #include "utilities/utilities.hpp"

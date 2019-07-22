@@ -28,6 +28,7 @@ public:
 	void run_visuals_preview();
 
 	void __stdcall create_objects(IDirect3DDevice9* device) {
+
 		if (hooks::window)
 			ImGui_ImplDX9_CreateDeviceObjects();
 	}
@@ -37,15 +38,18 @@ public:
 	}
 
 	void __stdcall setup_resent(IDirect3DDevice9* device) {
-		ImGui_ImplDX9_Init(hooks::window, device);
+		if(!ImGui_ImplWin32_Init(hooks::window))
+			return;
+
+		if(!ImGui_ImplDX9_Init(device))
+			return;
 
 		ImGuiStyle& style = ImGui::GetStyle();
 		style.Alpha = 1.0f;
-		style.WindowPadding = ImVec2(0, 0);
+		style.WindowPadding = ImVec2(12, 12);
 		style.WindowMinSize = ImVec2(32, 32);
 		style.WindowRounding = 0.0f;
 		style.WindowTitleAlign = ImVec2(0.0f, 0.5f);
-		style.ChildWindowRounding = 0.0f;
 		style.FramePadding = ImVec2(4, 4);
 		style.FrameRounding = 0.0f;
 		style.ItemSpacing = ImVec2(8, 8);
@@ -61,7 +65,8 @@ public:
 		style.DisplayWindowPadding = ImVec2(22, 22);
 		style.DisplaySafeAreaPadding = ImVec2(4, 4);
 		style.AntiAliasedLines = true;
-		style.AntiAliasedShapes = false;
+		style.TabRounding = 0;
+		
 		style.CurveTessellationTol = 1.f;
 
 		ImVec4* colors = ImGui::GetStyle().Colors;
@@ -121,9 +126,6 @@ public:
 		font_config.OversampleV = 1;
 		font_config.PixelSnapH = 1;
 
-
-		//font_main = ImGui::GetIO().Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\Tahoma.ttf", 18);
-		//font_menu = ImGui::GetIO().Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\Verdana.ttf", 12);
 		font_main = ImGui::GetIO().Fonts->AddFontFromMemoryTTF((void*)BeauSans, sizeof(BeauSans), 12, &font_config, ranges);
 		font_menu = ImGui::GetIO().Fonts->AddFontFromMemoryTTF((void*)DINPro, sizeof(DINPro), 18, &font_config, ranges);
 	}
@@ -137,7 +139,7 @@ public:
 		}
 
 		ImGui::Render();
-
+		ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
 		state_block->Apply();
 		state_block->Release();
 	}
@@ -180,6 +182,8 @@ public:
 
 	void __stdcall post_render() {
 		ImGui_ImplDX9_NewFrame();
+		ImGui_ImplWin32_NewFrame();
+		ImGui::NewFrame();
 	}
 
 	ImFont* font_main;

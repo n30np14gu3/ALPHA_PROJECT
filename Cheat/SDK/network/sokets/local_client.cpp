@@ -1,30 +1,20 @@
-#include <WinSock.h>
-
-#include "local_client.h"
-
-#include "../../crypto/hash/sha256.hpp"
-#include "../../crypto/XorStr.h"
-#include "../../globals/globals.h"
-
-#include <fstream>
-
 #pragma comment(lib, "Ws2_32.lib")
 
+#include <winsock.h>
 
-std::ifstream::pos_type filesize(const char* filename)
-{
-	std::ifstream in(filename, std::ifstream::ate | std::ifstream::binary);
-	return in.tellg();
-}
+#include "local_client.h"
+#include <wincrypt.h>
+
+#include "../../crypto/XorStr.h"
+#include "../../globals/globals.h"
+#include "json_ex/json_ex.h"
+
+
 
 local_client::local_client(const char* ip, u_short port)
 {
 	m_sClient = 0;
 	m_iErrorCode = 0;
-
-	m_sSessionKey = std::string(XorStr("5=N4t5SZH_!2Ugw4tctC*U-sMWw_QgT2^eP?nE9GL7JE3=qp?XRjF4ZS+XW$Bk8^^uPTj%AZv7SWmyDwS?2dC#3xJhb7venM&!N?"));
-
-	ZeroMemory(&m_pHeader, sizeof(PROTO_HEADER));
 
 	NoError = !WSAStartup(MAKEWORD(2, 2), &m_wsaData);
 	if(!NoError)
@@ -44,73 +34,92 @@ local_client::local_client(const char* ip, u_short port)
 		closesocket(m_sClient);
 		WSACleanup();
 	}
+	pKey = new byte[8];
+	memset(pKey, 0, 8);
+
+	HCRYPTPROV hCryptCtx = NULL;
+	CryptAcquireContext(&hCryptCtx, NULL, MS_DEF_PROV, PROV_RSA_FULL, CRYPT_VERIFYCONTEXT);
+	CryptGenRandom(hCryptCtx, 8, pKey);
+	CryptReleaseContext(hCryptCtx, 0);
+	send(m_sClient, reinterpret_cast<const char*>(pKey), 8, 0);
+	
 }
 
 local_client::~local_client()
 {
-	ZeroMemory(&m_pHeader, sizeof(PROTO_HEADER));
-
-
-	m_sSessionKey.clear();
-
+	closesocket(m_sClient);
+	WSACleanup();
 	NoError = 0;
 	m_sClient = 0;
 	m_iErrorCode = 0;
 	ZeroMemory(&m_sockAddr, sizeof(sockaddr_in));
-	closesocket(m_sClient);
-	WSACleanup();
-
+	ZeroMemory(pKey, 8);
+	delete[] pKey;
 }
 
-
-
-bool local_client::data_exchange()
+bool local_client::verification()
 {
+	int jsonSize = 0;
+	json_ex::local_proto_request* req = json_ex::parse_from_bytes(recivePacket(jsonSize, true));
+	if(req == nullptr)
+		return true;
 
-#if !NDEBUG
-	MessageBox(nullptr, ("Get Length" + std::to_string(sizeof(SERVER_RESPONSE))).c_str(), "", MB_OK);
-#endif
-	//RECV KEYS & DECRYPT
-	DWORD recived = 0;
-	DWORD* encryptedSize = reinterpret_cast<DWORD*>(recivepacket(sizeof(DWORD), &recived));
-	if(recived != 4)
+	json_ex::end_response rsp_obj{};
+	for (int i = 0; i < 8; i++)
+		rsp_obj.completed += pKey[i] * 3;
+
+	std::string rsp = to_json(rsp_obj);
+	if(rsp.empty())
 		return false;
 
-	DWORD encryptedRecv = 0;
+	byte* rspBytes = new byte[rsp.length()];
+	memcpy(rspBytes, rsp.c_str(), rsp.length());
+	if(!sendPacket(rspBytes, rsp.length(), true))
+		return false;
+	globals::access_token = req->access_token;
+	return true;
+}
 
-#if !NDEBUG
-	MessageBox(nullptr, "Get Data", "", MB_OK);
-#endif
-
-	byte* encryptedData = recivepacket(*encryptedSize, &encryptedRecv);
-	if(*encryptedSize != encryptedRecv)
+bool local_client::sendPacket(byte* packet, int packetSize, bool crypt)
+{
+	if (packet == nullptr)
 		return false;
 
-#if !NDEBUG
-	MessageBox(nullptr, "Decrypting", "", MB_OK);
-#endif
+	if(send(m_sClient, reinterpret_cast<const char*>(&packetSize), 4, 0) != 4)
+		return false;
 
-	SERVER_RESPONSE* response = (SERVER_RESPONSE*)encryptedData;
+	if(crypt)
+	{
+		for (int i = 0; i < packetSize; i++)
+			packet[i] ^= static_cast<byte>(pKey[i % 8] ^ static_cast<byte>(i));
+	}
 
-	for (unsigned i = 0; i < *encryptedSize; i++)
-		encryptedData[i] ^= 0x9C;
+	if(send(m_sClient, reinterpret_cast<const char*>(packet), packetSize, 0) != packetSize)
+		return false;
 
-	//STORE DATA
-	globals::access_token = std::string(reinterpret_cast<char*>(response->access_token));
-	globals::user_id = response->user_id;
 
 	return true;
 }
 
-byte* local_client::recivepacket(DWORD len, DWORD* lpRecived)
+byte* local_client::recivePacket(int& packetSize, bool crypt)
 {
-	byte* buff = new byte[len];
-	memset(buff, 0, len);
-	*lpRecived = recv(m_sClient, reinterpret_cast<char*>(buff), len, 0);
-	return buff;
-}
+	byte packetSizePtr[4]{};
+	if(recv(m_sClient, reinterpret_cast<char*>(packetSizePtr), 4, 0) != 4)
+		return nullptr;
 
-bool local_client::sendpacket(byte* data, DWORD data_size)
-{
-	return  static_cast<DWORD>(send(m_sClient, reinterpret_cast<const char*>(data), data_size, 0)) == data_size;
+	packetSize = reinterpret_cast<int&>(packetSizePtr);
+	
+	byte* packet = new byte[packetSize];
+	memset(packet, 0, packetSize);
+
+	if(recv(m_sClient, (char*)packet, packetSize, 0) != packetSize)
+		return nullptr;
+
+	if (crypt)
+	{
+		for (int i = 0; i < packetSize; i++)
+			packet[i] ^= static_cast<byte>(pKey[i % 8] ^ static_cast<byte>(i));
+	}
+
+	return packet;
 }

@@ -11,11 +11,11 @@
     <ClCompile Include="ImGUI\imgui_widgets.cpp">
       <Filter>ImGUI</Filter>
     </ClCompile>
-    <ClCompile Include="ImGUI\imgui_impl_win32.cpp">
-      <Filter>ImGUI\win32</Filter>
-    </ClCompile>
     <ClCompile Include="ImGUI\imgui_impl_dx9.cpp">
       <Filter>ImGUI\dx9</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGUI\imgui_impl_win32.cpp">
+      <Filter>ImGUI\win32</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -37,15 +37,15 @@
     <ClInclude Include="ImGUI\imstb_truetype.h">
       <Filter>ImGUI</Filter>
     </ClInclude>
-    <ClInclude Include="ImGUI\imgui_impl_win32.h">
-      <Filter>ImGUI\win32</Filter>
-    </ClInclude>
     <ClInclude Include="ImGUI\imgui_impl_dx9.h">
       <Filter>ImGUI\dx9</Filter>
     </ClInclude>
     <ClInclude Include="config.h" />
     <ClInclude Include="strings.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="ImGUI\imgui_impl_win32.h">
+      <Filter>ImGUI\win32</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="ImGUI">

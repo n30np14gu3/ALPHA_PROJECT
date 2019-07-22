@@ -308,7 +308,7 @@ public:
 	weapon_settings& get_active_weapon(size_t weapon_id);
 	config_base& get_config();
 
-	alpha_config(weapon_settings& blank_settings);
+	alpha_config();
 	void run(const char*) noexcept;
 	void load(size_t) noexcept;
 	void save(size_t) const noexcept;
@@ -320,7 +320,7 @@ public:
 		return configs;
 	}
 
-	weapon_settings& current_weapon;
+	weapon_settings* current_weapon;
 	int current_wepon_id{ 0 };
 	std::string current_weapon_name;
 

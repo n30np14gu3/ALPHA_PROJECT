@@ -116,7 +116,7 @@ INT WINAPI WinMain(
 		UnregisterClass(WINDOW_CLASS_NAME, wc.hInstance);
 		return 0;
 	}
-
+	
 	ZeroMemory(&g_d3dpp, sizeof(g_d3dpp));
 	g_d3dpp.Windowed = TRUE;
 	g_d3dpp.SwapEffect = D3DSWAPEFFECT_DISCARD;

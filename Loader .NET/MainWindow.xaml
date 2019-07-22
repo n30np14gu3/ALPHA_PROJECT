@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="ALPHA PROJECT" Height="545.5" Width="326.333"
+        Title="ALPHA CHEAT" Height="545.5" Width="326.333"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         TextElement.FontWeight="Regular"
         TextElement.FontSize="13"
@@ -32,10 +32,9 @@
             </Grid.Background>
             <StackPanel x:Name="DragHeader" Height="22" VerticalAlignment="Top" Background="#FF15161B" MouseLeftButtonDown="DragHeader_MouseLeftButtonDown" MouseLeftButtonUp="DragHeader_MouseLeftButtonUp" MouseMove="DragHeader_MouseMove"/>
             <Button x:Name="CloseBtn"  Margin="0,1,0,0"  Style="{DynamicResource MaterialDesignToolButton}" Content="{materialDesign:PackIcon Close}"
-                 ToolTip="Icon" Height="21" Width="24" FontSize="14" Background="#FF145291" BorderBrush="#FF124C85" Foreground="#FFEAEAEA" RenderTransformOrigin="0.585,0.818" Click="CloseBtn_Click" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                  Height="21" Width="24" FontSize="14" Background="#FF145291" BorderBrush="#FF124C85" Foreground="#FFEAEAEA" RenderTransformOrigin="0.585,0.818" Click="CloseBtn_Click" HorizontalAlignment="Right" VerticalAlignment="Top"/>
             <Button x:Name="MinBtn"  Margin="0,-1,25,0"  Style="{DynamicResource MaterialDesignToolButton}" Content="{materialDesign:PackIcon Minus}"
-                Padding="0,9,0,0"
-            ToolTip="Icon" Height="21" Width="21" FontSize="14" Background="#FF145291" BorderBrush="#FF124C85" Foreground="#FFEAEAEA"  Click="MinBtn_Click"
+                Padding="0,9,0,0" Height="21" Width="21" FontSize="14" Background="#FF145291" BorderBrush="#FF124C85" Foreground="#FFEAEAEA"  Click="MinBtn_Click"
                 Grid.Column="0" IsTabStop="False" IsManipulationEnabled="True" HorizontalAlignment="Right" VerticalAlignment="Top" />
             <Rectangle Fill="#FF191A21" Height="45" Margin="0,22,0,0" VerticalAlignment="Top"
                        Grid.Column="0" HorizontalAlignment="Left" Width="306"/>
@@ -66,6 +65,15 @@
             <Button x:Name="LaunchBtn" Content="ЗАПУСТИТЬ" HorizontalAlignment="Left" Margin="10,0,0,44" VerticalAlignment="Bottom" Width="286" Height="40" Click="LaunchBtn_Click"/>
             <Label x:Name="BrandLink" Content="alphacheat.com" HorizontalAlignment="Right" Margin="0,0,10,10" Width="286" Height="26" VerticalAlignment="Bottom" HorizontalContentAlignment="Center" Style="{DynamicResource linkStyle}" MouseLeftButtonUp="BrandLink_MouseLeftButtonUp"/>
             <Label x:Name="LLogout" Content="ВЫХОД" HorizontalAlignment="Right" Margin="0,36,10,0" Width="77" Height="26" VerticalAlignment="Top" HorizontalContentAlignment="Center" Style="{DynamicResource linkStyle}" MouseLeftButtonUp="LLogout_MouseLeftButtonUp"/>
+
+            <materialDesign:Snackbar
+                IsActive="False"
+                x:Name="InfoMessage" Background="#FF15161B">
+                <materialDesign:SnackbarMessage
+                    x:Name="InfoMessage_Text"
+                    Content=""
+                    ActionContent="X" Foreground="White" ActionClick="InfoMessage_Text_ActionClick"/>
+            </materialDesign:Snackbar>
         </Grid>
     </Border>
 </Window>
