@@ -7,6 +7,5 @@ namespace Loader.NET.SDK.Api.Structs
     {
         public ServerCodes code;
         public T data;
-        public string salt;
     }
 }

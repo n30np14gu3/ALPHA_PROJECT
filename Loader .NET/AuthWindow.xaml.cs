@@ -78,7 +78,6 @@ namespace Loader.NET
                     data["game_id"] = ClientData.GameId;
 
                     string result = request.Post($"{ClientData.AppDomain}/api/login", data).ToString();
-                    result = Aes.DecryptResponse(Convert.FromBase64String(result));
                     ServerResponse<UserData> response = JsonConvert.DeserializeObject<ServerResponse<UserData>>(result);
                     Clipboard.SetText(JsonConvert.SerializeObject(response));
                     switch (response.code)
@@ -104,8 +103,6 @@ namespace Loader.NET
                         case ServerCodes.API_CODE_OK:
                             ClientData.Logged = true;
                             ClientData.Data = response.data;
-                            ClientData.ZipPassword = Crypto.Sha256(Encoding.UTF8.GetBytes(
-                                $"{Crypto.Sha256(Encoding.UTF8.GetBytes(TPassword.Password))}.{response.data.access_token}"));
                             if (CBSave.IsChecked.HasValue && CBSave.IsChecked.Value)
                             {
                                 Properties.Settings.Default.login = TEmail.Text;
@@ -162,7 +159,6 @@ namespace Loader.NET
                     RequestParams data = new RequestParams();
                     data["game_id"] = ClientData.GameId;
                     string rsp = request.Post($"{ClientData.AppDomain}/api/request_updates", data).ToString();
-                    rsp = Aes.DecryptResponse(Convert.FromBase64String(rsp));
                     ServerResponse<UpdateInfo> updateInfo = JsonConvert.DeserializeObject<ServerResponse<UpdateInfo>>(rsp);
                     switch (updateInfo.code)
                     {

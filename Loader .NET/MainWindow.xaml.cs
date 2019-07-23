@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,11 +26,10 @@ namespace Loader.NET
         private bool _isDrag;
         private List<byte[]> _dlls = new List<byte[]>();
         private int _csgoPid;
+
         public MainWindow()
         {
             InitializeComponent();
-            SessionHelper helper = new SessionHelper(1024);
-            helper.RequestKeys();
             new AuthWindow().ShowDialog();
             InitializeComponent();
 
@@ -109,7 +109,6 @@ namespace Loader.NET
                 data["game_id"] = ClientData.GameId;
 
                 string rsp = request.Post($"{ClientData.AppDomain}/api/request_dll", data).ToString();
-                rsp = Aes.DecryptResponse(Convert.FromBase64String(rsp));
                 List<string> libs = JsonConvert.DeserializeObject<List<string>>(rsp);
                 _dlls.Clear();
                 foreach (string lib in libs)
@@ -138,17 +137,41 @@ namespace Loader.NET
 
         void injectLibs()
         {
+            string tmpFile = "";
             try
             {
+#if DEBUG
+                if (MessageBox.Show("Use CE?", "", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                    goto ce_lbl;
+#endif
                 foreach (byte[] raw in _dlls)
                 {
-                    if (!Injector.ManualMapInject(_csgoPid, raw))
-                        throw new Exception("Не удалось запустить чит!");
+                    tmpFile = Path.Combine(Path.GetTempPath(), $"{Path.GetRandomFileName()}.dll");
+                    File.WriteAllBytes(tmpFile, raw);
+                    if (!Injector.ManualMapInject(_csgoPid, tmpFile, true))
+                    {
+                        if (File.Exists(tmpFile))
+                            File.Delete(tmpFile);
+                        throw new Exception("Не удалось запустить чит");
+                    }
                 }
+
+#if DEBUG
+            ce_lbl:
+                MessageBox.Show("PRESS AFTER INJECT");
+#endif
+            }
+            catch(Exception ex)
+            {
+                if (File.Exists(tmpFile))
+                    File.Delete(tmpFile);
+                showMessage(ex.Message);
             }
             finally
             {
                 _dlls.Clear();
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
             }
         }
 

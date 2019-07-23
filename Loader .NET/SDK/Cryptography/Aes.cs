@@ -7,7 +7,7 @@ namespace Loader.NET.SDK.Cryptography
 {
     internal class Aes
     {
-        internal static string DecryptResponse(byte[] rsp)
+        internal static string DecryptResponse(byte[] rsp, byte[] iv, byte[] key)
         {
 
             string result;
@@ -15,8 +15,8 @@ namespace Loader.NET.SDK.Cryptography
             {
                 cryptor.Mode = CipherMode.CBC;
 
-                cryptor.IV = Encoding.UTF8.GetBytes(Crypto.Config.Iv);
-                cryptor.Key = Encoding.UTF8.GetBytes(Crypto.Config.Key);
+                cryptor.IV = iv;
+                cryptor.Key = key;
                 cryptor.Padding = PaddingMode.PKCS7;
 
                 ICryptoTransform decryptor = cryptor.CreateDecryptor();
@@ -34,7 +34,7 @@ namespace Loader.NET.SDK.Cryptography
             return result;
         }
 
-        internal static byte[]  EncryptResponse(string data)
+        internal static byte[]  EncryptResponse(string data, byte[] iv, byte[] key)
         {
 
             byte[] result;
@@ -42,8 +42,8 @@ namespace Loader.NET.SDK.Cryptography
             {
                 cryptor.Mode = CipherMode.CBC;
 
-                cryptor.IV = Encoding.UTF8.GetBytes(Crypto.Config.Iv);
-                cryptor.Key = Encoding.UTF8.GetBytes(Crypto.Config.Key);
+                cryptor.IV = iv;
+                cryptor.Key = key;
                 cryptor.Padding = PaddingMode.PKCS7;
 
                 ICryptoTransform decryptor = cryptor.CreateEncryptor();

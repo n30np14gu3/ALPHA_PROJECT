@@ -11,7 +11,7 @@ void LoaderConnect()
 {
 	Sleep(1000);
 
-	local_client client(XorStr("127.0.0.1"), 4980);
+	local_client client(XorStr("127.0.0.1"), 4034);
 	if (!client.NoError)
 		TerminateProcess(GetCurrentProcess(), 0);
 

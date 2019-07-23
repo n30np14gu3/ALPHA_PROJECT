@@ -38,7 +38,8 @@ namespace json_ex
 			rapidjson::Document json;
 			json.SetObject();
 			rapidjson::Document::AllocatorType& allocator = json.GetAllocator();
-			json.AddMember(toString(XorStr("completed")), toString(std::to_string(obj.completed).c_str()), allocator);
+			
+			json.AddMember(toString(XorStr("completed")), obj.completed, allocator);
 
 			rapidjson::StringBuffer buffer;
 			rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);

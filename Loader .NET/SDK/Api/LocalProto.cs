@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Windows;
 using Newtonsoft.Json;
 
 namespace Loader.NET.SDK.Api
@@ -36,9 +37,15 @@ namespace Loader.NET.SDK.Api
             List<byte> json = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(jsonObj)).ToList();
             json.Add(0);
 
+#if DEBUG
+            MessageBox.Show($"SIZE SENDING\nN={json.Count}");
+#endif
             if (Send(BitConverter.GetBytes(json.Count)) != 4)
                 return false;
 
+#if DEBUG
+            MessageBox.Show($"DATA SENDING\n{Encoding.UTF8.GetString(json.ToArray())}");
+#endif
             return Send(json.ToArray()) == json.Count;
         }
 
@@ -59,7 +66,7 @@ namespace Loader.NET.SDK.Api
         public int Send(byte[] bytes)
         {
             for (int i = 0; i < bytes.Length; i++)
-                bytes[i] ^= (byte)(_pKey[i % 8] ^ (byte)i);
+                bytes[i] ^= _pKey[i % 8];
 
             return _cheat.Send(bytes);
         }
@@ -70,13 +77,14 @@ namespace Loader.NET.SDK.Api
             int packetLength;
             _cheat.Receive(packetLengthBytes);
             for (int i = 0; i < packetLengthBytes.Length; i++)
-                packetLengthBytes[i] ^= (byte)(_pKey[i % 8] ^ (byte) i);
+                packetLengthBytes[i] ^= _pKey[i % 8];
 
             packetLength = BitConverter.ToInt32(packetLengthBytes, 0);
+
             byte[] recv = new byte[packetLength];
             _cheat.Receive(recv);
-            for (int i = 0; i < packetLengthBytes.Length; i++)
-                recv[i] ^= (byte)(_pKey[i % 8] ^ (byte)i);
+            for (int i = 0; i < packetLength; i++)
+                recv[i] ^= _pKey[i % 8];
             return recv;
         }
 

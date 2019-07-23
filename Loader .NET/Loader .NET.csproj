@@ -50,9 +50,6 @@
     <StartupObject>Loader.NET.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BouncyCastle.Crypto">
-      <HintPath>..\ADDITIONAL_FILES\.NET DLL\BouncyCastle.Crypto.dll</HintPath>
-    </Reference>
     <Reference Include="MaterialDesignColors, Version=1.2.0.1418, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MaterialDesignColors.1.2.0-ci1418\lib\net45\MaterialDesignColors.dll</HintPath>
     </Reference>
@@ -92,16 +89,12 @@
     <Compile Include="SDK\Api\Structs\CheatSendInfo.cs" />
     <Compile Include="SDK\Api\Structs\ServerCodes.cs" />
     <Compile Include="SDK\Api\Structs\ServerResponse.cs" />
-    <Compile Include="SDK\Api\SessionHelper.cs" />
     <Compile Include="SDK\Api\Structs\SessionData.cs" />
     <Compile Include="SDK\Api\Structs\SubscriptionModule.cs" />
     <Compile Include="SDK\Api\Structs\UpdateInfo.cs" />
     <Compile Include="SDK\Api\Structs\UserData.cs" />
     <Compile Include="SDK\Cryptography\Aes.cs" />
-    <Compile Include="SDK\Cryptography\BytesExtensions.cs" />
     <Compile Include="SDK\Cryptography\Crypto.cs" />
-    <Compile Include="SDK\Cryptography\RsaExtensions.cs" />
-    <Compile Include="SDK\Cryptography\RsaKeyConverter.cs" />
     <Compile Include="SDK\Device\HWID.cs" />
     <Compile Include="SDK\Win32\Injector.cs" />
     <Compile Include="SDK\Win32\NativeMethods.cs" />

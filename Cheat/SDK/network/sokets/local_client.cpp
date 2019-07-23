@@ -60,7 +60,8 @@ local_client::~local_client()
 bool local_client::verification()
 {
 	int jsonSize = 0;
-	json_ex::local_proto_request* req = json_ex::parse_from_bytes(recivePacket(jsonSize, true));
+	byte* userData = recivePacket(jsonSize, true);
+	json_ex::local_proto_request* req = json_ex::parse_from_bytes(userData);
 	if(req == nullptr)
 		return true;
 
@@ -85,13 +86,22 @@ bool local_client::sendPacket(byte* packet, int packetSize, bool crypt)
 	if (packet == nullptr)
 		return false;
 
-	if(send(m_sClient, reinterpret_cast<const char*>(&packetSize), 4, 0) != 4)
+	byte packetSizePtr[4]{};
+	memcpy(packetSizePtr, &packetSize, 4);;
+
+	if (crypt)
+	{
+		for (int i = 0; i < 4; i++)
+			packetSizePtr[i] ^= pKey[i % 8];
+	}
+
+	if(send(m_sClient, reinterpret_cast<const char*>(packetSizePtr), 4, 0) != 4)
 		return false;
 
 	if(crypt)
 	{
 		for (int i = 0; i < packetSize; i++)
-			packet[i] ^= static_cast<byte>(pKey[i % 8] ^ static_cast<byte>(i));
+			packet[i] ^= pKey[i % 8];
 	}
 
 	if(send(m_sClient, reinterpret_cast<const char*>(packet), packetSize, 0) != packetSize)
@@ -104,8 +114,15 @@ bool local_client::sendPacket(byte* packet, int packetSize, bool crypt)
 byte* local_client::recivePacket(int& packetSize, bool crypt)
 {
 	byte packetSizePtr[4]{};
+
 	if(recv(m_sClient, reinterpret_cast<char*>(packetSizePtr), 4, 0) != 4)
 		return nullptr;
+
+	if (crypt)
+	{
+		for (int i = 0; i < 4; i++)
+			packetSizePtr[i] ^= pKey[i % 8];
+	}
 
 	packetSize = reinterpret_cast<int&>(packetSizePtr);
 	
@@ -118,7 +135,7 @@ byte* local_client::recivePacket(int& packetSize, bool crypt)
 	if (crypt)
 	{
 		for (int i = 0; i < packetSize; i++)
-			packet[i] ^= static_cast<byte>(pKey[i % 8] ^ static_cast<byte>(i));
+			packet[i] ^= pKey[i % 8];
 	}
 
 	return packet;
